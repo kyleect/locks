@@ -22,12 +22,12 @@ impl Cmd {
             #[cfg(feature = "lsp")]
             Cmd::Lsp => crate::lsp::serve(),
             #[cfg(not(feature = "lsp"))]
-            Cmd::Lsp => bail!("loxcraft was not compiled with the lsp feature"),
+            Cmd::Lsp => bail!("locks was not compiled with the lsp feature"),
 
             #[cfg(feature = "repl")]
             Cmd::Repl => crate::repl::run(),
             #[cfg(not(feature = "repl"))]
-            Cmd::Repl => bail!("loxcraft was not compiled with the repl feature"),
+            Cmd::Repl => bail!("locks was not compiled with the repl feature"),
 
             Cmd::Run { path } => {
                 let source = fs::read_to_string(path)

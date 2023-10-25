@@ -54,7 +54,7 @@ fn editor() -> Result<Reedline> {
     let highlighter = Box::new(Highlighter::new()?);
 
     let data_dir = dirs::data_dir().context("could not find data directory")?;
-    let history_path = data_dir.join("loxcraft/history.txt");
+    let history_path = data_dir.join("locks/history.txt");
     let history = Box::new(
         FileBackedHistory::with_file(10000, history_path.clone())
             .with_context(|| format!("could not open history file: {}", history_path.display()))?,

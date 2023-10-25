@@ -36,7 +36,7 @@ type LoxOutMessage =
   | LoxOutMessageExitSuccess;
 
 /**
- * Loxcraft's playground page component
+ * Locks's playground page component
  * @returns A page component
  */
 const Playground: React.FC = () => {

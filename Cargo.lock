@@ -943,6 +943,38 @@ dependencies = [
 ]
 
 [[package]]
+name = "locks"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "arrayvec 0.7.2",
+ "build-deps",
+ "clap",
+ "codespan-reporting",
+ "dirs",
+ "hashbrown 0.13.2",
+ "iota",
+ "lalrpop",
+ "lalrpop-util",
+ "logos",
+ "mimalloc",
+ "nu-ansi-term",
+ "pprof",
+ "pretty_assertions",
+ "reedline",
+ "rustc-hash",
+ "termcolor",
+ "test-generator",
+ "thiserror",
+ "tokio",
+ "tower-lsp",
+ "tree-sitter",
+ "tree-sitter-highlight",
+ "tree-sitter-lox",
+ "wasm-bindgen",
+]
+
+[[package]]
 name = "log"
 version = "0.4.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -972,38 +1004,6 @@ dependencies = [
  "quote 1.0.26",
  "regex-syntax 0.6.29",
  "syn 1.0.109",
-]
-
-[[package]]
-name = "loxcraft"
-version = "0.1.1"
-dependencies = [
- "anyhow",
- "arrayvec 0.7.2",
- "build-deps",
- "clap",
- "codespan-reporting",
- "dirs",
- "hashbrown 0.13.2",
- "iota",
- "lalrpop",
- "lalrpop-util",
- "logos",
- "mimalloc",
- "nu-ansi-term",
- "pprof",
- "pretty_assertions",
- "reedline",
- "rustc-hash",
- "termcolor",
- "test-generator",
- "thiserror",
- "tokio",
- "tower-lsp",
- "tree-sitter",
- "tree-sitter-highlight",
- "tree-sitter-lox",
- "wasm-bindgen",
 ]
 
 [[package]]

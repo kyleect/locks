@@ -1,8 +1,8 @@
 use std::fmt::{self, Display, Formatter};
 use std::io::{self, Write};
 
-use loxcraft::error::report_error;
-use loxcraft::vm::VM;
+use locks::error::report_error;
+use locks::vm::VM;
 use serde::Serialize;
 use termcolor::{Color, WriteColor};
 use wasm_bindgen::prelude::*;

@@ -1,7 +1,8 @@
 {
-  "name": "@loxcraft/playground",
+  "name": "locks-playground",
+  "private": true,
   "version": "0.1",
-  "description": "Online playground for the Lox programming language",
+  "description": "Online playground for the Locks programming language",
   "keywords": [
     "playground",
     "lox",
@@ -11,7 +12,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ajeetdsouza/loxcraft",
+    "url": "https://github.com/kyleect/locks",
     "directory": "playground"
   },
   "source": "src/index.html",

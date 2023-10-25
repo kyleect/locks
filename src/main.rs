@@ -1,6 +1,6 @@
 use anyhow::Result;
 use clap::Parser;
-use loxcraft::cmd::Cmd;
+use locks::cmd::Cmd;
 
 fn main() -> Result<()> {
     Cmd::parse().run()
