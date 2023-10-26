@@ -5,7 +5,7 @@ authors = [
     "Kartik Sharma <kartik.sharma522@gmail.com>",
 ]
 categories = ["development-tools"]
-description = "A toy language branched from Lox. Forked from [loxcraft](https://github.com/ajeetdsouza/loxcraft)"
+description = "A toy language branched from Lox to learn language implementation. Forked from [loxcraft](https://github.com/ajeetdsouza/loxcraft)"
 edition = "2021"
 keywords = [
     "cli",

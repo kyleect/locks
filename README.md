@@ -7,7 +7,7 @@
 
 # locks
 
-A toy language branched from Lox. Forked from [loxcraft](https://github.com/ajeetdsouza/loxcraft)
+A toy language branched from Lox to learn language implementation. Forked from [loxcraft](https://github.com/ajeetdsouza/loxcraft)
 
 </div>
 
