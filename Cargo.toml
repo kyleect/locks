@@ -27,6 +27,7 @@ name = "locks"
 repository = "https://github.com/kyleect/locks"
 rust-version = "1.73"
 version = "1.0.0"
+publish = false
 
 [features]
 default = ["lsp", "repl"]
