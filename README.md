@@ -7,7 +7,7 @@
 
 # locks
 
-A toy language branched from Lox to learn language implementation. Forked from [loxcraft](https://github.com/ajeetdsouza/loxcraft)
+A toy language branched from [Lox](https://www.craftinginterpreters.com/) to learn language implementation. Forked from [loxcraft](https://github.com/ajeetdsouza/loxcraft)
 
 [![ci](https://github.com/kyleect/locks/actions/workflows/ci.yml/badge.svg)](https://github.com/kyleect/locks/actions/workflows/ci.yml)
 
