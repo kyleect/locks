@@ -5,7 +5,7 @@
 
 <div align="center">
 
-# locks
+# 🔒🔓 locks
 
 A toy language branched from [Lox](https://www.craftinginterpreters.com/) to learn language implementation. Forked from [loxcraft](https://github.com/ajeetdsouza/loxcraft)
 
