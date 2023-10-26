@@ -89,7 +89,9 @@ impl Gc {
             if mem::take(unsafe { &mut (*string).common.is_marked }) {
                 false
             } else {
-                unsafe { let _ = Box::from_raw(string); };
+                unsafe {
+                    let _ = Box::from_raw(string);
+                };
                 true
             }
         });
@@ -102,7 +104,9 @@ impl Drop for Gc {
             object.free();
         }
         for &string in self.strings.values() {
-            unsafe { let _ = Box::from_raw(string); };
+            unsafe {
+                let _ = Box::from_raw(string);
+            };
         }
     }
 }
