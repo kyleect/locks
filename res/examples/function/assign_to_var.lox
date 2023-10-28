@@ -1,0 +1,7 @@
+fun f() {
+  print("Test");
+}
+
+var fn = f;
+
+fn(); // out: Test
