@@ -1,0 +1,147 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "locks",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#statements"
+    },
+    {
+      "include": "#callables"
+    },
+    {
+      "include": "#ident"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#digits"
+    }
+  ],
+  "repository": {
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.locks",
+          "match": "\\b(if|else|while|for|return|and|or)\\b"
+        },
+        {
+          "name": "constant.language.null.locks",
+          "match": "\\b(nil)\\b"
+        },
+        {
+          "name": "constant.language.boolean.locks",
+          "match": "\\b(true|false)\\b"
+        },
+        {
+          "name": "support.function.builtin.locks",
+          "match": "\\b(print)\\b"
+        },
+        {
+          "name": "variable.language.this.locks",
+          "match": "\\b(this)\\b"
+        },
+        {
+          "name": "variable.language.super.locks",
+          "match": "\\b(super)\\b"
+        }
+      ]
+    },
+    "statements": {
+      "patterns": [
+        {
+          "match": "\\b(var)\\s+([A-Za-z_][A-Za-z0-9_]*)\\b",
+          "captures": {
+            "1": {
+              "name": "storage.type.locks"
+            },
+            "2": {
+              "name": "support.variable.locks"
+            }
+          }
+        },
+        {
+          "match": "\\b(fun)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*\\(([A-Za-z0-9_,\\s]*)\\)",
+          "captures": {
+            "1": {
+              "name": "storage.type.function.locks"
+            },
+            "2": {
+              "name": "entity.name.function.locks"
+            },
+            "3": {
+              "patterns": [
+                {
+                  "match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b",
+                  "name": "variable.parameter.locks"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "match": "\\b(class)\\s+([A-Za-z_][A-Za-z0-9_]*)(?:\\s*(<)\\s*([A-Za-z_][A-Za-z0-9_]*))?\\b",
+          "captures": {
+            "1": {
+              "name": "storage.type.class.locks"
+            },
+            "2": {
+              "name": "entity.name.type.class.locks"
+            },
+            "3": {
+              "name": "storage.modifier.locks"
+            },
+            "4": {
+              "name": "entity.name.type.class.locks"
+            }
+          }
+        }
+      ]
+    },
+    "callables": {
+      "patterns": [
+        {
+          "match": "([A-Za-z_][A-Za-z0-9_]*)\\(",
+          "name": "support.function.locks"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.locks",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": []
+    },
+    "digits": {
+      "patterns": [
+        {
+          "name": "constant.numeric.locks",
+          "match": "\\b[0-9]+(?:.[0-9]+)?\\b"
+        }
+      ]
+    },
+    "ident": {
+      "patterns": [
+        {
+          "name": "variable.other.readwrite.locks",
+          "match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b"
+        }
+      ]
+    },
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.locks",
+          "match": "\\/\\/.*"
+        }
+      ]
+    }
+  },
+  "scopeName": "source.locks"
+}
