@@ -10,8 +10,12 @@ import {
 let lc: LanguageClient;
 
 export function activate(context: ExtensionContext) {
+  const locksBinPath: string =
+    workspace.getConfiguration("locks").get("binPath") ??
+    context.asAbsolutePath("../target/release/locks.exe");
+
   const serverOptions: ServerOptions = {
-    command: context.asAbsolutePath("../target/release/locks.exe"),
+    command: locksBinPath,
     args: ["lsp"],
   };
 

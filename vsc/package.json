@@ -45,7 +45,20 @@
         "language": "locks",
         "path": "./snippets.json"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Locks",
+      "properties": {
+        "locks.binPath": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "description": "Specifies the folder path containing the locks binary."
+        }
+      }
+    }
   },
   "devDependencies": {
     "@types/node": "^17.0.45",
