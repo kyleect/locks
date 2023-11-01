@@ -1,15 +1,9 @@
 "use strict";
 
-import * as net from "net";
-
-import { Trace } from "vscode-jsonrpc";
-import { window, workspace, commands, ExtensionContext, Uri } from "vscode";
+import { workspace, ExtensionContext } from "vscode";
 import {
   LanguageClient,
   LanguageClientOptions,
-  StreamInfo,
-  Position as LSPosition,
-  Location as LSLocation,
   ServerOptions,
 } from "vscode-languageclient/node";
 
