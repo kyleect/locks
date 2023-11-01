@@ -26,3 +26,13 @@ $ docker build -t kyleect/locks:1.0.0 .
 ```shell
 $ docker run --rm -it kyleect/locks:1.0.0 locks repl
 ```
+
+## VS Code Extension
+
+- Syntax highlighting
+- Error reporting
+- Snippets
+
+### Configuration
+
+Set `locks.binPath` to the absolute path of the `locks` binary. Defaults to `target/release/locks.exe`.
