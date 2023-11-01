@@ -1,0 +1,22 @@
+{
+  "Function": {
+    "prefix": "fun",
+    "body": ["fun $1($2) {", "  $3", "}$4"],
+    "description": "Create a function"
+  },
+  "class": {
+    "prefix": "class",
+    "body": ["class $1 {", "  $2", "}$3"],
+    "description": "Define a class"
+  },
+  "Variable": {
+    "prefix": "var",
+    "body": ["var $1 = $2;$3"],
+    "description": "Define a variable"
+  },
+  "Print": {
+    "prefix": "print",
+    "body": ["print $1;$2"],
+    "description": "Print value"
+  }
+}

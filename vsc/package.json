@@ -16,7 +16,8 @@
     "vscode": "^1.83.1"
   },
   "categories": [
-    "Programming Languages"
+    "Programming Languages",
+    "Snippets"
   ],
   "main": "out/extension.js",
   "contributes": {
@@ -37,6 +38,12 @@
         "language": "locks",
         "scopeName": "source.locks",
         "path": "./locks.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "locks",
+        "path": "./snippets.json"
       }
     ]
   },
