@@ -9,7 +9,10 @@ class LocalStorage {
   static editorTextKey = 'editorText';
 
   static get editorText(): string {
-    return localStorage.getItem(this.editorTextKey) || '';
+    return (
+      localStorage.getItem(this.editorTextKey) ||
+      'var a = 1;\nvar b = 2;\nprint a + b;'
+    );
   }
 
   static set editorText(text: string) {
