@@ -13,20 +13,6 @@ A toy language branched from [Lox](https://www.craftinginterpreters.com/) to lea
 
 </div>
 
-## Docker
-
-### Build
-
-```shell
-$ docker build -t kyleect/locks:1.0.0 .
-```
-
-### Repl
-
-```shell
-$ docker run --rm -it kyleect/locks:1.0.0 locks repl
-```
-
 ## VS Code Extension
 
 - Syntax highlighting
@@ -50,3 +36,5 @@ Set `locks.binPath` to the absolute path of the `locks` binary. Defaults to `tar
 - `$ just lint-all` Run linting on packages
 - `$ just clean-all` Clean build artifacts in all packages
 - `$ just run-playground` Build and run playground
+- `$ just build-docker` Build docker image
+- `$ just run-repl-docker` Run `locks repl` inside built docker image

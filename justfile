@@ -4,6 +4,12 @@ default:
 build:
     cargo build --release
 
+build-docker:
+    docker build -t kyleect/locks:1.0.0 .
+
+run-docker-repl:
+    docker run --rm -it kyleect/locks:1.0.0 locks repl
+
 build-all: build
     cd vsc/ && just build
     cd playground/ && just build
