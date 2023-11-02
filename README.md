@@ -36,3 +36,17 @@ $ docker run --rm -it kyleect/locks:1.0.0 locks repl
 ### Configuration
 
 Set `locks.binPath` to the absolute path of the `locks` binary. Defaults to `target/release/locks.exe`.
+
+## Development
+
+### Setup
+
+- `$ cargo install just` Required for running development scripts
+- `$ cargo install wasm-pack` Required to compile wasm package for playground
+
+### Scripts
+
+- `$ just build-all` Build all packages (locks, playground, & vs code extension)
+- `$ just lint-all` Run linting on packages
+- `$ just clean-all` Clean build artifacts in all packages
+- `$ just run-playground` Build and run playground
