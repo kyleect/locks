@@ -21,17 +21,7 @@ A toy language branched from [Lox](https://www.craftinginterpreters.com/) to lea
 - Online Playground, via WebAssembly
 - Language Server Protocol
 - REPL
-- VS Code Extension
-
-## VS Code Extension
-
-- Syntax highlighting
-- Error reporting
-- Snippets
-
-### Configuration
-
-Set `locks.binPath` to the absolute path of the `locks` binary. Defaults to `target/release/locks.exe`.
+- [VS Code Extension](#vs-code-extension)
 
 ## Development
 
@@ -50,3 +40,20 @@ Set `locks.binPath` to the absolute path of the `locks` binary. Defaults to `tar
 - `$ just run-playground` Build and run playground
 - `$ just build-docker` Build docker image
 - `$ just run-repl-docker` Run `locks repl` inside built docker image
+
+## VS Code Extension
+
+- Syntax highlighting
+- Error reporting
+- Snippets
+
+### Configuration
+
+Set `locks.binPath` to the command or absolute path to `locks`.
+
+### Usage
+
+1. Run `just build-all`
+2. Run `cargo install`
+3. Install `./vsc/out/locks-language-1.0.0.vsix` in VS Code
+4. Create `*.locks` file
