@@ -1,6 +1,6 @@
 "use strict";
 
-import { workspace, ExtensionContext } from "vscode";
+import { workspace, ExtensionContext, commands } from "vscode";
 import {
   LanguageClient,
   LanguageClientOptions,
@@ -28,12 +28,39 @@ export function activate(context: ExtensionContext) {
     synchronize: {
       fileEvents: workspace.createFileSystemWatcher("**/*.locks"),
     },
+    outputChannelName: "locks",
   };
 
   lc = new LanguageClient(
     "locks-language-server",
     serverOptions,
     clientOptions
+  );
+
+  const startLanguageServerHandler = () => {
+    console.log("Starting locks language server...");
+    lc.start();
+  };
+
+  const stopLanguageServerHandler = () => {
+    console.log("Stopping locks language server...");
+
+    if (!lc) {
+      return undefined;
+    }
+
+    return lc.stop();
+  };
+
+  context.subscriptions.push(
+    commands.registerCommand(
+      "locks.startLanguageServer",
+      startLanguageServerHandler
+    ),
+    commands.registerCommand(
+      "locks.stopLanguageServer",
+      stopLanguageServerHandler
+    )
   );
 
   lc.start();

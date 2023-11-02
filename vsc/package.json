@@ -58,7 +58,17 @@
           "description": "Specifies the folder path containing the locks binary."
         }
       }
-    }
+    },
+    "commands": [
+      {
+        "command": "locks.startLanguageServer",
+        "title": "Start Locks Language Server"
+      },
+      {
+        "command": "locks.stopLanguageServer",
+        "title": "Stop Locks Language Server"
+      }
+    ]
   },
   "devDependencies": {
     "@types/node": "^17.0.45",
