@@ -13,6 +13,16 @@ A toy language branched from [Lox](https://www.craftinginterpreters.com/) to lea
 
 </div>
 
+## Features
+
+- Bytecode Compiler
+- Stack Based Virtual Machine
+- Garbage Collection
+- Online Playground, via WebAssembly
+- Language Server Protocol
+- REPL
+- VS Code Extension
+
 ## VS Code Extension
 
 - Syntax highlighting
