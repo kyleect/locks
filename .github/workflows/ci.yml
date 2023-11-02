@@ -39,12 +39,12 @@ jobs:
       - name: Run Build
         run: just build-all
       - name: Upload Binary
-        uses: actions/upload-artifact@3
+        uses: actions/upload-artifact@v3
         with:
           name: locks-binary
           path: target/release/locks
       - name: Upload VS Code Extension Artifact
-        uses: actions/upload-artifact@3
+        uses: actions/upload-artifact@v3
         with:
           name: locks-vscode-extension
           path: vsc/out/locks-language-1.0.0.vsix
