@@ -80,7 +80,6 @@
     "vscode-languageclient": "9.0.1"
   },
   "scripts": {
-    "prepublish": "tsc -p",
     "build": "tsc",
     "watch": "tsc -w",
     "update-vscode": "node ./node_modules/vscode/bin/install"

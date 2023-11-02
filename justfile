@@ -5,18 +5,21 @@ build:
     cargo build --release
 
 build-all: build
+    cd vsc/ && just build
     cd playground/ && just build
 
 clean:
     cargo clean
 
 clean-all: clean
+    cd vsc/ && just clean
     cd playground/ && just clean
 
 fmt:
     cargo +nightly fmt --all
 
 fmt-all: fmt
+    cd vsc && just fmt
     cd playground/ && just fmt
 
 lint:
@@ -24,6 +27,7 @@ lint:
     cargo clippy --all-targets --no-deps --workspace
 
 lint-all: lint
+    cd vsc/ && just lint
     cd playground/ && just lint
 
 run-playground:

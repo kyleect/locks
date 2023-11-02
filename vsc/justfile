@@ -1,0 +1,15 @@
+default:
+  @just --list
+
+build:
+    npm ci
+    npm run build
+
+clean:
+    rm -rf out/* node_modules/
+
+fmt:
+    echo "No formatter in place"
+
+lint:
+    echo "No linter in place"
