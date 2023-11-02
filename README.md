@@ -23,6 +23,8 @@ A toy language branched from [Lox](https://www.craftinginterpreters.com/) to lea
 - REPL
 - [VS Code Extension](#vs-code-extension)
 
+Future [goals](https://github.com/kyleect/locks/issues/1)
+
 ## Usage
 
 Download the binary and vs code extension from the [latest build](https://github.com/kyleect/locks/actions/workflows/ci.yml)
