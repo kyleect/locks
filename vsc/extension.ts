@@ -1,6 +1,16 @@
 "use strict";
 
-import { workspace, ExtensionContext, commands } from "vscode";
+import {
+  workspace,
+  ExtensionContext,
+  commands,
+  tasks,
+  ShellExecution,
+  Task,
+  TaskScope,
+  TaskDefinition,
+  window,
+} from "vscode";
 import {
   LanguageClient,
   LanguageClientOptions,
@@ -51,6 +61,14 @@ export function activate(context: ExtensionContext) {
     return lc.stop();
   };
 
+  const runFileHandler = () => {
+    const terminal = window.createTerminal(`locks run`);
+    terminal.sendText(
+      `${locksBinPath} run ${window.activeTextEditor.document.uri.path}`
+    );
+    terminal.show();
+  };
+
   context.subscriptions.push(
     commands.registerCommand(
       "locks.startLanguageServer",
@@ -59,7 +77,8 @@ export function activate(context: ExtensionContext) {
     commands.registerCommand(
       "locks.stopLanguageServer",
       stopLanguageServerHandler
-    )
+    ),
+    commands.registerCommand("locks.runCurrentFile", runFileHandler)
   );
 
   lc.start();
@@ -71,4 +90,11 @@ export function deactivate() {
   }
 
   return lc.stop();
+}
+
+interface LocksRunFileTaskDefinition extends TaskDefinition {
+  /**
+   * The locks file to run
+   */
+  file: string;
 }

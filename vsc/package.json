@@ -67,6 +67,10 @@
       {
         "command": "locks.stopLanguageServer",
         "title": "Stop Locks Language Server"
+      },
+      {
+        "command": "locks.runCurrentFile",
+        "title": "Locks: Run Current File"
       }
     ]
   },
