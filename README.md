@@ -46,6 +46,7 @@ A toy language branched from [Lox](https://www.craftinginterpreters.com/) to lea
 - Syntax highlighting
 - Error reporting
 - Snippets
+- Command: Run current file
 
 ### Configuration
 
