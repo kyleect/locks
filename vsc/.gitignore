@@ -1,3 +1,4 @@
 out/*
 !dist/.gitkeep
 node_modules/
+*.vsix

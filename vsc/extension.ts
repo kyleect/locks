@@ -11,8 +11,7 @@ let lc: LanguageClient;
 
 export function activate(context: ExtensionContext) {
   const locksBinPath: string =
-    workspace.getConfiguration("locks").get("binPath") ??
-    context.asAbsolutePath("../target/release/locks.exe");
+    workspace.getConfiguration("locks").get("binPath") ?? "locks";
 
   const serverOptions: ServerOptions = {
     command: locksBinPath,

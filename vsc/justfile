@@ -4,6 +4,7 @@ default:
 build:
     npm ci
     npm run build
+    npm run package
 
 clean:
     rm -rf out/* node_modules/
