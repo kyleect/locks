@@ -27,6 +27,22 @@ A toy language branched from [Lox](https://www.craftinginterpreters.com/) to lea
 
 Download the binary and vs code extension from the [latest build](https://github.com/kyleect/locks/actions/workflows/ci.yml)
 
+```shell
+$ locks repl
+```
+
+You can also run files
+
+```shell
+$ locks run file.locks
+```
+
+Or run the language server
+
+```shell
+$ locks lsp
+```
+
 ## Development
 
 ### Setup
