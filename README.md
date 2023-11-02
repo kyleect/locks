@@ -27,6 +27,8 @@ Set `locks.binPath` to the absolute path of the `locks` binary. Defaults to `tar
 
 ### Setup
 
+- Install [Rust](https://www.rust-lang.org/tools/install)
+- Install [Docker](https://www.docker.com/)
 - `$ cargo install just` Required for running development scripts
 - `$ cargo install wasm-pack` Required to compile wasm package for playground
 
