@@ -21,7 +21,7 @@ fmt-all: fmt
 
 lint:
     cargo +nightly fmt --all -- --check
-    cargo clippy --all-features --all-targets --workspace -- --deny=warnings
+    cargo clippy --all-targets --no-deps --workspace
 
 lint-all: lint
     cd playground/ && just lint

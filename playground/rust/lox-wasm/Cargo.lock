@@ -443,6 +443,27 @@ dependencies = [
 ]
 
 [[package]]
+name = "locks"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "arrayvec",
+ "build-deps",
+ "clap",
+ "codespan-reporting",
+ "hashbrown 0.13.2",
+ "iota",
+ "lalrpop",
+ "lalrpop-util",
+ "logos",
+ "mimalloc",
+ "rustc-hash",
+ "termcolor",
+ "thiserror",
+ "wasm-bindgen",
+]
+
+[[package]]
 name = "log"
 version = "0.4.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -484,27 +505,6 @@ dependencies = [
  "serde",
  "serde_json",
  "termcolor",
- "wasm-bindgen",
-]
-
-[[package]]
-name = "locks"
-version = "0.1.1"
-dependencies = [
- "anyhow",
- "arrayvec",
- "build-deps",
- "clap",
- "codespan-reporting",
- "hashbrown 0.13.2",
- "iota",
- "lalrpop",
- "lalrpop-util",
- "logos",
- "mimalloc",
- "rustc-hash",
- "termcolor",
- "thiserror",
  "wasm-bindgen",
 ]
 
