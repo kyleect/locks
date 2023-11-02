@@ -48,6 +48,42 @@ jobs:
         with:
           name: locks-vscode-extension
           path: vsc/out/locks-language-1.0.0.vsix
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          components: clippy
+          profile: minimal
+          toolchain: 1.73.0
+      - name: Install Rust (nightly)
+        uses: actions-rs/toolchain@v1
+        with:
+          components: rustfmt
+          profile: minimal
+          toolchain: nightly
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          cache: npm
+          cache-dependency-path: playground/package-lock.json
+          node-version: 18
+      - name: Setup Rust cache
+        uses: Swatinem/rust-cache@v1
+      - name: Install just + wasm-pack
+        uses: taiki-e/install-action@v2
+        with:
+          tool: just,wasm-pack
+      - name: Run Build
+        run: just build-all
+      - name: Upload Binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: locks--windows-binary
+          path: target/release/locks.exe
   lint:
     runs-on: ubuntu-latest
     steps:
