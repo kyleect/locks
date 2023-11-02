@@ -5,11 +5,11 @@ use locks::vm::VM;
 use pretty_assertions::assert_eq;
 use test_generator::test_resources;
 
-#[test_resources("res/examples/**/*.lox")]
+#[test_resources("res/examples/**/*.locks")]
 fn lox(path: &str) {
     // Miri is too slow to run these tests.
     const MIRI_SKIP_PATHS: &[&str] =
-        &["res/examples/limit/loop_too_large.lox", "res/examples/limit/stack_overflow.lox"];
+        &["res/examples/limit/loop_too_large.locks", "res/examples/limit/stack_overflow.locks"];
     if cfg!(miri) && MIRI_SKIP_PATHS.contains(&path) {
         return;
     }
