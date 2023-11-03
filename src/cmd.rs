@@ -1,5 +1,5 @@
 use std::fs;
-use std::io::{self, Write};
+use std::io::{self, BufRead, Write};
 
 use anyhow::{bail, Context, Result};
 use clap::Parser;
@@ -13,6 +13,7 @@ pub enum Cmd {
     Lsp,
     Repl,
     Run { path: String },
+    Exec { source: Option<String> },
 }
 
 impl Cmd {
@@ -40,6 +41,35 @@ impl Cmd {
                 }
                 Ok(())
             }
+
+            Cmd::Exec { source } => match source {
+                Some(source) => {
+                    let mut vm = VM::default();
+                    let stdout = &mut io::stdout().lock();
+
+                    if let Err(e) = vm.run(&source, stdout) {
+                        report_err(&source, e);
+                        bail!("program exited with errors");
+                    }
+                    Ok(())
+                }
+                None => {
+                    let source = io::stdin()
+                        .lock()
+                        .lines()
+                        .fold("".to_string(), |acc, line| acc + &line.unwrap() + "\n");
+
+                    let mut vm = VM::default();
+                    let stdout = &mut io::stdout().lock();
+
+                    if let Err(e) = vm.run(&source, stdout) {
+                        report_err(&source, e);
+                        bail!("program exited with errors");
+                    }
+
+                    Ok(())
+                }
+            },
         }
     }
 }

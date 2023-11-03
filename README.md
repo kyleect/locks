@@ -39,6 +39,18 @@ You can also run files
 $ locks run file.locks
 ```
 
+Execute from a string argument
+
+```shell
+$ locks exec 'print "Hello";' # Hello
+```
+
+Or from stdin
+
+```shell
+$ cat res/benchmarks/fib.locks | locks exec
+```
+
 Or run the language server
 
 ```shell
