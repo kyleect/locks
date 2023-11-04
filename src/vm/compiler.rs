@@ -738,6 +738,7 @@ struct ClassCtx {
     has_super: bool,
 }
 
+/// Local Variable
 #[derive(Debug, Default)]
 struct Local {
     /// The name of the variable.
@@ -750,6 +751,9 @@ struct Local {
     is_captured: bool,
 }
 
+/// Closure Variable
+///
+/// A stack pointer to the closure variable's value is
 #[derive(Debug, Eq, PartialEq)]
 struct Upvalue {
     idx: u8,
