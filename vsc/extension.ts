@@ -5,9 +5,6 @@ import {
   ExtensionContext,
   commands,
   tasks,
-  ShellExecution,
-  Task,
-  TaskScope,
   TaskDefinition,
   window,
 } from "vscode";
@@ -16,6 +13,7 @@ import {
   LanguageClientOptions,
   ServerOptions,
 } from "vscode-languageclient/node";
+import { LocksTaskProvider } from "./locksTaskProvider";
 
 let lc: LanguageClient;
 
@@ -80,6 +78,8 @@ export function activate(context: ExtensionContext) {
     ),
     commands.registerCommand("locks.runCurrentFile", runFileHandler)
   );
+
+  tasks.registerTaskProvider("locks", new LocksTaskProvider());
 
   lc.start();
 }

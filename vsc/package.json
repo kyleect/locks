@@ -72,6 +72,13 @@
         "command": "locks.runCurrentFile",
         "title": "Locks: Run Current File"
       }
+    ],
+    "taskDefinitions": [
+      {
+        "type": "locks",
+        "required": [],
+        "properties": {}
+      }
     ]
   },
   "activationEvents": [],
