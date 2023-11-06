@@ -1,2 +1,2 @@
-// out: SyntaxError: unexpected "fun"
-while (true) fun foo() {}
+// out: SyntaxError: unexpected "fn"
+while (true) fn foo() {}

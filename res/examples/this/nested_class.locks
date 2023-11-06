@@ -2,7 +2,7 @@ class Outer {
   method() {
     print this; // out: <object Outer>
 
-    fun f() {
+    fn f() {
       print this; // out: <object Outer>
 
       class Inner {

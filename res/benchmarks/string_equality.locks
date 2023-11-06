@@ -9,7 +9,7 @@ var a8 = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa8";
 
 var n = 15000000;
 
-fun constants() {
+fn constants() {
   var i = 0;
   while (i < n) {
       i = i + 1;
@@ -24,7 +24,7 @@ fun constants() {
     }
 }
 
-fun equality() {
+fn equality() {
   var i = 0;
   while (i < n) {
     i = i + 1;

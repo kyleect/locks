@@ -1,7 +1,7 @@
-fun f() {
+fn f() {
   print("Test");
 }
 
-var fn = f;
+var fun = f;
 
-fn(); // out: Test
+fun(); // out: Test

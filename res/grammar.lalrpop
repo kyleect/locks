@@ -17,7 +17,7 @@ DeclS = Spanned<Decl>;
 
 Decl = {
     DeclClass,
-    DeclFun,
+    DeclFn,
     DeclVar,
     Stmt,
 }
@@ -26,7 +26,7 @@ DeclClass: ast::Stmt =
     "class" <name:identifier> <super_:("<" <Spanned<ExprVar>>)?> "{" <methods:Spanned<Function>*> "}" =>
         ast::Stmt::Class(ast::StmtClass { <> });
 
-DeclFun: ast::Stmt = "fun" <function:Function> => ast::Stmt::Fun(<>);
+DeclFn: ast::Stmt = "fn" <function:Function> => ast::Stmt::Fn(<>);
 
 DeclVar: ast::Stmt = "var" <name:identifier> <value:("=" <ExprS>)?> ";" =>
     ast::Stmt::Var(ast::StmtVar {
@@ -197,9 +197,9 @@ ExprThis: ast::Expr = "this" => ast::Expr::Var(ast::ExprVar { var: ast::Var {
 // Utilities
 Spanned<T>: ast::Spanned<T> = <l:@L> <t:T> <r:@R> => (t, l..r);
 
-Function: ast::StmtFun =
+Function: ast::StmtFn =
     <name:identifier> "(" <params:Params> ")" <body:StmtBlockInternal> =>
-        ast::StmtFun { <> };
+        ast::StmtFn { <> };
 
 Params: Vec<String> = {
     <first:identifier> <mut params:("," <identifier>)*> => {
@@ -262,7 +262,7 @@ extern {
         "else" => lexer::Token::Else,
         "false" => lexer::Token::False,
         "for" => lexer::Token::For,
-        "fun" => lexer::Token::Fun,
+        "fn" => lexer::Token::Fn,
         "if" => lexer::Token::If,
         "nil" => lexer::Token::Nil,
         "or" => lexer::Token::Or,

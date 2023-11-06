@@ -1,2 +1,2 @@
-// out: SyntaxError: unexpected "fun"
-if (true) fun foo() {}
+// out: SyntaxError: unexpected "fn"
+if (true) fn foo() {}

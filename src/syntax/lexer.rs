@@ -122,8 +122,8 @@ pub enum Token {
     False,
     #[token("for")]
     For,
-    #[token("fun")]
-    Fun,
+    #[token("fn")]
+    Fn,
     #[token("if")]
     If,
     #[token("nil")]

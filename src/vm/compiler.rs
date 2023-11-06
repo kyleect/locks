@@ -5,7 +5,7 @@ use arrayvec::ArrayVec;
 
 use crate::error::{ErrorS, NameError, OverflowError, Result, SyntaxError};
 use crate::syntax::ast::{
-    Expr, ExprLiteral, ExprS, OpInfix, OpPrefix, Stmt, StmtFun, StmtReturn, StmtS,
+    Expr, ExprLiteral, ExprS, OpInfix, OpPrefix, Stmt, StmtFn, StmtReturn, StmtS,
 };
 use crate::types::Span;
 use crate::vm::gc::Gc;
@@ -175,7 +175,7 @@ impl Compiler {
 
                 self.end_scope(span);
             }
-            Stmt::Fun(fun) => {
+            Stmt::Fn(fun) => {
                 self.compile_function(fun, span, FunctionType::Function, gc)?;
                 if self.is_global() {
                     let name = gc.alloc(&fun.name).into();
@@ -277,7 +277,7 @@ impl Compiler {
 
     fn compile_function(
         &mut self,
-        fun: &StmtFun,
+        fun: &StmtFn,
         span: &Span,
         type_: FunctionType,
         gc: &mut Gc,

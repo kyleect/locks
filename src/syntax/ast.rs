@@ -16,7 +16,7 @@ pub enum Stmt {
     Class(StmtClass),
     Expr(StmtExpr),
     For(Box<StmtFor>),
-    Fun(StmtFun),
+    Fn(StmtFn),
     If(Box<StmtIf>),
     Print(StmtPrint),
     Return(StmtReturn),
@@ -34,7 +34,7 @@ pub struct StmtBlock {
 pub struct StmtClass {
     pub name: String,
     pub super_: Option<ExprS>,
-    pub methods: Vec<Spanned<StmtFun>>,
+    pub methods: Vec<Spanned<StmtFn>>,
 }
 
 /// An expression statement evaluates an expression and discards the result.
@@ -52,7 +52,7 @@ pub struct StmtFor {
 }
 
 #[derive(Clone, Debug, PartialEq)]
-pub struct StmtFun {
+pub struct StmtFn {
     pub name: String,
     pub params: Vec<String>,
     pub body: StmtBlock,

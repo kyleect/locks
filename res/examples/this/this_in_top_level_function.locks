@@ -1,4 +1,4 @@
-fun foo() {
+fn foo() {
   this;
 }
 

@@ -67,7 +67,7 @@
           }
         },
         {
-          "match": "\\b(fun)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*\\(([A-Za-z0-9_,\\s]*)\\)",
+          "match": "\\b(fn)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*\\(([A-Za-z0-9_,\\s]*)\\)",
           "captures": {
             "1": {
               "name": "storage.type.function.locks"

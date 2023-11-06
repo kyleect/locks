@@ -1,4 +1,4 @@
-fun foo(arg,
+fn foo(arg,
         arg) { // out: NameError: name "arg" is already defined
   "body";
 }

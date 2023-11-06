@@ -20,7 +20,7 @@ for (var a = 0; a < 3; a = a + 1) {
 //
 // out: done
 //
-fun foo() {
+fn foo() {
   for (;;) return "done";
 }
 print foo();
@@ -39,7 +39,7 @@ for (; i < 2; i = i + 1) print i;
 // out: 1
 // out: 2
 //
-fun bar() {
+fn bar() {
   for (var i = 0;; i = i + 1) {
     print i;
     if (i >= 2) return;

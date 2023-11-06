@@ -1,7 +1,7 @@
 {
   "Function": {
-    "prefix": "fun",
-    "body": ["fun ${1:name}($2) {", "  $3", "}", "$0"],
+    "prefix": "fn",
+    "body": ["fn ${1:name}($2) {", "  $3", "}", "$0"],
     "description": "Create a function"
   },
   "Class": {
