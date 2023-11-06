@@ -5,14 +5,19 @@ import { Editor } from '../components/editor';
 import { Navbar } from '../components/navbar';
 import { Output } from '../components/output';
 
+const startingCode = `
+fn hello() {
+  print "Hello!";
+}
+
+hello();
+`;
+
 class LocalStorage {
   static editorTextKey = 'editorText';
 
   static get editorText(): string {
-    return (
-      localStorage.getItem(this.editorTextKey) ||
-      'var a = 1;\nvar b = 2;\nprint a + b;'
-    );
+    return localStorage.getItem(this.editorTextKey) || startingCode;
   }
 
   static set editorText(text: string) {
