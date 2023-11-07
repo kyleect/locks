@@ -63,7 +63,9 @@ const Playground: React.FC = () => {
       return;
     }
 
-    const hash = `#/code=${compressToEncodedURIComponent(editorText)}`;
+    const compressedText = compressToEncodedURIComponent(editorText);
+
+    const hash = `#/code=${compressedText}`;
 
     if (history.replaceState) {
       history.replaceState(null, '', hash);
@@ -71,7 +73,7 @@ const Playground: React.FC = () => {
       location.hash = hash;
     }
 
-    LocalStorage.editorText = editorText;
+    LocalStorage.editorText = compressedText;
   }, [editorText]);
 
   useEffect(() => {
@@ -84,7 +86,10 @@ const Playground: React.FC = () => {
         userCode = decompressFromEncodedURIComponent(decodeURIComponent(code));
       setEditorText(userCode);
     } else if (LocalStorage.editorText) {
-      setEditorText(LocalStorage.editorText);
+      const decompressedCode = decompressFromEncodedURIComponent(
+        LocalStorage.editorText,
+      );
+      setEditorText(decompressedCode);
     }
   }, []);
 
