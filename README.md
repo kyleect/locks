@@ -73,7 +73,7 @@ for (var i = 0; i < 10; i = i + 1) {
 // out: 9
 ```
 
-[If/Else](https://kyleect.github.io/locks/#/code=G4QwTgBAlgzgKmArgUwgXggFycg3AWACgioAzCAClgRQEoIBvIiCABzCgDtMIAiAdRAwsOAIS8ChAL4RkAGxiomhFuy48BQiKRALk4yVKJA)
+[If/Else](https://kyleect.github.io/locks/#/code=G4QwTgBAlgzgKmArgUwgXggFycg3AWACgioAzCAClgRQEoIBvIiCABzCgDtMIAiAdRAwsOAIS8ChAL4RkAGxiomhFuy48BQiKRALk4yVKJEA9CYgB7RJgBcEQcOwpRQA)
 
 ```
 var isTrue = true;
@@ -83,6 +83,8 @@ if (isTrue) {
 } else {
   print "Was false!";
 }
+
+// out: Was true!
 ```
 
 ## Usage
