@@ -44,14 +44,14 @@ fn sum (a, b) {
 print sum(60, 40); // out: 100
 ```
 
-[String Concatenation](https://kyleect.github.io/locks/#/code=GYOwBAFgpgNjD2AKEBDAtlAlGA3gWACgwwAnKAFwFcTwAiACVgTFrAGoxUMBuQgX0KEADiQCWIcpCZJaAdXgkYAE1qZuQA)
+[String Concatenation](https://kyleect.github.io/locks/#/code=GYOwBAFgpgNjD2AKEBDAtlAlGA3gWACgwwAnKAFwFcTwAiACVgTFrAGoxUMBuQgX0KEADiQCWIcpCZJaAdXgkYAE1qZuYAPQaw8SuQBcYRnHhh5ipUA)
 
 ```
 fn hello(name) {
   return "Hello " + name;
 }
 
-print hello("World"); // out: Hello
+print hello("World"); // out: Hello World
 ```
 
 [Closures](https://kyleect.github.io/locks/#/code=GYOwBA5gTgpjAuAKad4EsQQJRgN4FgAoMMUMABxigGcB7EREAQwFsYcDiSxZ4BXKOBQIMEMAGowAImkSwzNgG4iJAL4qwG3gPCUa9ZYXWEi5KBniRYCRFIASMADaPaUrLYDqtKI4AmbxTAAeiCwWj54AC4wB2daMC8fXyA)
