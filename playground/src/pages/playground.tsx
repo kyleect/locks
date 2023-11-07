@@ -59,7 +59,7 @@ const Playground: React.FC = () => {
   const [editorText, setEditorText] = useState<string>('');
 
   useEffect(() => {
-    if (editorText.length === 0) {
+    if (editorText?.length === 0) {
       return;
     }
 
