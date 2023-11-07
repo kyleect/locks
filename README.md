@@ -25,6 +25,66 @@ A toy language branched from [Lox](https://www.craftinginterpreters.com/) to lea
 
 Future [goals](https://github.com/kyleect/locks/issues/1)
 
+## Syntax Examples
+
+[Variables](https://kyleect.github.io/locks/#/code=G4QwTgBKA2CuCmEC8ECMAmAzAbgLACgAHMASwDsAXKEOebCAegYgHtYKAuNLIA)
+
+```
+var value = 123;
+print value; // out: 123
+```
+
+[Functions](https://kyleect.github.io/locks/#/code=GYOwBAzgrgtmAUBDANGARgSjAbwLACgwwAnAUwBcpjxEwBqdAbgIF8CCAHYgSxHMljwAbAAZUAFhEZGYAPSywAeyjkAXGACMIkUA)
+
+```
+fn sum (a, b) {
+  return a + b;
+}
+
+print sum(60, 40); // out: 100
+```
+
+[String Concatenation](https://kyleect.github.io/locks/#/code=GYOwBAFgpgNjD2AKEBDAtlAlGA3gWACgwwAnKAFwFcTwAiACVgTFrAGoxUMBuQgX0KEADiQCWIcpCZJaAdXgkYAE1qZuQA)
+
+```
+fn hello(name) {
+  return "Hello " + name;
+}
+
+print hello("World"); // out: Hello
+```
+
+[For Loops](https://kyleect.github.io/locks/#/code=GYewTgBAFAbghpAlhAvBADAbgsgPBARix1RIGpCBKCAbwFgAoCCABzEQDsAXHTRgX0ZA)
+
+```
+for (var i = 0; i < 10; i = i + 1) {
+  print i;
+}
+
+// out: 0
+// out: 1
+// out: 2
+// out: 3
+// out: 4
+// out: 5
+// out: 6
+// out: 7
+// out: 8
+// out: 9
+```
+
+[If/Else](https://kyleect.github.io/locks/#/code=G4QwTgBAlgzgKmArgUwgXggFycg3AWACgioAzCAClgRQEoIBvIiCABzCgDtMIAiAdRAwsOAIS8ChAL4RkAGxiomhFuy48BQiKRALk4yVKJA)
+
+```
+var isTrue = true;
+
+if (isTrue) {
+  print "Was true!";
+} else {
+  print "Was false!";
+}
+```
+
 ## Usage
 
 Download the binary and vs code extension from the [latest build](https://github.com/kyleect/locks/actions/workflows/ci.yml)
