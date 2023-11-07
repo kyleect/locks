@@ -34,7 +34,10 @@ const Navbar = ({ onRunClick, isRunning }: NavBarProps) => {
           className="btn btn-primary bi bi-share-fill me-1"
           type="button"
           onClick={() => {
-            navigator.clipboard.writeText(window.location.href);
+            navigator.clipboard.writeText(window.location.href).catch(() => {
+              // eslint-disable-next-line no-alert
+              alert('Unable to copy playground link');
+            });
           }}
           aria-label="Github repository"
         />

@@ -6,5 +6,5 @@
     "tsconfig.json",
     "tsconfig.eslint.json"
   ],
-  "exclude": [".parcel-cache", "dist", "node_modules"]
+  "exclude": [".parcel-cache", "dist", "node_modules", "vendor"]
 }

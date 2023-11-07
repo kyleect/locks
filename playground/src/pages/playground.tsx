@@ -1,8 +1,10 @@
+/* eslint-disable no-restricted-globals */
 import React, { useEffect, useState } from 'react';
 import Split from 'react-split';
 import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
+  // eslint-disable-next-line import/no-relative-packages
 } from '../../vendor/lz-string';
 
 import { Editor } from '../components/editor';
@@ -57,27 +59,23 @@ const Playground: React.FC = () => {
   const [editorText, setEditorText] = useState<string>('');
 
   useEffect(() => {
-    if (editorText.length == 0) {
+    if (editorText.length === 0) {
       return;
     }
 
     const hash = `#/code=${compressToEncodedURIComponent(editorText)}`;
 
     if (history.replaceState) {
-      console.log(`Replacing state...`);
       history.replaceState(null, '', hash);
     } else {
       location.hash = hash;
     }
-
-    console.log('Updating local storage');
 
     LocalStorage.editorText = editorText;
   }, [editorText]);
 
   useEffect(() => {
     if (location.hash.startsWith('#/code')) {
-      console.log('Found code in the url!');
       const code = location.hash.replace('#/code=', '').trim();
       let userCode = decompressFromEncodedURIComponent(code);
       // Fallback incase there is an extra level of decoding:
