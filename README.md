@@ -159,6 +159,10 @@ var greeter = HelloGreeter();
 print greeter.greet("World"); // out: Hello World
 ```
 
+### More Examples
+
+See [res/examples](res/examples) for more syntax examples.
+
 ## Usage
 
 Download the binary and vs code extension from the [latest build](https://github.com/kyleect/locks/actions/workflows/ci.yml)
