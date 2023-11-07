@@ -31,7 +31,15 @@ const Navbar = ({ onRunClick, isRunning }: NavBarProps) => {
       </div>
       <div>
         <button
-          className="btn btn-primary bi bi-share-fill me-1"
+          className="btn btn-dark bi bi-github me-1"
+          type="button"
+          onClick={() => {
+            window.open('https://github.com/kyleect/locks', '_blank');
+          }}
+          aria-label="Github repository"
+        />
+        <button
+          className="btn btn-primary me-1"
           type="button"
           onClick={() => {
             navigator.clipboard.writeText(window.location.href).catch(() => {
@@ -40,15 +48,14 @@ const Navbar = ({ onRunClick, isRunning }: NavBarProps) => {
             });
           }}
           aria-label="Github repository"
-        />
-        <button
-          className="btn btn-dark bi bi-github me-1"
-          type="button"
-          onClick={() => {
-            window.open('https://github.com/kyleect/locks', '_blank');
-          }}
-          aria-label="Github repository"
-        />
+        >
+          <span
+            className="me-1 bi bi-clipboard"
+            role="status"
+            aria-hidden="true"
+          />
+          Copy
+        </button>
         <button
           id="run-btn"
           className={`btn ${runColor}`}
