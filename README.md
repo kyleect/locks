@@ -119,6 +119,30 @@ var greeter = Greeter("Hello");
 print greeter.greet("World"); // out: Hello World
 ```
 
+[Inheritance](https://kyleect.github.io/locks/#/code=MYGwhgzhAEDiBOBTRAXR9oG8CwAoa0AlgHaEoAUA5kqiZQJRZ4EEoAWhEAdNcindAC80XrWKUA3M2gBfPNNEViYALaJGOfCyQoArvGLR2nHjX7joAamgAiW1ejK1UrXNxu8oSDAASiECAA9gh86NAAPHBmYZoEJGTkGtIEELoADuhc8RQ2fgGBNvQuBG4euABuYBiKYcJ5QSGo6IkueGnwJCgi0fCmfOQ2AOqB8CAAJoUS0AD009CBuigAXND1gdDDo2N4QA)
+
+```
+class Greeter {
+  init(greeting) {
+    this.greeting = greeting;
+  }
+
+  greet(name) {
+    return this.greeting + " " + name;
+  }
+}
+
+class HelloGreeter < Greeter {
+  init() {
+    super.init("Hello");
+  }
+}
+
+var greeter = HelloGreeter();
+
+print greeter.greet("World"); // out: Hello World
+```
+
 ## Usage
 
 Download the binary and vs code extension from the [latest build](https://github.com/kyleect/locks/actions/workflows/ci.yml)
