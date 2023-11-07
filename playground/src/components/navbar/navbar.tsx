@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { Popover } from 'bootstrap';
 
 interface NavBarProps {
   /**
@@ -21,6 +22,16 @@ const Navbar = ({ onRunClick, isRunning }: NavBarProps) => {
     runIcon = 'me-2 spinner-grow spinner-grow-sm';
     runText = 'Stop';
   }
+
+  const clipboardRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    // eslint-disable-next-line no-new, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+    new Popover(clipboardRef.current as any, {
+      content: 'Copied!',
+      trigger: 'focus',
+    });
+  }, []);
 
   return (
     <nav className="navbar p-2" id="navbar">
@@ -45,6 +56,8 @@ const Navbar = ({ onRunClick, isRunning }: NavBarProps) => {
         <button
           className="btn btn-primary me-1"
           type="button"
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          ref={clipboardRef}
           onClick={() => {
             navigator.clipboard.writeText(window.location.href).catch(() => {
               // eslint-disable-next-line no-alert
@@ -53,12 +66,7 @@ const Navbar = ({ onRunClick, isRunning }: NavBarProps) => {
           }}
           aria-label="Github repository"
         >
-          <span
-            className="me-1 bi bi-clipboard"
-            role="status"
-            aria-hidden="true"
-          />
-          Copy
+          <span className="bi bi-clipboard" role="status" aria-hidden="true" />
         </button>
         <button
           id="run-btn"
