@@ -101,6 +101,24 @@ if (isTrue) {
 // out: Was true!
 ```
 
+[Classes](https://kyleect.github.io/locks/#/code=MYGwhgzhAEDiBOBTRAXR9oG8CwAoa0AlgHaEoAUA5kqiZQJRZ4EEoAWhEAdNcindAC80XrWKUA3M2gBfPNNEViYALaJGOfCyQoArvGLR2nHjX7joAamgAiW1ejK1UrXNxu8ANzAZF6IXBm6OQ2ABKIICAA9jb0LngADvAkKCJB8KZ8IQDqUfAgACaxEtAA9KXQUbooAFzQ4ZFR0Ln5BXhAA)
+
+```
+class Greeter {
+  init(greeting) {
+    this.greeting = greeting;
+  }
+
+  greet(name) {
+    return this.greeting + " " + name;
+  }
+}
+
+var greeter = Greeter("Hello");
+
+print greeter.greet("World"); // out: Hello World
+```
+
 ## Usage
 
 Download the binary and vs code extension from the [latest build](https://github.com/kyleect/locks/actions/workflows/ci.yml)
