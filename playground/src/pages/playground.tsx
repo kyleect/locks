@@ -1,23 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import Split from 'react-split';
+import {
+  compressToEncodedURIComponent,
+  decompressFromEncodedURIComponent,
+} from '../../vendor/lz-string';
 
 import { Editor } from '../components/editor';
 import { Navbar } from '../components/navbar';
 import { Output } from '../components/output';
 
-const startingCode = `
-fn hello() {
-  print "Hello!";
-}
-
-hello();
-`;
-
 class LocalStorage {
   static editorTextKey = 'editorText';
 
-  static get editorText(): string {
-    return localStorage.getItem(this.editorTextKey) || startingCode;
+  static get editorText(): string | null {
+    return localStorage.getItem(this.editorTextKey);
   }
 
   static set editorText(text: string) {
@@ -58,10 +54,41 @@ const Playground: React.FC = () => {
   }, []);
 
   // Editor text is saved to local storage.
-  const [editorText, setEditorText] = useState<string>(LocalStorage.editorText);
+  const [editorText, setEditorText] = useState<string>('');
+
   useEffect(() => {
+    if (editorText.length == 0) {
+      return;
+    }
+
+    const hash = `#/code=${compressToEncodedURIComponent(editorText)}`;
+
+    if (history.replaceState) {
+      console.log(`Replacing state...`);
+      history.replaceState(null, '', hash);
+    } else {
+      location.hash = hash;
+    }
+
+    console.log('Updating local storage');
+
     LocalStorage.editorText = editorText;
   }, [editorText]);
+
+  useEffect(() => {
+    if (location.hash.startsWith('#/code')) {
+      console.log('Found code in the url!');
+      const code = location.hash.replace('#/code=', '').trim();
+      let userCode = decompressFromEncodedURIComponent(code);
+      // Fallback incase there is an extra level of decoding:
+      // https://gitter.im/Microsoft/TypeScript?at=5dc478ab9c39821509ff189a
+      if (!userCode)
+        userCode = decompressFromEncodedURIComponent(decodeURIComponent(code));
+      setEditorText(userCode);
+    } else if (LocalStorage.editorText) {
+      setEditorText(LocalStorage.editorText);
+    }
+  }, []);
 
   // Output from Lox is continuously streamed here.
   const [outputText, setOutputText] = useState<string>('');

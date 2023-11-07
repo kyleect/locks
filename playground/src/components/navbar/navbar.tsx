@@ -31,6 +31,14 @@ const Navbar = ({ onRunClick, isRunning }: NavBarProps) => {
       </div>
       <div>
         <button
+          className="btn btn-primary bi bi-share-fill me-1"
+          type="button"
+          onClick={() => {
+            navigator.clipboard.writeText(window.location.href);
+          }}
+          aria-label="Github repository"
+        />
+        <button
           className="btn btn-dark bi bi-github me-1"
           type="button"
           onClick={() => {
