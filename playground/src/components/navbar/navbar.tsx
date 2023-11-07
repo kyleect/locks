@@ -25,8 +25,13 @@ const Navbar = ({ onRunClick, isRunning }: NavBarProps) => {
 
   return (
     <nav className="navbar p-2" id="navbar">
-      <div className="navbar-brand">
-        <img alt="Logo" className="me-2" src={Logo} />
+      <div className="navbar-brand fw-bold">
+        <span className="bi bi-lock-fill" role="img" aria-hidden="true" />
+        <span
+          className="me-2 bi bi-unlock-fill"
+          role="img"
+          aria-hidden="true"
+        />
         Locks Playground
       </div>
       <div>
