@@ -18,7 +18,7 @@ A toy language branched from [Lox](https://www.craftinginterpreters.com/) to lea
 - Bytecode Compiler
 - Stack Based Virtual Machine
 - Garbage Collection
-- [Online Playground](https://kyleect.github.io/locks/), via WebAssembly
+- [Online Playground](https://kyleect.github.io/locks/), via WebAssembly (/w shareable [links](https://kyleect.github.io/locks/#/code=GYOwBAFgpgNjD2AKEBDAtlAlGA3gWACgwwAnKAFwFcTwAiACVgTFrAGoxUMBuQgX0KEADiQCWIcpCZJaAdXgkYAE1qZeBIA))
 - Language Server Protocol
 - REPL
 - [VS Code Extension](#vs-code-extension)
