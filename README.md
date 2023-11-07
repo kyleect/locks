@@ -54,6 +54,20 @@ fn hello(name) {
 print hello("World"); // out: Hello
 ```
 
+[Closures](https://kyleect.github.io/locks/#/code=GYOwBA5gTgpjAuAKad4EsQQJRgN4FgAoMMUMABxigGcB7EREAQwFsYcDiSxZ4BXKOBQIMEMAGowAImkSwzNgG4iJAL4qwG3gPCUa9ZYXWEi5KBniRYCRFIASMADaPaUrLYDqtKI4AmbxTAAeiCwWj54AC4wB2daMC8fXyA)
+
+```
+fn greet(greeting) {
+  fn person(name) {
+    return greeting + " " + name;
+  }
+
+  return person;
+}
+
+print greet("Hello")("World"); // out: Hello World
+```
+
 [For Loops](https://kyleect.github.io/locks/#/code=GYewTgBAFAbghpAlhAvBADAbgsgPBARix1RIGpCBKCAbwFgAoCCABzEQDsAXHTRgX0ZA)
 
 ```
