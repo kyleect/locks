@@ -27,14 +27,18 @@ Future [goals](https://github.com/kyleect/locks/issues/1)
 
 ## Syntax Examples
 
-[Variables](https://kyleect.github.io/locks/#/code=G4QwTgBKA2CuCmEC8ECMAmAzAbgLACgAHMASwDsAXKEOebCAegYgHtYKAuNLIA)
+### Variables
+
+[Playground](https://kyleect.github.io/locks/#/code=G4QwTgBKA2CuCmEC8ECMAmAzAbgLACgAHMASwDsAXKEOebCAegYgHtYKAuNLIA)
 
 ```
 var value = 123;
 print value; // out: 123
 ```
 
-[Functions](https://kyleect.github.io/locks/#/code=GYOwBAzgrgtmAUBDANGARgSjAbwLACgwwAnAUwBcpjxEwBqdAbgIF8CCAHYgSxHMljwAbAAZUAFhEZGYAPSywAeyjkAXGACMIkUA)
+### Functions
+
+[Playground](https://kyleect.github.io/locks/#/code=GYOwBAzgrgtmAUBDANGARgSjAbwLACgwwAnAUwBcpjxEwBqdAbgIF8CCAHYgSxHMljwAbAAZUAFhEZGYAPSywAeyjkAXGACMIkUA)
 
 ```
 fn sum (a, b) {
@@ -44,7 +48,9 @@ fn sum (a, b) {
 print sum(60, 40); // out: 100
 ```
 
-[String Concatenation](https://kyleect.github.io/locks/#/code=GYOwBAFgpgNjD2AKEBDAtlAlGA3gWACgwwAnKAFwFcTwAiACVgTFrAGoxUMBuQgX0KEADiQCWIcpCZJaAdXgkYAE1qZuYAPQaw8SuQBcYRnHhh5ipUA)
+### String Concatenation
+
+[Playground](https://kyleect.github.io/locks/#/code=GYOwBAFgpgNjD2AKEBDAtlAlGA3gWACgwwAnKAFwFcTwAiACVgTFrAGoxUMBuQgX0KEADiQCWIcpCZJaAdXgkYAE1qZuYAPQaw8SuQBcYRnHhh5ipUA)
 
 ```
 fn hello(name) {
@@ -54,7 +60,9 @@ fn hello(name) {
 print hello("World"); // out: Hello World
 ```
 
-[Closures](https://kyleect.github.io/locks/#/code=GYOwBA5gTgpjAuAKad4EsQQJRgN4FgAoMMUMABxigGcB7EREAQwFsYcDiSxZ4BXKOBQIMEMAGowAImkSwzNgG4iJAL4qwG3gPCUa9ZYXWEi5KBniRYCRFIASMADaPaUrLYDqtKI4AmbxTAAeiCwWj54AC4wB2daMC8fXyA)
+### Closures
+
+[Playground](https://kyleect.github.io/locks/#/code=GYOwBA5gTgpjAuAKad4EsQQJRgN4FgAoMMUMABxigGcB7EREAQwFsYcDiSxZ4BXKOBQIMEMAGowAImkSwzNgG4iJAL4qwG3gPCUa9ZYXWEi5KBniRYCRFIASMADaPaUrLYDqtKI4AmbxTAAeiCwWj54AC4wB2daMC8fXyA)
 
 ```
 fn greet(greeting) {
@@ -68,7 +76,9 @@ fn greet(greeting) {
 print greet("Hello")("World"); // out: Hello World
 ```
 
-[For Loops](https://kyleect.github.io/locks/#/code=GYewTgBAFAbghpAlhAvBADAbgsgPBARix1RIGpCBKCAbwFgAoCCABzEQDsAXHTRgX0ZA)
+### For Loops
+
+[Playground](https://kyleect.github.io/locks/#/code=GYewTgBAFAbghpAlhAvBADAbgsgPBARix1RIGpCBKCAbwFgAoCCABzEQDsAXHTRgX0ZA)
 
 ```
 for (var i = 0; i < 10; i = i + 1) {
@@ -87,7 +97,9 @@ for (var i = 0; i < 10; i = i + 1) {
 // out: 9
 ```
 
-[If/Else](https://kyleect.github.io/locks/#/code=G4QwTgBAlgzgKmArgUwgXggFycg3AWACgioAzCAClgRQEoIBvIiCABzCgDtMIAiAdRAwsOAIS8ChAL4RkAGxiomhFuy48BQiKRALk4yVKJEA9CYgB7RJgBcEQcOwpRQA)
+### If/Else
+
+[Playground](https://kyleect.github.io/locks/#/code=G4QwTgBAlgzgKmArgUwgXggFycg3AWACgioAzCAClgRQEoIBvIiCABzCgDtMIAiAdRAwsOAIS8ChAL4RkAGxiomhFuy48BQiKRALk4yVKJEA9CYgB7RJgBcEQcOwpRQA)
 
 ```
 var isTrue = true;
@@ -101,7 +113,9 @@ if (isTrue) {
 // out: Was true!
 ```
 
-[Classes](https://kyleect.github.io/locks/#/code=MYGwhgzhAEDiBOBTRAXR9oG8CwAoa0AlgHaEoAUA5kqiZQJRZ4EEoAWhEAdNcindAC80XrWKUA3M2gBfPNNEViYALaJGOfCyQoArvGLR2nHjX7joAamgAiW1ejK1UrXNxu8ANzAZF6IXBm6OQ2ABKIICAA9jb0LngADvAkKCJB8KZ8IQDqUfAgACaxEtAA9KXQUbooAFzQ4ZFR0Ln5BXhAA)
+### Classes
+
+[Playground](https://kyleect.github.io/locks/#/code=MYGwhgzhAEDiBOBTRAXR9oG8CwAoa0AlgHaEoAUA5kqiZQJRZ4EEoAWhEAdNcindAC80XrWKUA3M2gBfPNNEViYALaJGOfCyQoArvGLR2nHjX7joAamgAiW1ejK1UrXNxu8ANzAZF6IXBm6OQ2ABKIICAA9jb0LngADvAkKCJB8KZ8IQDqUfAgACaxEtAA9KXQUbooAFzQ4ZFR0Ln5BXhAA)
 
 ```
 class Greeter {
@@ -119,7 +133,9 @@ var greeter = Greeter("Hello");
 print greeter.greet("World"); // out: Hello World
 ```
 
-[Inheritance](https://kyleect.github.io/locks/#/code=MYGwhgzhAEDiBOBTRAXR9oG8CwAoa0AlgHaEoAUA5kqiZQJRZ4EEoAWhEAdNcindAC80XrWKUA3M2gBfPNNEViYALaJGOfCyQoArvGLR2nHjX7joAamgAiW1ejK1UrXNxu8oSDAASiECAA9gh86NAAPHBmYZoEJGTkGtIEELoADuhc8RQ2fgGBNvQuBG4euABuYBiKYcJ5QSGo6IkueGnwJCgi0fCmfOQ2AOqB8CAAJoUS0AD009CBuigAXND1gdDDo2N4QA)
+### Inheritance
+
+[Playground](https://kyleect.github.io/locks/#/code=MYGwhgzhAEDiBOBTRAXR9oG8CwAoa0AlgHaEoAUA5kqiZQJRZ4EEoAWhEAdNcindAC80XrWKUA3M2gBfPNNEViYALaJGOfCyQoArvGLR2nHjX7joAamgAiW1ejK1UrXNxu8oSDAASiECAA9gh86NAAPHBmYZoEJGTkGtIEELoADuhc8RQ2fgGBNvQuBG4euABuYBiKYcJ5QSGo6IkueGnwJCgi0fCmfOQ2AOqB8CAAJoUS0AD009CBuigAXND1gdDDo2N4QA)
 
 ```
 class Greeter {
