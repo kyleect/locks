@@ -1,40 +1,22 @@
-import React, { useEffect, useRef } from 'react';
-import { Popover } from 'bootstrap';
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable react/require-default-props */
+import React, { ReactNode } from 'react';
+import { NavLink } from 'react-router-dom';
 
 interface NavBarProps {
   /**
    * Set to `true` if VM is currently running.
    */
-  isRunning: boolean;
-  onRunClick: () => void;
+  subBrandText: string;
+  content?: ReactNode;
 }
 
 /**
  * Navbar component
  */
-const Navbar = ({ onRunClick, isRunning }: NavBarProps) => {
-  let runColor = 'btn-success';
-  let runIcon = 'me-1 bi bi-play-fill';
-  let runText = 'Run';
-
-  if (isRunning) {
-    runColor = 'btn-danger';
-    runIcon = 'me-2 spinner-grow spinner-grow-sm';
-    runText = 'Stop';
-  }
-
-  const clipboardRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    // eslint-disable-next-line no-new, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
-    new Popover(clipboardRef.current as any, {
-      content: 'Copied!',
-      trigger: 'focus',
-    });
-  }, []);
-
-  return (
-    <nav className="navbar p-2" id="navbar">
+const Navbar = ({ subBrandText, content }: NavBarProps) => (
+  <nav className="navbar navbar-expand-lg p-1" id="navbar">
+    <div className="container-fluid">
       <div className="navbar-brand fw-bold">
         <span className="bi bi-lock-fill" role="img" aria-hidden="true" />
         <span
@@ -42,45 +24,56 @@ const Navbar = ({ onRunClick, isRunning }: NavBarProps) => {
           role="img"
           aria-hidden="true"
         />
-        Locks Playground
+        Locks {subBrandText}
       </div>
-      <div>
+      <div className="d-flex">
         <button
-          className="btn btn-dark bi bi-github me-1"
+          className="navbar-toggler"
           type="button"
-          onClick={() => {
-            window.open('https://github.com/kyleect/locks', '_blank');
-          }}
-          aria-label="Github repository"
-        />
-        <button
-          className="btn btn-primary me-1"
-          type="button"
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          ref={clipboardRef}
-          onClick={() => {
-            navigator.clipboard.writeText(window.location.href).catch(() => {
-              // eslint-disable-next-line no-alert
-              alert('Unable to copy playground link');
-            });
-          }}
-          aria-label="Github repository"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
         >
-          <span className="bi bi-clipboard" role="status" aria-hidden="true" />
+          <span className="navbar-toggler-icon" />
         </button>
-        <button
-          id="run-btn"
-          className={`btn ${runColor}`}
-          onClick={onRunClick}
-          type="button"
-          aria-label="Run code"
-        >
-          <span className={runIcon} role="status" aria-hidden="true" />
-          {runText}
-        </button>
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <li className="nav-item nav-link">
+              <NavLink
+                className={({ isActive }) => (isActive ? 'fw-bold' : '')}
+                aria-current="page"
+                to="/"
+              >
+                Playground
+              </NavLink>
+            </li>
+            <li className="nav-item nav-link">
+              <NavLink
+                className={({ isActive }) => (isActive ? 'fw-bold' : '')}
+                aria-current="page"
+                to="/docs"
+              >
+                Docs
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <button
+                className="btn btn-dark bi bi-github me-1"
+                type="button"
+                onClick={() => {
+                  window.open('https://github.com/kyleect/locks', '_blank');
+                }}
+                aria-label="Github repository"
+              />
+              {content}
+            </li>
+          </ul>
+        </div>
       </div>
-    </nav>
-  );
-};
+    </div>
+  </nav>
+);
 
 export { Navbar, NavBarProps };

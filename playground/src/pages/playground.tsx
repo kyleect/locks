@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-globals */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Popover } from 'bootstrap';
 import Split from 'react-split';
 import {
   compressToEncodedURIComponent,
@@ -157,11 +158,65 @@ const Playground: React.FC = () => {
    */
   const resizeHandler = () => window.dispatchEvent(new Event('resize'));
 
+  const clipboardRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    // eslint-disable-next-line no-new, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+    new Popover(clipboardRef.current as any, {
+      content: 'Copied!',
+      trigger: 'focus',
+    });
+  }, []);
+
+  let runColor = 'btn-success';
+  let runIcon = 'me-1 bi bi-play-fill';
+  let runText = 'Run';
+
+  if (isRunning) {
+    runColor = 'btn-danger';
+    runIcon = 'me-2 spinner-grow spinner-grow-sm';
+    runText = 'Stop';
+  }
+
   return (
     <>
       <Navbar
-        isRunning={isRunning}
-        onRunClick={isRunning ? stopLox : startLox}
+        subBrandText="Playground"
+        content={
+          <>
+            <button
+              className="btn btn-primary me-1"
+              type="button"
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+              ref={clipboardRef}
+              onClick={() => {
+                navigator.clipboard
+                  .writeText(window.location.href)
+                  .catch(() => {
+                    // eslint-disable-next-line no-alert
+                    alert('Unable to copy playground link');
+                  });
+              }}
+              aria-label="Github repository"
+            >
+              <span
+                className="bi bi-clipboard"
+                role="status"
+                aria-hidden="true"
+              />
+            </button>
+            <button
+              id="run-btn"
+              className={`btn ${runColor}`}
+              onClick={isRunning ? stopLox : startLox}
+              type="button"
+              aria-label="Run code"
+            >
+              <span className={runIcon} role="status" aria-hidden="true" />
+              {runText}
+            </button>
+          </>
+        }
       />
       <Split
         className="d-flex"
