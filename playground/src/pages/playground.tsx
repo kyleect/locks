@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-globals */
 import React, { useEffect, useRef, useState } from 'react';
 import { Popover } from 'bootstrap';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import Split from 'react-split';
 import {
   compressToEncodedURIComponent,
@@ -47,6 +48,9 @@ type LoxOutMessage =
  * @returns A page component
  */
 const Playground: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
   /**
    * @remarks
    * Sends resize signal to editor on initialization.
@@ -74,12 +78,14 @@ const Playground: React.FC = () => {
       location.hash = hash;
     }
 
+    navigate(`/?code=${compressedText}`);
+
     LocalStorage.editorText = compressedText;
-  }, [editorText]);
+  }, [editorText, navigate]);
 
   useEffect(() => {
-    if (location.hash.startsWith('#/code')) {
-      const code = location.hash.replace('#/code=', '').trim();
+    if (searchParams.get('code')) {
+      const code = searchParams.get('code')?.trim() ?? '';
       let userCode = decompressFromEncodedURIComponent(code);
       // Fallback incase there is an extra level of decoding:
       // https://gitter.im/Microsoft/TypeScript?at=5dc478ab9c39821509ff189a
@@ -92,7 +98,7 @@ const Playground: React.FC = () => {
       );
       setEditorText(decompressedCode);
     }
-  }, []);
+  }, [searchParams]);
 
   // Output from Lox is continuously streamed here.
   const [outputText, setOutputText] = useState<string>('');

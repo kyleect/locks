@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-restricted-globals */
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { Example } from '../components/example';
 import { Navbar } from '../components/navbar';
@@ -24,9 +23,9 @@ const Docs: React.FC = () => (
             </Example>
           </div>
 
-          <Link to="/#/code=MYGwhgzhAEDiBOBTRAXR9oG8CwAoa0AlgHaEoAUA5kqiZQJRZ4EEoAWhEAdNcindAC80XrWKUA3M2gBfPNNEViYALaJGOfCyQoArvGLR2nHjX7joAamgAiW1ejK1UrXNxu8oSDAASiECAA9gh86NAAPHBmYZoEJGTkGtIEELoADuhc8RQ2fgGBNvQuBG4euABuYBiKYcJ5QSGo6IkueGnwJCgi0fCmfOQ2AOqB8CAAJoUS0AD009CBuigAXND1gdDDo2N4QA">
+          <a href="/#/?code=code=G4QwTgBKA2CuCmEC8ECMAmAzAbgLACgAHMASwDsAXKEOebCAegYgHtYKAuNLIA">
             Playground
-          </Link>
+          </a>
         </div>
         <div className="card p-2">
           <h2 className="fs-3">Functions</h2>
@@ -43,9 +42,9 @@ const Docs: React.FC = () => (
             </Example>
           </div>
 
-          <Link to="/#/code=GYOwBAzgrgtmAUBDANGARgSjAbwLACgwwAnAUwBcpjxEwBqdAbgIF8CCAHYgSxHMljwAbAAZUAFhEZGYAPSywAeyjkAXGACMIkUA">
+          <a href="/#/?code=GYOwBAzgrgtmAUBDANGARgSjAbwLACgwwAnAUwBcpjxEwBqdAbgIF8CCAHYgSxHMljwAbAAZUAFhEZGYAPSywAeyjkAXGACMIkUA">
             Playground
-          </Link>
+          </a>
         </div>
         <div className="card p-2">
           <h2 className="fs-3">String Concatenation</h2>
@@ -62,9 +61,9 @@ const Docs: React.FC = () => (
             </Example>
           </div>
 
-          <Link to="/#/code=GYOwBAFgpgNjD2AKEBDAtlAlGA3gWACgwwAnKAFwFcTwAiACVgTFrAGoxUMBuQgX0KEADiQCWIcpCZJaAdXgkYAE1qZuYAPQaw8SuQBcYRnHhh5ipUA">
+          <a href="/#/?code=GYOwBAFgpgNjD2AKEBDAtlAlGA3gWACgwwAnKAFwFcTwAiACVgTFrAGoxUMBuQgX0KEADiQCWIcpCZJaAdXgkYAE1qZuYAPQaw8SuQBcYRnHhh5ipUA">
             Playground
-          </Link>
+          </a>
         </div>
         <div className="card p-2">
           <h2 className="fs-3">Closures</h2>
@@ -85,9 +84,9 @@ const Docs: React.FC = () => (
             </Example>
           </div>
 
-          <Link to="/#/code=GYOwBA5gTgpjAuAKad4EsQQJRgN4FgAoMMUMABxigGcB7EREAQwFsYcDiSxZ4BXKOBQIMEMAGowAImkSwzNgG4iJAL4qwG3gPCUa9ZYXWEi5KBniRYCRFIASMADaPaUrLYDqtKI4AmbxTAAeiCwWj54AC4wB2daMC8fXyA">
+          <a href="/#/?code=GYOwBA5gTgpjAuAKad4EsQQJRgN4FgAoMMUMABxigGcB7EREAQwFsYcDiSxZ4BXKOBQIMEMAGowAImkSwzNgG4iJAL4qwG3gPCUa9ZYXWEi5KBniRYCRFIASMADaPaUrLYDqtKI4AmbxTAAeiCwWj54AC4wB2daMC8fXyA">
             Playground
-          </Link>
+          </a>
         </div>
         <div className="card p-2">
           <h2 className="fs-3">For Loops</h2>
@@ -113,9 +112,9 @@ const Docs: React.FC = () => (
             </Example>
           </div>
 
-          <Link to="/#/code=GYewTgBAFAbghpAlhAvBADAbgsgPBARix1RIGpCBKCAbwFgAoCCABzEQDsAXHTRgX0ZA">
+          <a href="/#/?code=GYewTgBAFAbghpAlhAvBADAbgsgPBARix1RIGpCBKCAbwFgAoCCABzEQDsAXHTRgX0ZA">
             Playground
-          </Link>
+          </a>
         </div>
         <div className="card p-2">
           <h2 className="fs-3">If/Else</h2>
@@ -136,9 +135,9 @@ const Docs: React.FC = () => (
             </Example>
           </div>
 
-          <Link to="/#/code=G4QwTgBAlgzgKmArgUwgXggFycg3AWACgioAzCAClgRQEoIBvIiCABzCgDtMIAiAdRAwsOAIS8ChAL4RkAGxiomhFuy48BQiKRALk4yVKJEA9CYgB7RJgBcEQcOwpRQAA">
+          <a href="/#/?code=G4QwTgBAlgzgKmArgUwgXggFycg3AWACgioAzCAClgRQEoIBvIiCABzCgDtMIAiAdRAwsOAIS8ChAL4RkAGxiomhFuy48BQiKRALk4yVKJEA9CYgB7RJgBcEQcOwpRQAA">
             Playground
-          </Link>
+          </a>
         </div>
         <div className="card p-2">
           <h2 className="fs-3">Classes</h2>
@@ -163,9 +162,9 @@ const Docs: React.FC = () => (
             </Example>
           </div>
 
-          <Link to="/#/code=MYGwhgzhAEDiBOBTRAXR9oG8CwAoa0AlgHaEoAUA5kqiZQJRZ4EEoAWhEAdNcindAC80XrWKUA3M2gBfPNNEViYALaJGOfCyQoArvGLR2nHjX7joAamgAiW1ejK1UrXNxu8ANzAZF6IXBm6OQ2ABKIICAA9jb0LngADvAkKCJB8KZ8IQDqUfAgACaxEtAA9KXQUbooAFzQ4ZFR0Ln5BXhAA">
+          <a href="/#/?code=MYGwhgzhAEDiBOBTRAXR9oG8CwAoa0AlgHaEoAUA5kqiZQJRZ4EEoAWhEAdNcindAC80XrWKUA3M2gBfPNNEViYALaJGOfCyQoArvGLR2nHjX7joAamgAiW1ejK1UrXNxu8ANzAZF6IXBm6OQ2ABKIICAA9jb0LngADvAkKCJB8KZ8IQDqUfAgACaxEtAA9KXQUbooAFzQ4ZFR0Ln5BXhAA">
             Playground
-          </Link>
+          </a>
         </div>
         <div className="card p-2">
           <h2 className="fs-3">Inheritance</h2>
@@ -196,9 +195,9 @@ const Docs: React.FC = () => (
             </Example>
           </div>
 
-          <Link to="/#/code=MYGwhgzhAEDiBOBTRAXR9oG8CwAoa0AlgHaEoAUA5kqiZQJRZ4EEoAWhEAdNcindAC80XrWKUA3M2gBfPNNEViYALaJGOfCyQoArvGLR2nHjX7joAamgAiW1ejK1UrXNxu8oSDAASiECAA9gh86NAAPHBmYZoEJGTkGtIEELoADuhc8RQ2fgGBNvQuBG4euABuYBiKYcJ5QSGo6IkueGnwJCgi0fCmfOQ2AOqB8CAAJoUS0AD009CBuigAXND1gdDDo2N4QA">
+          <a href="/#/?code=MYGwhgzhAEDiBOBTRAXR9oG8CwAoa0AlgHaEoAUA5kqiZQJRZ4EEoAWhEAdNcindAC80XrWKUA3M2gBfPNNEViYALaJGOfCyQoArvGLR2nHjX7joAamgAiW1ejK1UrXNxu8oSDAASiECAA9gh86NAAPHBmYZoEJGTkGtIEELoADuhc8RQ2fgGBNvQuBG4euABuYBiKYcJ5QSGo6IkueGnwJCgi0fCmfOQ2AOqB8CAAJoUS0AD009CBuigAXND1gdDDo2N4QA">
             Playground
-          </Link>
+          </a>
         </div>
       </div>
     </div>

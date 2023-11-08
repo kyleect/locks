@@ -8,7 +8,7 @@ import Playground from './pages/playground';
 
 const router = createHashRouter([
   {
-    path: '/',
+    path: '/*',
     element: <Playground />,
   },
   {
