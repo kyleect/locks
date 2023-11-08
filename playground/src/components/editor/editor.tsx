@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import React from 'react';
 import AceEditor from 'react-ace';
 
 interface EditorProps {
   text: string;
-  // eslint-disable-next-line no-unused-vars
-  onChange: (value: string) => void;
+  // eslint-disable-next-line no-unused-vars, react/require-default-props
+  onChange?: (value: string) => void;
 }
 
 /**
@@ -16,7 +17,7 @@ const Editor = ({ onChange, text }: EditorProps) => (
     focus
     mode="text"
     name="editor"
-    onChange={onChange}
+    onChange={onChange ?? (() => {})}
     showPrintMargin={false}
     value={text}
   />
