@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1",
   "description": "Online playground for the Locks programming language",
-  "homepage": "https://kyleect.github.io/locks/",
+  "homepage": ".",
   "keywords": [
     "playground",
     "lox",
