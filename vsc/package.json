@@ -71,6 +71,10 @@
       {
         "command": "locks.runCurrentFile",
         "title": "Locks: Run Current File"
+      },
+      {
+        "command": "locks.openDocs",
+        "title": "Locks: Open Docs"
       }
     ],
     "taskDefinitions": [

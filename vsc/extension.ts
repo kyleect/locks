@@ -7,6 +7,8 @@ import {
   tasks,
   TaskDefinition,
   window,
+  env,
+  Uri,
 } from "vscode";
 import {
   LanguageClient,
@@ -76,7 +78,10 @@ export function activate(context: ExtensionContext) {
       "locks.stopLanguageServer",
       stopLanguageServerHandler
     ),
-    commands.registerCommand("locks.runCurrentFile", runFileHandler)
+    commands.registerCommand("locks.runCurrentFile", runFileHandler),
+    commands.registerCommand("locks.openDocs", () => {
+      env.openExternal(Uri.parse("https://kyleect.github.io/locks/#/docs"));
+    })
   );
 
   tasks.registerTaskProvider("locks", new LocksTaskProvider());
