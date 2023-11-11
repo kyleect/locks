@@ -59,7 +59,7 @@ fizzBuzz(100);
 
 ### Runtime
 
-Download the binary and vs code extension from the [latest build](https://github.com/kyleect/locks/actions/workflows/ci.yml)
+Download the runtime from the [latest build](https://github.com/kyleect/locks/actions/workflows/ci.yml)
 
 ```shell
 $ locks repl
@@ -90,6 +90,10 @@ $ locks lsp
 ```
 
 ### VS Code Extension
+
+Download the VS Code extension from the [latest build](https://github.com/kyleect/locks/actions/workflows/ci.yml)
+
+#### OR
 
 1. Run `just build-all`
 2. Copy `./target/release/locks[.exe]` somewhere in your `PATH`
