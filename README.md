@@ -27,7 +27,7 @@ Future [goals](https://github.com/kyleect/locks/issues/1)
 
 ## Getting Started
 
-Check out [online playground](https://kyleect.github.io/locks/)) & [interactive Documentation](https://kyleect.github.io/locks/#/docs)
+Check out [online playground](https://kyleect.github.io/locks/) & [interactive Documentation](https://kyleect.github.io/locks/#/docs)
 
 ## Installing
 
