@@ -15,9 +15,9 @@ interface NavBarProps {
  * Navbar component
  */
 const Navbar = ({ subBrandText, content }: NavBarProps) => (
-  <nav className="navbar navbar-expand-lg p-1" id="navbar">
+  <nav className="navbar navbar-dark bg-dark navbar-expand-lg p-1" id="navbar">
     <div className="container-fluid">
-      <div className="navbar-brand fw-bold">
+      <div className="navbar-brand fw-bold text-light">
         <span className="bi bi-lock-fill" role="img" aria-hidden="true" />
         <span
           className="me-2 bi bi-unlock-fill"
@@ -26,20 +26,9 @@ const Navbar = ({ subBrandText, content }: NavBarProps) => (
         />
         Locks {subBrandText}
       </div>
-      <div className="d-flex">
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon" />
-        </button>
+      <div className="d-flex bg-dark">
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+          <ul className="navbar-nav me-auto p-3 p-lg-0 mb-0">
             <li className="nav-item nav-link">
               <NavLink
                 className={({ isActive }) => (isActive ? 'fw-bold' : '')}
@@ -71,6 +60,17 @@ const Navbar = ({ subBrandText, content }: NavBarProps) => (
             </li>
           </ul>
         </div>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon" />
+        </button>
       </div>
     </div>
   </nav>
