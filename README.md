@@ -32,11 +32,11 @@ Check out the [documentation](https://kyleect.github.io/locks/#/docs) the start 
 
 ### Example
 
-[Playground](https://kyleect.github.io/locks/#/?code=GYOwBMCWBe0EIFdYAoQEowG8CwAoMEA9gE5jIBuAhqZGALxgCMA3GLQDxMAMLb9fAaiYYc+AuMjAytAKRMArPQZcRecerAAHYpBAAXMACIAYjHhJoh5mo0BfG+oCmAGwDOjtlOSywAZiVgKlgOGtq6BiZmViEE9mJObh6S0mByinTKqvGhOvpGiLDR2bExYC7uwcXiYXmQ1lVxJbhxeFCwBdDIjFwqzEA)
+[Playground](https://kyleect.github.io/locks/#/?code=GYOwBMCWBe0EIFdYAoQEowG8CwAoMEA9gE5jIBuAhqZGALxgCMA3GLQDwMiu0O0DUTDDnwExkYGVoBSJgFZ6DAAzC8Y9WAAOxSCAAuYAEQAxGPCTRDzNRoC+N9QFMANgGdHbSchlgAzIrAVLAcNbV0DEzMrEIJ7USc3DwkpMFkFOmVVeNCdfSNEWGjs2JiwF3dg4rEwvMhrKriS3Di8KFgC6GRGJRV6vAB6frBCBD0ALiYBoZHxsAAmKeHRidNYRZmJgBZ15bAOndnV6AOJgHYTsAAOC6OL-dxBpdnGRhuzC8ZfD+2H6d2j+6PDZMABsH3OvyeK3ekOBjAAnHcLG81rDdnMFmjZnMvljoaigbtAX9sWC8WBbuS5tcqYjyQDkeTfK8mZjCYcYeyJr4fly9oy+ZS+b4IcKaYLOSSJsSoWBNiyJQSpXLcXzNrzlQylbLNmS1aLNZKdXS+TLgULlXI2ZbVYbtcCzbs5Hq7cdyXJxZaTa7HbMQQrlSDrbKLbKQRrZb78W6+SCDWHPSGjQ6BcrTgGk-bdqdbbLThHzWYo2BTi68-HC1nZqdvZHU5mY8rLsHgZdc5XG3WqxNLmWOxdLonW7WO8X4RngfCW-9k7t4QWifX++T4RW50OZ93+bAgA)
 
 ```
 fn fizzBuzz(n) {
-  for (var i = 1; i < 101; i = i + 1) {
+  for (var i = 1; i <= n; i = i + 1) {
       if (i % 15 == 0) {
         print "FizzBuzz";
       }
@@ -53,6 +53,107 @@ fn fizzBuzz(n) {
 }
 
 fizzBuzz(100);
+
+// out: 1
+// out: 2
+// out: Fizz
+// out: 4
+// out: Buzz
+// out: Fizz
+// out: 7
+// out: 8
+// out: Fizz
+// out: Buzz
+// out: 11
+// out: Fizz
+// out: 13
+// out: 14
+// out: FizzBuzz
+// out: 16
+// out: 17
+// out: Fizz
+// out: 19
+// out: Buzz
+// out: Fizz
+// out: 22
+// out: 23
+// out: Fizz
+// out: Buzz
+// out: 26
+// out: Fizz
+// out: 28
+// out: 29
+// out: FizzBuzz
+// out: 31
+// out: 32
+// out: Fizz
+// out: 34
+// out: Buzz
+// out: Fizz
+// out: 37
+// out: 38
+// out: Fizz
+// out: Buzz
+// out: 41
+// out: Fizz
+// out: 43
+// out: 44
+// out: FizzBuzz
+// out: 46
+// out: 47
+// out: Fizz
+// out: 49
+// out: Buzz
+// out: Fizz
+// out: 52
+// out: 53
+// out: Fizz
+// out: Buzz
+// out: 56
+// out: Fizz
+// out: 58
+// out: 59
+// out: FizzBuzz
+// out: 61
+// out: 62
+// out: Fizz
+// out: 64
+// out: Buzz
+// out: Fizz
+// out: 67
+// out: 68
+// out: Fizz
+// out: Buzz
+// out: 71
+// out: Fizz
+// out: 73
+// out: 74
+// out: FizzBuzz
+// out: 76
+// out: 77
+// out: Fizz
+// out: 79
+// out: Buzz
+// out: Fizz
+// out: 82
+// out: 83
+// out: Fizz
+// out: Buzz
+// out: 86
+// out: Fizz
+// out: 88
+// out: 89
+// out: FizzBuzz
+// out: 91
+// out: 92
+// out: Fizz
+// out: 94
+// out: Buzz
+// out: Fizz
+// out: 97
+// out: 98
+// out: Fizz
+// out: Buzz
 ```
 
 ## Installing
