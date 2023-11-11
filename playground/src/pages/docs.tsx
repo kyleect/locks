@@ -24,12 +24,22 @@ const Docs: React.FC = () => (
         <DocCard
           title="Variables"
           anchor="variables"
-          code={['var value;']}
-          height="30px"
+          code={['var value;', '', 'print value; // nil']}
+          height="70px"
         >
           Variables are declared using the <code>var</code> keyword with an
           identifier/name matching <code>[a-zA-Z_][a-zA-Z0-9_]*</code>.
-          Supported value types: string, number, boolean, function, nil
+          Supported value types: string, number, boolean, function,{' '}
+          <code>nil</code>. Variables default to <code>nil</code>.
+        </DocCard>
+
+        <DocCard
+          title="Nil"
+          anchor="nil"
+          code={['var value = nil;', '', 'print nil; // out: nil']}
+          height="70px"
+        >
+          A null value.
         </DocCard>
 
         <DocCard
@@ -45,15 +55,6 @@ const Docs: React.FC = () => (
           code={['var value = true;', '', 'print value; // out: true']}
           height="70px"
         />
-
-        <DocCard
-          title="Nil"
-          anchor="nil"
-          code={['var value = nil;', '', 'print nil; // out: nil']}
-          height="70px"
-        >
-          A null value.
-        </DocCard>
 
         <DocCard
           title="Strings"
