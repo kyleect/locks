@@ -31,7 +31,24 @@ Future [goals](https://github.com/kyleect/locks/issues/1)
 Check out the [documentation](https://kyleect.github.io/locks/#/docs) the start running code in the [playground](https://kyleect.github.io/locks/).
 
 ```
-print "Hello World";
+fn fizzBuzz(n) {
+  for (var i = 1; i < 101; i = i + 1) {
+      if (i % 15 == 0) {
+        print "FizzBuzz";
+      }
+      else if (i % 3 == 0) {
+        print "Fizz";
+      }
+      else if (i % 5 == 0) {
+        print "Buzz";
+      }
+      else {
+        print i;
+      }
+  }
+}
+
+fizzBuzz(100);
 ```
 
 ## Installing

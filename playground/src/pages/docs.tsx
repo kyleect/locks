@@ -66,8 +66,13 @@ const Docs: React.FC = () => (
             'print -123; // out: -123',
             'print -123.45; // out: -123.45',
             'print (5 + 7) * 2.5; // out: 30;',
+            'print 5 % 1; // out: 0',
+            'print 5 % 2; // out: 1',
+            'print 5 % 3; // out: 2',
+            'print 5 % 4; // out: 1',
+            'print 5 % 5; // out: 0'
           ]}
-          height="110px"
+          height="300px"
         >
           A 64bit float value.
         </DocCard>

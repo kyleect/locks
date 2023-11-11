@@ -84,6 +84,8 @@ pub enum Token {
     Slash,
     #[token("*")]
     Asterisk,
+    #[token("%")]
+    Modulus,
 
     // One or two character tokens.
     #[token("!")]

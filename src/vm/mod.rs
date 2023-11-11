@@ -146,6 +146,7 @@ impl VM {
                 op::SUBTRACT => self.op_subtract(),
                 op::MULTIPLY => self.op_multiply(),
                 op::DIVIDE => self.op_divide(),
+                op::MODULUS => self.op_modulus(),
                 op::NOT => self.op_not(),
                 op::NEGATE => self.op_negate(),
                 op::PRINT => self.op_print(stdout),
@@ -426,6 +427,10 @@ impl VM {
 
     fn op_divide(&mut self) -> Result<()> {
         self.binary_op_number(|a, b| Value::from(a / b), "/")
+    }
+
+    fn op_modulus(&mut self) -> Result<()> {
+        self.binary_op_number(|a, b| Value::from(a % b), "%")
     }
 
     fn op_not(&mut self) -> Result<()> {

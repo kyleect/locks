@@ -386,6 +386,10 @@ impl Compiler {
                         self.compile_expr(&infix.rt, gc)?;
                         self.emit_u8(op::DIVIDE, span);
                     }
+                    OpInfix::Modulus => {
+                        self.compile_expr(&infix.rt, gc)?;
+                        self.emit_u8(op::MODULUS, span);
+                    }
                     OpInfix::Less => {
                         self.compile_expr(&infix.rt, gc)?;
                         self.emit_u8(op::LESS, span);

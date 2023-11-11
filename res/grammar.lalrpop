@@ -143,6 +143,7 @@ ExprFactor = ExprInfix<ExprFactor, OpFactor, ExprPrefix>;
 OpFactor: ast::OpInfix = {
     "*" => ast::OpInfix::Multiply,
     "/" => ast::OpInfix::Divide,
+    "%" => ast::OpInfix::Modulus,
 }
 
 ExprPrefix: ast::Expr = {
@@ -239,6 +240,7 @@ extern {
         "+" => lexer::Token::Plus,
         ";" => lexer::Token::Semicolon,
         "/" => lexer::Token::Slash,
+        "%" => lexer::Token::Modulus,
         "*" => lexer::Token::Asterisk,
 
         // One or two character tokens.

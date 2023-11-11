@@ -59,6 +59,7 @@ iota! {
     DIVIDE,
     // Pops a value from the stack, checks if it is "falsey", and pushes the
     // result onto the stack.
+    MODULUS,
     NOT,
     // Pops a number from the stack, negates it, and pushes the result onto the
     // stack.
