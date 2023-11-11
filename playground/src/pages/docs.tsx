@@ -4,7 +4,10 @@ import React from 'react';
 
 import { Link } from 'react-router-dom';
 import { Example } from '../components/example';
+import { LocksRunButton } from '../components/locks-run-button';
 import { Navbar } from '../components/navbar';
+import { Output } from '../components/output';
+import { useLocks } from '../hooks/useLocks';
 
 interface DocCardProps {
   title: string;
@@ -18,13 +21,30 @@ const DocCard: React.FC<DocCardProps> = ({
   code,
   playgroundCode,
   height,
-}) => (
-  <div className="card p-2">
-    <h2 className="fs-3">{title}</h2>
-    <Example height={height}>{code}</Example>
-    <Link to={`/?code=${playgroundCode}`}>Playground</Link>
-  </div>
-);
+}) => {
+  const { isRunning, runLocks, stopLocks, locksResult } = useLocks();
+  const value = Array.isArray(code) ? code.join('\n') : code;
+
+  return (
+    <div className="card p-2">
+      <h2 className="fs-3">{title}</h2>
+      <Example height={height}>{code}</Example>
+      <LocksRunButton
+        isRunning={isRunning}
+        onClick={isRunning ? stopLocks : () => runLocks(value)}
+      />
+      {typeof locksResult === 'string' && (
+        <>
+          <h3 className="fs-5">Output</h3>
+          <div className="card">
+            <Output text={locksResult} />
+          </div>
+        </>
+      )}
+      <Link to={`/?code=${playgroundCode}`}>Playground</Link>
+    </div>
+  );
+};
 
 /**
  * Locks's documentation page component

@@ -10,8 +10,10 @@ import {
 } from '../../vendor/lz-string';
 
 import { Editor } from '../components/editor';
+import { LocksRunButton } from '../components/locks-run-button';
 import { Navbar } from '../components/navbar';
 import { Output } from '../components/output';
+import { useLocks } from '../hooks/useLocks';
 
 class LocalStorage {
   static editorTextKey = 'editorText';
@@ -25,24 +27,6 @@ class LocalStorage {
   }
 }
 
-type LoxOutMessageOutput = {
-  type: 'Output';
-  text: string;
-};
-
-type LoxOutMessageExitFailure = {
-  type: 'ExitFailure';
-};
-
-type LoxOutMessageExitSuccess = {
-  type: 'ExitSuccess';
-};
-
-type LoxOutMessage =
-  | LoxOutMessageOutput
-  | LoxOutMessageExitFailure
-  | LoxOutMessageExitSuccess;
-
 /**
  * Locks's playground page component
  * @returns A page component
@@ -50,6 +34,7 @@ type LoxOutMessage =
 const Playground: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { isRunning, runLocks, stopLocks, locksResult } = useLocks();
 
   /**
    * @remarks
@@ -99,64 +84,6 @@ const Playground: React.FC = () => {
       setEditorText(decompressedCode);
     }
   }, [searchParams]);
-
-  // Output from Lox is continuously streamed here.
-  const [outputText, setOutputText] = useState<string>('');
-  const addOutputText = (text: string) => {
-    setOutputText((currentOutput) => currentOutput + text);
-  };
-
-  // The worker is set back to null once it finishes executing.
-  const [worker, setWorker] = useState<Worker | null>(null);
-  const stopWorker = () => {
-    setWorker((currentWorker) => {
-      if (currentWorker !== null) {
-        currentWorker.terminate();
-      }
-      return null;
-    });
-  };
-
-  const startLox = () => {
-    stopWorker();
-    setOutputText('');
-
-    const webWorker = new Worker(new URL('../worker.ts', import.meta.url), {
-      type: 'module',
-    });
-
-    webWorker.onmessage = (event) => {
-      const msg: LoxOutMessage = JSON.parse(
-        event.data as string,
-      ) as LoxOutMessage;
-
-      switch (msg.type) {
-        case 'Output':
-          addOutputText(msg.text);
-          break;
-        case 'ExitSuccess':
-          stopWorker();
-          addOutputText('---\nProgram exited successfully.\n');
-          break;
-        case 'ExitFailure':
-          stopWorker();
-          addOutputText('---\nProgram exited with errors.\n');
-          break;
-        default:
-          break;
-      }
-    };
-
-    webWorker.postMessage(editorText);
-    setWorker(webWorker);
-  };
-
-  const stopLox = () => {
-    stopWorker();
-    addOutputText('---\nCommand terminated.');
-  };
-
-  const isRunning = worker !== null;
   /**
    * @remarks
    * Send resize signal to editor on split resize.
@@ -173,16 +100,6 @@ const Playground: React.FC = () => {
       trigger: 'focus',
     });
   }, []);
-
-  let runColor = 'btn-success';
-  let runIcon = 'me-1 bi bi-play-fill';
-  let runText = 'Run';
-
-  if (isRunning) {
-    runColor = 'btn-danger';
-    runIcon = 'me-2 spinner-grow spinner-grow-sm';
-    runText = 'Stop';
-  }
 
   return (
     <>
@@ -211,16 +128,10 @@ const Playground: React.FC = () => {
                 aria-hidden="true"
               />
             </button>
-            <button
-              id="run-btn"
-              className={`btn ${runColor}`}
-              onClick={isRunning ? stopLox : startLox}
-              type="button"
-              aria-label="Run code"
-            >
-              <span className={runIcon} role="status" aria-hidden="true" />
-              {runText}
-            </button>
+            <LocksRunButton
+              isRunning={isRunning}
+              onClick={isRunning ? stopLocks : () => runLocks(editorText)}
+            />
           </>
         }
       />
@@ -232,7 +143,7 @@ const Playground: React.FC = () => {
         onDragEnd={resizeHandler}
       >
         <Editor text={editorText} onChange={setEditorText} />
-        <Output text={outputText} />
+        <Output text={locksResult ?? ''} />
       </Split>
     </>
   );
