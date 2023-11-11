@@ -27,7 +27,7 @@ const DocCard: React.FC<DocCardProps> = ({
   const value = Array.isArray(code) ? code.join('\n') : code;
 
   return (
-    <div>
+    <div className="shadow p-3 rounded">
       <h2 className="fs-4">
         {title}{' '}
         <Link to={`#${anchor}`}>
