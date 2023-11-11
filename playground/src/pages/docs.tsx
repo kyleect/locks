@@ -44,18 +44,32 @@ const Docs: React.FC = () => (
         <DocCard
           title="Nil"
           anchor="nil"
-          code={['var value = nil;', '', 'print nil; // out: nil']}
-          height="70px"
+          code={[
+            'var value = nil;',
+            'print nil; // out: nil',
+            '',
+            'fn noReturn() {}',
+            'print noReturn(); // out: nil',
+          ]}
+          height="110px"
         >
-          A null value.
+          A null value. This is the default value for variables and functions
+          without a return.
         </DocCard>
 
         <DocCard
           title="Numbers"
           anchor="numbers"
-          code={['var value = 123;', '', 'print value; // out: 123']}
-          height="70px"
-        />
+          code={[
+            'print 123; // out: 123',
+            'print 123.45; // out: 123.45',
+            'print -123; // out: -123',
+            'print -123.45; // out: -123.45',
+          ]}
+          height="100px"
+        >
+          A 64bit float.
+        </DocCard>
 
         <DocCard
           title="Booleans"
