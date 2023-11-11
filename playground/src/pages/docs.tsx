@@ -18,25 +18,70 @@ const Docs: React.FC = () => (
           title="Comments"
           anchor="comments"
           code="// Line comments are supported"
-          height="50px"
-        />
-
-        <DocCard
-          title="Print"
-          anchor="print"
-          code='print "This outputs to stdout"; // out: This outputs to stdout'
-          height="50px"
+          height="30px"
         />
 
         <DocCard
           title="Variables"
           anchor="variables"
-          code={['var value = 123;', 'print value; // out: 123']}
-          height="50px"
+          code={['var value;']}
+          height="30px"
         >
           Variables are declared using the <code>var</code> keyword with an
           identifier/name matching <code>[a-zA-Z_][a-zA-Z0-9_]*</code>.
           Supported value types: string, number, boolean, function, nil
+        </DocCard>
+
+        <DocCard
+          title="Numbers"
+          anchor="numbers"
+          code={['var value = 123;', '', 'print value; // out: 123']}
+          height="70px"
+        />
+
+        <DocCard
+          title="Boolean"
+          anchor="boolean"
+          code={['var value = true;', '', 'print value; // out: true']}
+          height="70px"
+        />
+
+        <DocCard
+          title="Nil"
+          anchor="nil"
+          code={['var value = nil;', '', 'print nil; // out: nil']}
+          height="70px"
+        >
+          A null value.
+        </DocCard>
+
+        <DocCard
+          title="Strings"
+          anchor="strings"
+          code={[
+            'var value = "Hello World";',
+            '',
+            'print value; // out: Hello World',
+          ]}
+          height="70px"
+        >
+          Strings are created using double quotes.
+        </DocCard>
+
+        <DocCard
+          title="String Concatenation"
+          anchor="string-concatenation"
+          code={[
+            'fn hello(name) {',
+            '  return "Hello " + name;',
+            '}',
+            '',
+            'print hello("World"); // out: Hello World',
+          ]}
+          height="100px"
+        >
+          Strings can be concatenated together using the <code>+</code>{' '}
+          operator.
         </DocCard>
 
         <DocCard
@@ -87,22 +132,6 @@ const Docs: React.FC = () => (
           height="200px"
         >
           Functions can capture variables from their surrounding scope.
-        </DocCard>
-
-        <DocCard
-          title="String Concatenation"
-          anchor="string-concatenation"
-          code={[
-            'fn hello(name) {',
-            '  return "Hello " + name;',
-            '}',
-            '',
-            'print hello("World"); // out: Hello World',
-          ]}
-          height="100px"
-        >
-          Strings can be concatenated together using the <code>+</code>{' '}
-          operator.
         </DocCard>
 
         <DocCard
