@@ -32,14 +32,14 @@ const DocCard: React.FC<DocCardProps> = ({
         {title}{' '}
         <Link to={`#${anchor}`}>
           <span
-            className="me-2 bi bi-link-45deg text-black align-text-bottom"
+            className="me-1 bi bi-link-45deg text-black align-text-bottom"
             role="img"
             aria-hidden="true"
           />
         </Link>
         <Link to={`/?code=${compressToEncodedURIComponent(value)}`}>
           <span
-            className="me-2 bi bi-rocket-takeoff text-black align-text-bottom"
+            className="fs-5 bi bi-rocket-takeoff text-black"
             role="img"
             aria-hidden="true"
           />

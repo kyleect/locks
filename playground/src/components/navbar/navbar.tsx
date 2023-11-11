@@ -58,6 +58,11 @@ const Navbar = ({ subBrandText, content }: NavBarProps) => (
               </NavLink>
             </li>
             <li className="nav-item nav-link">
+              <span
+                className="me-2 bi bi-terminal-fill text-white"
+                role="img"
+                aria-hidden="true"
+              />
               <a
                 href="https://github.com/kyleect/locks#vs-code-extension"
                 target="_blank"
