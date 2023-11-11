@@ -47,7 +47,7 @@ const DocCard: React.FC<DocCardProps> = ({
         {typeof locksResult === 'string' && (
           <>
             <h3 className="fs-5 mt-2">Result:</h3>
-            <div className="card">
+            <div className="card bg-light bg-gradient">
               <Output text={locksResult} />
             </div>
           </>
