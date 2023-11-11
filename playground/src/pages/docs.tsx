@@ -17,7 +17,6 @@ const Docs: React.FC = () => (
         <DocCard
           title="Variables"
           code={['var value = 123;', 'print value; // out: 123']}
-          playgroundCode="G4QwTgBKA2CuCmEC8ECMAmAzAbgFAAcwBLAOwBcoQ55sIB6OiAe1jIC40sg"
           height="50px"
         />
 
@@ -30,7 +29,6 @@ const Docs: React.FC = () => (
             '',
             'print sum(60, 40); // out: 100',
           ]}
-          playgroundCode="GYOwBAzgrgtmAUBDANGARgSjAbwFBjACcBTAFykPETAGp0BuXAX11wAdCBLEUyWeAGwAGVABYhGemAD00sAHsopAFxgAjEKFA"
           height="100px"
         />
 
@@ -43,7 +41,6 @@ const Docs: React.FC = () => (
             '',
             'print hello("World"); // out: Hello World',
           ]}
-          playgroundCode="GYOwBAFgpgNjD2AKEBDAtlAlGA3gKDDACcoAXAVyPACIAJWBMasAajFQwG48BfPPAA5EAliFKQGSagHV4RGABNqmTmAD0asPHKkAXGHpx4YWfIVA"
           height="100px"
         />
 
@@ -60,7 +57,6 @@ const Docs: React.FC = () => (
             '',
             'print greet("Hello")("World"); // out: Hello World',
           ]}
-          playgroundCode="GYOwBA5gTgpjAuAKad4EsQQJRgN4CgwxQwAHGKAZwHsREQBDAWxhwKKNngFcpwUEGCGADUYAEQTRYRiwDchMAF98irr3DkqtBSvykoGeJFgJE4gBIwANteris5gOrUo1gCYO5YAPQ+w1NzwAFxgVrbUYC5u7kA"
           height="200px"
         />
 
@@ -82,7 +78,6 @@ const Docs: React.FC = () => (
             '// out: 8',
             '// out: 9',
           ]}
-          playgroundCode="GYewTgBAFAbghpAlhAvBADAbgsgPBARix1RIGpCBKCAbwCgIIAHMRAOwBcdM6BfOugHpBEEAFcOALgxCR4qYVmiJ0gExL50gMwaVEACy6FAViPSAbGYgB2KwA4rATiA"
           height="300px"
         />
 
@@ -99,7 +94,6 @@ const Docs: React.FC = () => (
             '',
             '// out: Was true!',
           ]}
-          playgroundCode="G4QwTgBAlgzgKmArgUwgXggFycg3AKHygDMIAKWBFASggG98IIAHMKAO0wgCIB1EGFhwBCbgQC+EZABsYqBk1YcufARGIhZyURMIB6PRAD2iTAC4I-QdhTCgA"
           height="200px"
         />
 
@@ -120,7 +114,6 @@ const Docs: React.FC = () => (
             '',
             'print greeter.greet("World"); // out: Hello World',
           ]}
-          playgroundCode="MYGwhgzhAEDiBOBTRAXR9oG8BQ1oEsA7fFACgHMlUjyBKLXPaFAC3wgDpLkUboBeaN2qFyAbkYBfbI2FlCYALaJ6OJtCQoArvELM2nOXwDU0AETnophcol5p07ADcwGOegFwqaeKTMAJRBAQAHszWglsAAd4IhQhb3Qubz8AdRD4EAATcLFoAHp86BCtFAAuaEDgkOh0zKygA"
           height="300px"
         />
 
@@ -147,7 +140,6 @@ const Docs: React.FC = () => (
             '',
             'print greeter.greet("World"); // out: Hello World',
           ]}
-          playgroundCode="MYGwhgzhAEDiBOBTRAXR9oG8BQ1oEsA7fFACgHMlUjyBKLXPaFAC3wgDpLkUboBeaN2qFyAbkYBfbI2FlCYALaJ6OJtCQoArvELM2nOXwDU0AETnophcol5p07KEgwAEohAgA9gh7poADxwVGgYagTEZKqMeBBaAA7oHEQkpGbunl5mtHbQDjIAbmAYcv6CGd6+qOikOTLx8EQoQiFJcmkA6l7wIAAm2WLQAPRD0F5aKABc0BVe0F09vUA"
           height="400px"
         />
       </div>

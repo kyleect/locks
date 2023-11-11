@@ -9,7 +9,7 @@ interface OutputProps {
  */
 const Output = ({ text }: OutputProps) => (
   <pre
-    className="h-100 font-monospace fs-6 ms-1"
+    className="h-100 font-monospace fs-6 ms-2"
     // eslint-disable-next-line react/no-danger
     dangerouslySetInnerHTML={{ __html: text }}
     id="output"
