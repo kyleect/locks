@@ -23,8 +23,8 @@ const DocCard: React.FC<DocCardProps> = ({
   const value = Array.isArray(code) ? code.join('\n') : code;
 
   return (
-    <>
-      <h2 className="fs-3 mb-0">
+    <div>
+      <h2 className="fs-4">
         {title}{' '}
         <Link to={`#${anchor}`}>
           <span
@@ -35,7 +35,7 @@ const DocCard: React.FC<DocCardProps> = ({
         </Link>
       </h2>
 
-      {children ? <p className="m-0">{children}</p> : null}
+      {children ? <p>{children}</p> : null}
 
       <div className="card p-2" id={anchor}>
         <Example height={height}>{code}</Example>
@@ -53,7 +53,7 @@ const DocCard: React.FC<DocCardProps> = ({
           </>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

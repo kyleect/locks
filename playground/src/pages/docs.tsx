@@ -50,10 +50,51 @@ const Docs: React.FC = () => (
         />
 
         <DocCard
-          title="Boolean"
-          anchor="boolean"
-          code={['var value = true;', '', 'print value; // out: true']}
-          height="70px"
+          title="Booleans"
+          anchor="booleans"
+          code={[
+            'print true; // out: true',
+            'print true and false; // out: false',
+            'print true or false; // out: true',
+            'print !true; // out: false',
+          ]}
+          height="100px"
+        >
+          <code>true</code> and <code>false</code> are booleans.{' '}
+          <code>and</code>/<code>or</code> are logical operators. <code>!</code>{' '}
+          negates a boolean.
+        </DocCard>
+
+        <DocCard
+          title="If"
+          anchor="if"
+          code={[
+            'var isTrue = true;',
+            '',
+            'if (isTrue) {',
+            '  print "Was true!";',
+            '}',
+            '',
+            '// out: Was true!',
+          ]}
+          height="150px"
+        />
+
+        <DocCard
+          title="If/Else"
+          anchor="if-else"
+          code={[
+            'var isTrue = true;',
+            '',
+            'if (isTrue) {',
+            '  print "Was true!";',
+            '} else {',
+            '  print "Was false!";',
+            '}',
+            '',
+            '// out: Was true!',
+          ]}
+          height="200px"
         />
 
         <DocCard
@@ -168,38 +209,6 @@ const Docs: React.FC = () => (
             '}',
           ]}
           height="110px"
-        />
-
-        <DocCard
-          title="If"
-          anchor="if"
-          code={[
-            'var isTrue = true;',
-            '',
-            'if (isTrue) {',
-            '  print "Was true!";',
-            '}',
-            '',
-            '// out: Was true!',
-          ]}
-          height="150px"
-        />
-
-        <DocCard
-          title="If/Else"
-          anchor="if-else"
-          code={[
-            'var isTrue = true;',
-            '',
-            'if (isTrue) {',
-            '  print "Was true!";',
-            '} else {',
-            '  print "Was false!";',
-            '}',
-            '',
-            '// out: Was true!',
-          ]}
-          height="200px"
         />
 
         <DocCard
