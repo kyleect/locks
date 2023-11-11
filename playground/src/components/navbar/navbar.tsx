@@ -7,7 +7,7 @@ interface NavBarProps {
   /**
    * Set to `true` if VM is currently running.
    */
-  subBrandText: string;
+  subBrandText?: string;
   content?: ReactNode;
 }
 
@@ -59,17 +59,17 @@ const Navbar = ({ subBrandText, content }: NavBarProps) => (
             </li>
             <li className="nav-item nav-link">
               <span
-                className="me-2 bi bi-terminal-fill text-white"
+                className="me-2 bi bi-wrench text-white"
                 role="img"
                 aria-hidden="true"
               />
-              <a
-                href="https://github.com/kyleect/locks#vs-code-extension"
-                target="_blank"
-                rel="noreferrer"
+              <NavLink
+                className={({ isActive }) => (isActive ? 'fw-bold' : '')}
+                aria-current="page"
+                to="/tooling"
               >
-                VS Code
-              </a>
+                Tooling
+              </NavLink>
             </li>
             <li className="nav-item">
               <button

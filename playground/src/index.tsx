@@ -6,6 +6,7 @@ import { createHashRouter } from 'react-router-dom';
 import { ScrollToAnchor } from './components/scroll-to-anchor/ScrollToAnchor';
 import Docs from './pages/docs';
 import Playground from './pages/playground';
+import Tooling from './pages/tooling';
 
 const router = createHashRouter([
   {
@@ -20,6 +21,10 @@ const router = createHashRouter([
         <Docs />
       </>
     ),
+  },
+  {
+    path: '/tooling',
+    element: <Tooling />,
   },
 ]);
 
