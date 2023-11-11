@@ -23,6 +23,7 @@ A toy language branched from [Lox](https://www.craftinginterpreters.com/) to lea
 - Language Server Protocol
 - REPL
 - [VS Code Extension](#vs-code-extension)
+- [Docker](#docker)
 
 Future [goals](https://github.com/kyleect/locks/issues/1)
 
@@ -55,7 +56,7 @@ fn fizzBuzz(n) {
 fizzBuzz(100);
 ```
 
-## Installing
+## Usage
 
 ### Runtime
 
@@ -88,6 +89,11 @@ Or run the language server
 ```shell
 $ locks lsp
 ```
+
+### Docker
+
+- `$ just build-docker` Build docker image
+- `$ just run-repl-docker` Run `locks repl` inside built docker image
 
 ### VS Code Extension
 
