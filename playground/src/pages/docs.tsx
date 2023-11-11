@@ -65,10 +65,11 @@ const Docs: React.FC = () => (
             'print 123.45; // out: 123.45',
             'print -123; // out: -123',
             'print -123.45; // out: -123.45',
+            'print (5 + 7) * 2.5; // out: 30;',
           ]}
-          height="100px"
+          height="110px"
         >
-          A 64bit float.
+          A 64bit float value.
         </DocCard>
 
         <DocCard
@@ -122,12 +123,8 @@ const Docs: React.FC = () => (
         <DocCard
           title="Strings"
           anchor="strings"
-          code={[
-            'var value = "Hello World";',
-            '',
-            'print value; // out: Hello World',
-          ]}
-          height="70px"
+          code={['print "Hello World"; // out: Hello World']}
+          height="30px"
         >
           Strings are created using double quotes.
         </DocCard>
@@ -135,14 +132,8 @@ const Docs: React.FC = () => (
         <DocCard
           title="String Concatenation"
           anchor="string-concatenation"
-          code={[
-            'fn hello(name) {',
-            '  return "Hello " + name;',
-            '}',
-            '',
-            'print hello("World"); // out: Hello World',
-          ]}
-          height="100px"
+          code={['print "Hello" +" "+ "World"; // out: Hello World']}
+          height="30px"
         >
           Strings can be concatenated together using the <code>+</code>{' '}
           operator.
@@ -162,8 +153,8 @@ const Docs: React.FC = () => (
         />
 
         <DocCard
-          title="First Class Functions"
-          anchor="functions"
+          title="Functions As Values"
+          anchor="functions-as-values"
           code={[
             'fn sum (a, b) {',
             '  return a + b;',
@@ -229,8 +220,18 @@ const Docs: React.FC = () => (
             '  print a;',
             '  a = a + 1;',
             '}',
+            '',
+            '// out: 1',
+            '// out: 2',
+            '// out: 3',
+            '// out: 4',
+            '// out: 5',
+            '// out: 6',
+            '// out: 7',
+            '// out: 8',
+            '// out: 9',
           ]}
-          height="110px"
+          height="300px"
         />
 
         <DocCard
