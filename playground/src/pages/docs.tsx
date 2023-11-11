@@ -16,12 +16,14 @@ const Docs: React.FC = () => (
       <div className="vstack gap-4">
         <DocCard
           title="Variables"
+          anchor="variables"
           code={['var value = 123;', 'print value; // out: 123']}
           height="50px"
         />
 
         <DocCard
           title="Functions"
+          anchor="functions"
           code={[
             'fn sum (a, b) {',
             '  return a + b;',
@@ -34,6 +36,7 @@ const Docs: React.FC = () => (
 
         <DocCard
           title="String Concatenation"
+          anchor="string-concatenation"
           code={[
             'fn hello(name) {',
             '  return "Hello " + name;',
@@ -46,6 +49,7 @@ const Docs: React.FC = () => (
 
         <DocCard
           title="Closures"
+          anchor="closures"
           code={[
             'fn greet(greeting) {',
             '  fn person(name) {',
@@ -62,6 +66,7 @@ const Docs: React.FC = () => (
 
         <DocCard
           title="For Loops"
+          anchor="for-loops"
           code={[
             'for (var i = 0; i < 10; i = i + 1) {',
             '  print i;',
@@ -83,6 +88,7 @@ const Docs: React.FC = () => (
 
         <DocCard
           title="If/Else"
+          anchor="if-else"
           code={[
             'var isTrue = true;',
             '',
@@ -99,6 +105,7 @@ const Docs: React.FC = () => (
 
         <DocCard
           title="Classes"
+          anchor="classes"
           code={[
             'class Greeter {',
             '  init(greeting) {',
@@ -119,6 +126,7 @@ const Docs: React.FC = () => (
 
         <DocCard
           title="Inheritance"
+          anchor="inheritance"
           code={[
             'class Greeter {',
             '  init(greeting) {',

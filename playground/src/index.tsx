@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router';
 import { createHashRouter } from 'react-router-dom';
+import { ScrollToAnchor } from './components/scroll-to-anchor/ScrollToAnchor';
 import Docs from './pages/docs';
 import Playground from './pages/playground';
 
@@ -13,7 +14,12 @@ const router = createHashRouter([
   },
   {
     path: '/docs',
-    element: <Docs />,
+    element: (
+      <>
+        <ScrollToAnchor />
+        <Docs />
+      </>
+    ),
   },
 ]);
 
