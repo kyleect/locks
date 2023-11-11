@@ -30,6 +30,10 @@ Future [goals](https://github.com/kyleect/locks/issues/1)
 
 Check out the [documentation](https://kyleect.github.io/locks/#/docs) the start running code in the [playground](https://kyleect.github.io/locks/).
 
+### Example
+
+[Playground](https://kyleect.github.io/locks/#/?code=GYOwBMCWBe0EIFdYAoQEowG8CwAoMEA9gE5jIBuAhqZGALxgCMA3GLQDxMAMLb9fAaiYYc+AuMjAytAKRMArPQZcRecerAAHYpBAAXMACIAYjHhJoh5mo0BfG+oCmAGwDOjtlOSywAZiVgKlgOGtq6BiZmViEE9mJObh6S0mByinTKqvGhOvpGiLDR2bExYC7uwcXiYXmQ1lVxJbhxeFCwBdDIjFwqzEA)
+
 ```
 fn fizzBuzz(n) {
   for (var i = 1; i < 101; i = i + 1) {
