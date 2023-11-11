@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocks } from '../../hooks/useLocks';
 import { Example } from '../example';
@@ -10,14 +10,21 @@ interface DocCardProps {
   anchor: string;
   code: string | string[];
   height: string;
+  children?: ReactNode;
 }
-const DocCard: React.FC<DocCardProps> = ({ title, code, height, anchor }) => {
+const DocCard: React.FC<DocCardProps> = ({
+  title,
+  code,
+  height,
+  anchor,
+  children,
+}) => {
   const { isRunning, runLocks, stopLocks, locksResult } = useLocks();
   const value = Array.isArray(code) ? code.join('\n') : code;
 
   return (
-    <div className="card p-2" id={anchor}>
-      <h2 className="fs-3">
+    <>
+      <h2 className="fs-3 mb-0">
         {title}{' '}
         <Link to={`#${anchor}`}>
           <span
@@ -28,24 +35,30 @@ const DocCard: React.FC<DocCardProps> = ({ title, code, height, anchor }) => {
         </Link>
       </h2>
 
-      <h3 className="fs-5">Example:</h3>
+      {children ? <p className="m-0">{children}</p> : null}
 
-      <Example height={height}>{code}</Example>
+      <div className="card p-2" id={anchor}>
+        <Example height={height}>{code}</Example>
 
-      <LocksRunButton
-        isRunning={isRunning}
-        onClick={isRunning ? stopLocks : () => runLocks(value)}
-      />
-      {typeof locksResult === 'string' && (
-        <>
-          <h3 className="fs-5 mt-2">Result:</h3>
-          <div className="card">
-            <Output text={locksResult} />
-          </div>
-        </>
-      )}
-    </div>
+        <LocksRunButton
+          isRunning={isRunning}
+          onClick={isRunning ? stopLocks : () => runLocks(value)}
+        />
+        {typeof locksResult === 'string' && (
+          <>
+            <h3 className="fs-5 mt-2">Result:</h3>
+            <div className="card">
+              <Output text={locksResult} />
+            </div>
+          </>
+        )}
+      </div>
+    </>
   );
+};
+
+DocCard.defaultProps = {
+  children: '',
 };
 
 export { DocCardProps, DocCard };

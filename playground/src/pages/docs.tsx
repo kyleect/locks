@@ -15,11 +15,29 @@ const Docs: React.FC = () => (
     <div className="m-4">
       <div className="vstack gap-4">
         <DocCard
+          title="Comments"
+          anchor="comments"
+          code="// Line comments are supported"
+          height="50px"
+        />
+
+        <DocCard
+          title="Print"
+          anchor="print"
+          code='print "This outputs to stdout"; // out: This outputs to stdout'
+          height="50px"
+        />
+
+        <DocCard
           title="Variables"
           anchor="variables"
           code={['var value = 123;', 'print value; // out: 123']}
           height="50px"
-        />
+        >
+          Variables are declared using the <code>var</code> keyword with an
+          identifier/name matching <code>[a-zA-Z_][a-zA-Z0-9_]*</code>.
+          Supported value types: string, number, boolean, function, nil
+        </DocCard>
 
         <DocCard
           title="Functions"
@@ -35,17 +53,22 @@ const Docs: React.FC = () => (
         />
 
         <DocCard
-          title="String Concatenation"
-          anchor="string-concatenation"
+          title="First Class Functions"
+          anchor="functions"
           code={[
-            'fn hello(name) {',
-            '  return "Hello " + name;',
+            'fn sum (a, b) {',
+            '  return a + b;',
             '}',
             '',
-            'print hello("World"); // out: Hello World',
+            'var add = sum;',
+            '',
+            'print add(70, 20); // out: 90',
           ]}
-          height="100px"
-        />
+          height="150px"
+        >
+          Functions can be assign to variables, passed to and returned from
+          other functions.
+        </DocCard>
 
         <DocCard
           title="Closures"
@@ -62,7 +85,25 @@ const Docs: React.FC = () => (
             'print greet("Hello")("World"); // out: Hello World',
           ]}
           height="200px"
-        />
+        >
+          Functions can capture variables from their surrounding scope.
+        </DocCard>
+
+        <DocCard
+          title="String Concatenation"
+          anchor="string-concatenation"
+          code={[
+            'fn hello(name) {',
+            '  return "Hello " + name;',
+            '}',
+            '',
+            'print hello("World"); // out: Hello World',
+          ]}
+          height="100px"
+        >
+          Strings can be concatenated together using the <code>+</code>{' '}
+          operator.
+        </DocCard>
 
         <DocCard
           title="For Loops"
@@ -84,6 +125,34 @@ const Docs: React.FC = () => (
             '// out: 9',
           ]}
           height="300px"
+        />
+
+        <DocCard
+          title="While Loops"
+          anchor="while-loops"
+          code={[
+            'var a = 1;',
+            'while (a < 10) {',
+            '  print a;',
+            '  a = a + 1;',
+            '}',
+          ]}
+          height="110px"
+        />
+
+        <DocCard
+          title="If"
+          anchor="if"
+          code={[
+            'var isTrue = true;',
+            '',
+            'if (isTrue) {',
+            '  print "Was true!";',
+            '}',
+            '',
+            '// out: Was true!',
+          ]}
+          height="150px"
         />
 
         <DocCard
