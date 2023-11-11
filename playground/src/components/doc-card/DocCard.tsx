@@ -37,16 +37,6 @@ const DocCard: React.FC<DocCardProps> = ({
             aria-hidden="true"
           />
         </Link>
-        <Link
-          to={`/?code=${compressToEncodedURIComponent(value)}`}
-          title="Open this code in the playground"
-        >
-          <span
-            className="fs-5 bi bi-rocket-takeoff link-primary"
-            role="img"
-            aria-hidden="true"
-          />
-        </Link>
       </h2>
 
       {children ? <p>{children}</p> : null}
@@ -54,10 +44,28 @@ const DocCard: React.FC<DocCardProps> = ({
       <div className="card p-2" id={anchor}>
         <Example height={height}>{code}</Example>
 
-        <LocksRunButton
-          isRunning={isRunning}
-          onClick={isRunning ? stopLocks : () => runLocks(value)}
-        />
+        <div className="d-flex justify-content-between">
+          <div className="flex-fill">
+            <LocksRunButton
+              className="w-100"
+              isRunning={isRunning}
+              onClick={isRunning ? stopLocks : () => runLocks(value)}
+            />
+          </div>
+
+          <Link
+            to={`/?code=${compressToEncodedURIComponent(value)}`}
+            title="Open this code in the playground"
+            className="btn btn-primary text-white p-1 flex-fill"
+          >
+            <span
+              className="fs-5 bi bi-rocket-takeoff align-middle"
+              role="img"
+              aria-hidden="true"
+            />{' '}
+            Playground
+          </Link>
+        </div>
         {typeof locksResult === 'string' && (
           <>
             <h3 className="fs-5 mt-2">Result:</h3>

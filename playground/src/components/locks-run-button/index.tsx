@@ -1,13 +1,16 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import React from 'react';
 
 interface LocksRunButtonProp {
   isRunning: boolean;
   onClick: () => void;
+  className?: string;
 }
 
 const LocksRunButton: React.FC<LocksRunButtonProp> = ({
   isRunning,
   onClick,
+  className,
 }) => {
   let runColor = 'btn-success';
   let runIcon = 'me-1 bi bi-play-fill';
@@ -22,7 +25,7 @@ const LocksRunButton: React.FC<LocksRunButtonProp> = ({
   return (
     <button
       id="run-btn"
-      className={`btn ${runColor}`}
+      className={`btn ${runColor} ${className}`}
       onClick={onClick}
       type="button"
       aria-label="Run code"
@@ -31,6 +34,10 @@ const LocksRunButton: React.FC<LocksRunButtonProp> = ({
       {runText}
     </button>
   );
+};
+
+LocksRunButton.defaultProps = {
+  className: '',
 };
 
 export { LocksRunButtonProp, LocksRunButton };
