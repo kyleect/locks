@@ -32,14 +32,17 @@ const DocCard: React.FC<DocCardProps> = ({
         {title}{' '}
         <Link to={`#${anchor}`}>
           <span
-            className="me-1 bi bi-link-45deg text-black align-text-bottom"
+            className="me-1 bi bi-link-45deg link-secondary align-text-bottom"
             role="img"
             aria-hidden="true"
           />
         </Link>
-        <Link to={`/?code=${compressToEncodedURIComponent(value)}`}>
+        <Link
+          to={`/?code=${compressToEncodedURIComponent(value)}`}
+          title="Open this code in the playground"
+        >
           <span
-            className="fs-5 bi bi-rocket-takeoff text-black"
+            className="fs-5 bi bi-rocket-takeoff link-primary"
             role="img"
             aria-hidden="true"
           />
