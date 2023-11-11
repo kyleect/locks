@@ -19,6 +19,7 @@ A toy language branched from [Lox](https://www.craftinginterpreters.com/) to lea
 - Stack Based Virtual Machine
 - Garbage Collection
 - [Online Playground](https://kyleect.github.io/locks/), via WebAssembly (/w shareable [links](https://kyleect.github.io/locks/#/code=GYOwBAFgpgNjD2AKEBDAtlAlGA3gWACgwwAnKAFwFcTwAiACVgTFrAGoxUMBuQgX0KEADiQCWIcpCZJaAdXgkYAE1qZeBIA))
+- [Interactive Documentation](https://kyleect.github.io/locks/#/docs)
 - Language Server Protocol
 - REPL
 - [VS Code Extension](#vs-code-extension)
@@ -27,7 +28,11 @@ Future [goals](https://github.com/kyleect/locks/issues/1)
 
 ## Getting Started
 
-Check out [online playground](https://kyleect.github.io/locks/) & [interactive Documentation](https://kyleect.github.io/locks/#/docs)
+Check out the [documentation](https://kyleect.github.io/locks/#/docs) the start running code in the [playground](https://kyleect.github.io/locks/).
+
+```
+print "Hello World";
+```
 
 ## Installing
 
