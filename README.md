@@ -21,12 +21,17 @@ A toy language branched from [Lox](https://www.craftinginterpreters.com/) to lea
 - [Online Playground](https://kyleect.github.io/locks/), via WebAssembly (/w shareable [links](https://kyleect.github.io/locks/#/code=GYOwBAFgpgNjD2AKEBDAtlAlGA3gWACgwwAnKAFwFcTwAiACVgTFrAGoxUMBuQgX0KEADiQCWIcpCZJaAdXgkYAE1qZeBIA))
 - Language Server Protocol
 - REPL
-- [Interactive Documentation](https://kyleect.github.io/locks/#/docs)
 - [VS Code Extension](#vs-code-extension)
 
 Future [goals](https://github.com/kyleect/locks/issues/1)
 
-## Usage
+## Getting Started
+
+Check out [online playground](https://kyleect.github.io/locks/)) & [interactive Documentation](https://kyleect.github.io/locks/#/docs)
+
+## Installing
+
+### Runtime
 
 Download the binary and vs code extension from the [latest build](https://github.com/kyleect/locks/actions/workflows/ci.yml)
 
@@ -58,6 +63,19 @@ Or run the language server
 $ locks lsp
 ```
 
+### VS Code Extension
+
+1. Run `just build-all`
+2. Copy `./target/release/locks[.exe]` somewhere in your `PATH`
+3. Install `./vsc/out/locks-language-1.0.0.vsix` in VS Code
+4. Create a new file and save as `*.locks`
+
+#### Features
+
+- Language Server support
+- Syntax highlighting
+- Snippets
+
 ## Development
 
 ### Setup
@@ -75,16 +93,3 @@ $ locks lsp
 - `$ just run-playground` Build and run playground
 - `$ just build-docker` Build docker image
 - `$ just run-repl-docker` Run `locks repl` inside built docker image
-
-## VS Code Extension
-
-- Language Server support
-- Syntax highlighting
-- Snippets
-
-### Usage
-
-1. Run `just build-all`
-2. Copy `./target/release/locks[.exe]` somewhere in your `PATH`
-3. Install `./vsc/out/locks-language-1.0.0.vsix` in VS Code
-4. Create a new file and save as `*.locks`
