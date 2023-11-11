@@ -16,7 +16,7 @@ const Docs: React.FC = () => (
       <div className="vstack gap-5">
         <h2>
           <span
-            className="me-2 bi bi-code-slash text-black align-text-bottom"
+            className="me-2 bi bi-code-square text-black align-text-bottom"
             role="img"
             aria-hidden="true"
           />{' '}
