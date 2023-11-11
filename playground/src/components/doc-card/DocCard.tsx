@@ -21,7 +21,7 @@ const DocCard: React.FC<DocCardProps> = ({ title, code, height, anchor }) => {
         {title}{' '}
         <Link to={`#${anchor}`}>
           <span
-            className="me-2 bi bi-link-45deg text-black"
+            className="me-2 bi bi-link-45deg text-black align-text-bottom"
             role="img"
             aria-hidden="true"
           />
