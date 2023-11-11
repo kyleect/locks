@@ -33,5 +33,10 @@
     "prefix": "print",
     "body": ["print $1;", "$0"],
     "description": "Print value"
+  },
+  "While": {
+    "prefix": "while",
+    "body": ["while ($1) {", "  $2", "}", "$0"],
+    "description": "Create a while loop"
   }
 }
