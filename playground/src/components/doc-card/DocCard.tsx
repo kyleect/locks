@@ -56,10 +56,10 @@ const DocCard: React.FC<DocCardProps> = ({
           <Link
             to={`/?code=${compressToEncodedURIComponent(value)}`}
             title="Open this code in the playground"
-            className="btn btn-primary text-white p-1 flex-fill"
+            className="btn btn-primary text-white flex-fill"
           >
             <span
-              className="fs-5 bi bi-rocket-takeoff align-middle"
+              className="bi bi-rocket-takeoff"
               role="img"
               aria-hidden="true"
             />{' '}
