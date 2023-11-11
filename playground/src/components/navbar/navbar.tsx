@@ -47,6 +47,15 @@ const Navbar = ({ subBrandText, content }: NavBarProps) => (
                 Docs
               </NavLink>
             </li>
+            <li className="nav-item nav-link">
+              <a
+                href="https://github.com/kyleect/locks#vs-code-extension"
+                target="_blank"
+                rel="noreferrer"
+              >
+                VS Code
+              </a>
+            </li>
             <li className="nav-item">
               <button
                 className="btn btn-dark bi bi-github me-1"

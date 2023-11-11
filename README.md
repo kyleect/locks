@@ -215,18 +215,13 @@ $ locks lsp
 
 ## VS Code Extension
 
+- Language Server support
 - Syntax highlighting
-- Error reporting
 - Snippets
-- Command: Run current file
-
-### Configuration
-
-Set `locks.binPath` to the command or absolute path to `locks`.
 
 ### Usage
 
 1. Run `just build-all`
-2. Run `cargo install`
+2. Copy `./target/release/locks[.exe]` somewhere in your `PATH`
 3. Install `./vsc/out/locks-language-1.0.0.vsix` in VS Code
-4. Create `*.locks` file
+4. Create a new file and save as `*.locks`
