@@ -18,13 +18,7 @@ const Navbar = ({ subBrandText, content }: NavBarProps) => (
   <nav className="navbar navbar-dark bg-dark navbar-expand-lg p-1" id="navbar">
     <div className="container-fluid">
       <div className="navbar-brand fw-bold text-light">
-        <span className="bi bi-lock-fill" role="img" aria-hidden="true" />
-        <span
-          className="me-2 bi bi-unlock-fill"
-          role="img"
-          aria-hidden="true"
-        />
-        Locks {subBrandText}
+        🔓 Locks {subBrandText}
       </div>
       <div className="d-flex bg-dark">
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
