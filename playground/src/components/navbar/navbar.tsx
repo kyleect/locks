@@ -30,6 +30,11 @@ const Navbar = ({ subBrandText, content }: NavBarProps) => (
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto p-3 p-lg-0 mb-0">
             <li className="nav-item nav-link">
+              <span
+                className="me-2 bi bi-rocket-takeoff-fill text-white"
+                role="img"
+                aria-hidden="true"
+              />
               <NavLink
                 className={({ isActive }) => (isActive ? 'fw-bold' : '')}
                 aria-current="page"
@@ -39,6 +44,11 @@ const Navbar = ({ subBrandText, content }: NavBarProps) => (
               </NavLink>
             </li>
             <li className="nav-item nav-link">
+              <span
+                className="me-2 bi bi-code-slash text-white"
+                role="img"
+                aria-hidden="true"
+              />
               <NavLink
                 className={({ isActive }) => (isActive ? 'fw-bold' : '')}
                 aria-current="page"

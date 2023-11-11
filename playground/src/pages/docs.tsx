@@ -13,7 +13,15 @@ const Docs: React.FC = () => (
   <>
     <Navbar subBrandText="Docs" />
     <div className="m-4">
-      <div className="vstack gap-4">
+      <div className="vstack gap-5">
+        <h2>
+          <span
+            className="me-2 bi bi-code-slash text-black align-text-bottom"
+            role="img"
+            aria-hidden="true"
+          />{' '}
+          Documentation
+        </h2>
         <DocCard
           title="Comments"
           anchor="comments"

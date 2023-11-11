@@ -1,5 +1,9 @@
 import React, { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
+import {
+  compressToEncodedURIComponent,
+  // eslint-disable-next-line import/no-relative-packages
+} from '../../../vendor/lz-string';
 import { useLocks } from '../../hooks/useLocks';
 import { Example } from '../example';
 import { LocksRunButton } from '../locks-run-button';
@@ -29,6 +33,13 @@ const DocCard: React.FC<DocCardProps> = ({
         <Link to={`#${anchor}`}>
           <span
             className="me-2 bi bi-link-45deg text-black align-text-bottom"
+            role="img"
+            aria-hidden="true"
+          />
+        </Link>
+        <Link to={`/?code=${compressToEncodedURIComponent(value)}`}>
+          <span
+            className="me-2 bi bi-rocket-takeoff text-black align-text-bottom"
             role="img"
             aria-hidden="true"
           />
