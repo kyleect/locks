@@ -70,7 +70,7 @@ const Docs: React.FC = () => (
             'print 5 % 2; // out: 1',
             'print 5 % 3; // out: 2',
             'print 5 % 4; // out: 1',
-            'print 5 % 5; // out: 0'
+            'print 5 % 5; // out: 0',
           ]}
           height="300px"
         >
