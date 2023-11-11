@@ -17,7 +17,7 @@ interface NavBarProps {
 const Navbar = ({ subBrandText, content }: NavBarProps) => (
   <nav className="navbar navbar-dark bg-dark navbar-expand-lg p-1" id="navbar">
     <div className="container-fluid">
-      <div className="navbar-brand fw-bold text-light">
+      <div className="navbar-brand fw-bold text-light user-select-none">
         🔓 Locks {subBrandText}
       </div>
       <div className="d-flex bg-dark">
@@ -30,7 +30,9 @@ const Navbar = ({ subBrandText, content }: NavBarProps) => (
                 aria-hidden="true"
               />
               <NavLink
-                className={({ isActive }) => (isActive ? 'fw-bold' : '')}
+                className={({ isActive }) =>
+                  `${isActive ? 'fw-bold' : ''} link-primary`
+                }
                 aria-current="page"
                 to="/"
               >
@@ -44,7 +46,9 @@ const Navbar = ({ subBrandText, content }: NavBarProps) => (
                 aria-hidden="true"
               />
               <NavLink
-                className={({ isActive }) => (isActive ? 'fw-bold' : '')}
+                className={({ isActive }) =>
+                  `${isActive ? 'fw-bold' : ''} link-primary`
+                }
                 aria-current="page"
                 to="/docs"
               >
@@ -58,7 +62,9 @@ const Navbar = ({ subBrandText, content }: NavBarProps) => (
                 aria-hidden="true"
               />
               <NavLink
-                className={({ isActive }) => (isActive ? 'fw-bold' : '')}
+                className={({ isActive }) =>
+                  `${isActive ? 'fw-bold' : ''} link-primary`
+                }
                 aria-current="page"
                 to="/tooling"
               >
