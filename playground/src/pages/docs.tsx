@@ -22,6 +22,49 @@ const Docs: React.FC = () => (
           />{' '}
           Documentation
         </h2>
+
+        <DocCard
+          title="Example"
+          anchor="example"
+          code={[
+            'fn fizzBuzz(n) {',
+            '  for (var i = 1; i <= n; i = i + 1) {',
+            '      if (i % 15 == 0) {',
+            '        print "FizzBuzz";',
+            '      }',
+            '      else if (i % 3 == 0) {',
+            '        print "Fizz";',
+            '      }',
+            '      else if (i % 5 == 0) {',
+            '        print "Buzz";',
+            '      }',
+            '      else {',
+            '        print i;',
+            '      }',
+            '  }',
+            '}',
+            '',
+            ' fizzBuzz(15);',
+            '',
+            ' // out: 1',
+            ' // out: 2',
+            '// out: Fizz',
+            '// out: 4',
+            '// out: Buzz',
+            '// out: Fizz',
+            '// out: 7',
+            '// out: 8',
+            '// out: Fizz',
+            '// out: Buzz',
+            '// out: 11',
+            '// out: Fizz',
+            '// out: 13',
+            '// out: 14',
+            '// out: FizzBuzz',
+          ]}
+          height="675px"
+        />
+
         <DocCard
           title="Comments"
           anchor="comments"
