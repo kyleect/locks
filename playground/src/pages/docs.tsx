@@ -13,7 +13,7 @@ const Docs: React.FC = () => (
   <>
     <Navbar subBrandText="Docs" />
     <div className="m-4">
-      <div className="vstack gap-5">
+      <div className="vstack gap-4">
         <h2>
           <span
             className="me-2 bi bi-code-square text-black align-text-bottom"
@@ -22,6 +22,8 @@ const Docs: React.FC = () => (
           />{' '}
           Documentation
         </h2>
+
+        <p>Welcome to the Locks language documentation.</p>
 
         <DocCard
           title="Example"
