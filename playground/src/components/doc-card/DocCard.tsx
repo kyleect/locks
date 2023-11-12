@@ -44,10 +44,9 @@ const DocCard: React.FC<DocCardProps> = ({
       <div className="card p-2" id={anchor}>
         <Example height={height}>{code}</Example>
 
-        <div className="d-flex justify-content-between">
-          <div className="flex-fill">
+        <div className="d-flex justify-content-baseline mt-2">
+          <div>
             <LocksRunButton
-              className="w-100"
               isRunning={isRunning}
               onClick={isRunning ? stopLocks : () => runLocks(value)}
             />
@@ -56,7 +55,7 @@ const DocCard: React.FC<DocCardProps> = ({
           <Link
             to={`/?code=${compressToEncodedURIComponent(value)}`}
             title="Open this code in the playground"
-            className="btn btn-primary text-white flex-fill"
+            className="btn btn-primary text-white"
           >
             <span
               className="bi bi-rocket-takeoff"
