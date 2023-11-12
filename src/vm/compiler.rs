@@ -36,6 +36,7 @@ impl Compiler {
         }
     }
 
+    /// Compile source string in to script function
     pub fn compile(
         source: &str,
         offset: usize,
@@ -669,6 +670,7 @@ pub struct CompilerCtx {
     locals: ArrayVec<Local, 256>,
     upvalues: ArrayVec<Upvalue, 256>,
     parent: Option<Box<CompilerCtx>>,
+    /// The scope currently executing
     scope_depth: usize,
 }
 
@@ -752,6 +754,7 @@ struct Local {
     /// variables.
     depth: usize,
     is_initialized: bool,
+    /// If the variable was captured as an upvalue of a closure
     is_captured: bool,
 }
 
