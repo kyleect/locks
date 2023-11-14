@@ -10,6 +10,7 @@ use crate::vm::value::Value;
 
 #[derive(Debug, Default)]
 pub struct Gc {
+    // Interned strings
     strings: HashMap<String, *mut ObjectString, BuildHasherDefault<FxHasher>>,
     objects: Vec<Object>,
     gray_objects: Vec<Object>,
@@ -115,6 +116,7 @@ pub trait GcAlloc<T> {
     fn alloc(self, gc: &mut Gc) -> T;
 }
 
+/// Handle allocating objects
 impl<T> GcAlloc<*mut T> for T
 where
     *mut T: Into<Object>,
@@ -132,6 +134,7 @@ where
     }
 }
 
+/// Handle allocating string objects differently
 impl<S> GcAlloc<*mut ObjectString> for S
 where
     S: AsRef<str> + Into<String>,

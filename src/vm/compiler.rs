@@ -634,12 +634,16 @@ impl Compiler {
 
         // Remove all locals that are no longer in scope.
         while let Some(local) = self.ctx.locals.last() {
+            // Is local outside the current scope?
             if local.depth > self.ctx.scope_depth {
+                // Was local captured from a closure?
                 if local.is_captured {
                     self.emit_u8(op::CLOSE_UPVALUE, span);
                 } else {
                     self.emit_u8(op::POP, span);
                 }
+
+                // Clean up compiler context
                 self.ctx.locals.pop();
             } else {
                 break;
@@ -667,7 +671,9 @@ impl Compiler {
 pub struct CompilerCtx {
     function: *mut ObjectFunction,
     type_: FunctionType,
+    /// Local variables
     locals: ArrayVec<Local, 256>,
+    /// Closure captured variables
     upvalues: ArrayVec<Upvalue, 256>,
     parent: Option<Box<CompilerCtx>>,
     /// The scope currently executing

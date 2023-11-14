@@ -58,6 +58,7 @@ pub struct VM {
     ///   `STACK_MAX = FRAMES_MAX * STACK_MAX_PER_FRAME` and we are
     ///   guaranteed to never exceed this size.
     stack: Box<[Value; STACK_MAX]>,
+    /// Pointer to the next empty slot in the stack
     stack_top: *mut Value,
 
     init_string: *mut ObjectString,
@@ -66,11 +67,11 @@ pub struct VM {
 
 impl VM {
     pub fn run(&mut self, source: &str, stdout: &mut impl Write) -> Result<(), Vec<ErrorS>> {
-        let offset = self.source.len();
-
         self.source.reserve(source.len() + 1);
         self.source.push_str(source);
         self.source.push('\n');
+
+        let offset = self.source.len();
 
         let function = Compiler::compile(source, offset, &mut self.gc)?;
 
@@ -99,6 +100,9 @@ impl VM {
         Ok(())
     }
 
+    /// Run a compiled function from the compiler
+    ///
+    /// This is only called by vm.run
     fn run_function(
         &mut self,
         function: *mut ObjectFunction,
@@ -107,6 +111,7 @@ impl VM {
         self.stack_top = self.stack.as_mut_ptr();
 
         self.frames.clear();
+
         self.frame = CallFrame {
             closure: self.gc.alloc(ObjectClosure::new(function, Vec::new())),
             ip: unsafe { (*function).chunk.ops.as_ptr() },
@@ -195,27 +200,32 @@ impl VM {
         Ok(())
     }
 
+    /// Read next [`Value`] from the stack
     fn op_constant(&mut self) -> Result<()> {
         let constant = self.read_value();
         self.push(constant);
         Ok(())
     }
 
+    /// Push a `nil` value on to the stack
     fn op_nil(&mut self) -> Result<()> {
         self.push(Value::NIL);
         Ok(())
     }
 
+    /// Push a `true` value on to the stack
     fn op_true(&mut self) -> Result<()> {
         self.push(Value::TRUE);
         Ok(())
     }
 
+    /// Push a `false` value on to the stack
     fn op_false(&mut self) -> Result<()> {
         self.push(Value::FALSE);
         Ok(())
     }
 
+    /// Pop value from the stack
     fn op_pop(&mut self) -> Result<()> {
         self.pop();
         Ok(())
@@ -389,6 +399,11 @@ impl VM {
         self.binary_op_number(|a, b| Value::from(a <= b), "<=")
     }
 
+    /// Pop last two values from the stack and add them
+    ///
+    /// Both values must be of the same type
+    ///
+    /// Both values must be either numbers or strings
     fn op_add(&mut self) -> Result<()> {
         let b = self.pop();
         let a = self.pop();
@@ -580,12 +595,19 @@ impl VM {
         Ok(())
     }
 
+    /// Allocate memory for object
     fn alloc<T>(&mut self, object: impl GcAlloc<T>) -> T {
+        // If gc is on
         if !cfg!(feature = "gc-off")
-            && (cfg!(feature = "gc-stress") || GLOBAL.allocated_bytes() > self.next_gc)
+            // If gc-stress is enabled
+            && (cfg!(feature = "gc-stress")
+            // Or memory needs to be freed
+            || GLOBAL.allocated_bytes() > self.next_gc)
         {
             self.gc();
         }
+
+        // Allocate memory using the garbage collector
         self.gc.alloc(object)
     }
 
@@ -652,6 +674,9 @@ impl VM {
         self.call_closure(unsafe { (*method).closure }, arg_count)
     }
 
+    /// Initialize a class into an instance
+    ///
+    /// var instance = Class();
     fn call_class(&mut self, class: *mut ObjectClass, arg_count: usize) -> Result<()> {
         let instance = self.alloc(ObjectInstance::new(class));
         unsafe { *self.peek(arg_count) = Value::from(instance) };
@@ -692,6 +717,7 @@ impl VM {
         Ok(())
     }
 
+    /// Call a native function built in to the language
     fn call_native(&mut self, native: *mut ObjectNative, arg_count: usize) -> Result<()> {
         self.pop();
         let value = match { unsafe { (*native).native } } {
@@ -735,14 +761,15 @@ impl VM {
         }
     }
 
-    /// Reads an instruction / byte from the current [`Chunk`].
+    /// Read and return the byte from the current [`Chunk`]
+    /// Increments the current [`Chunk`]'s instruction pointer
     fn read_u8(&mut self) -> u8 {
         let byte = unsafe { *self.frame.ip };
         self.frame.ip = unsafe { self.frame.ip.add(1) };
         byte
     }
 
-    /// Reads a 16-bit value from the current [`Chunk`].
+    /// Reads the next two bytes from the current [`Chunk`]
     fn read_u16(&mut self) -> u16 {
         let byte1 = self.read_u8();
         let byte2 = self.read_u8();
@@ -757,18 +784,22 @@ impl VM {
     }
 
     /// Pushes a [`Value`] to the stack.
+    ///
+    /// Increments stack_top to be just past the last [`Value`] in the stack.
     fn push(&mut self, value: Value) {
         unsafe { *self.stack_top = value };
         self.stack_top = unsafe { self.stack_top.add(1) };
     }
 
     /// Pops a [`Value`] from the stack.
+    ///
+    /// Decrements stack_top to be just past the new last [`Value`] in the stack
     fn pop(&mut self) -> Value {
         self.stack_top = unsafe { self.stack_top.sub(1) };
         unsafe { *self.stack_top }
     }
 
-    /// Peeks a [`Value`] from the stack.
+    /// Peeks [`Value`] from `n` slots back in the stack.
     fn peek(&mut self, n: usize) -> *mut Value {
         unsafe { self.stack_top.sub(n + 1) }
     }
