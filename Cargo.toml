@@ -87,6 +87,7 @@ lalrpop = { version = "0.19.1", default-features = false }
 [dev-dependencies]
 pretty_assertions = "1.1.0"
 test-generator = "0.3.0"
+parameterized_test = "0.2.1"
 
 [profile.release]
 codegen-units = 1

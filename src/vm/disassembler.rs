@@ -1,59 +1,21 @@
-use std::ops::Index;
+use super::{chunk::Chunk, op};
 
-use arrayvec::ArrayVec;
-
-use crate::error::{OverflowError, Result};
-use crate::types::Span;
-use crate::vm::op;
-use crate::vm::value::Value;
-
-#[derive(Debug, Default)]
-pub struct Chunk {
-    pub ops: Vec<u8>,
-    pub constants: ArrayVec<Value, 256>,
-    pub spans: VecRun<Span>,
+pub struct Disassembler<'a> {
+    chunk: &'a Chunk,
 }
 
-impl Chunk {
-    pub fn write_u8(&mut self, byte: u8, span: &Span) {
-        self.ops.push(byte);
-        self.spans.push(span.clone());
-    }
-
-    /// Writes a constant to the [`Chunk`] and returns its index. If an equal
-    /// [`Value`] is already present, then its index is returned instead.
-    pub fn write_constant(&mut self, value: Value, span: &Span) -> Result<u8> {
-        let idx = match self.constants.iter().position(|&constant| constant == value) {
-            Some(idx) => idx,
-            None => {
-                self.constants
-                    .try_push(value)
-                    .map_err(|_| (OverflowError::TooManyConstants.into(), span.clone()))?;
-                self.constants.len() - 1
-            }
-        };
-        Ok(idx.try_into().expect("constant index overflow"))
-    }
-
-    pub fn debug(&self, name: Option<&str>) {
-        if let Some(name) = name {
-            eprintln!("== {name} ==");
-        }
-
-        let result = self.disassemble();
-
-        eprintln!("{result}");
-    }
-
+impl<'a> Disassembler<'a> {
     pub fn disassemble(&self) -> String {
-        let mut out = String::from("");
+        let mut out = String::new();
 
         let mut idx = 0;
 
-        while idx < self.ops.len() {
+        while idx < self.chunk.ops.len() {
             let (byte_size, disassembled_byte_idx, disassembled_op) = self.disassemble_op(idx);
 
-            out.push_str(&format!("{disassembled_byte_idx} {disassembled_op}"));
+            let a = &format!("{disassembled_byte_idx} {disassembled_op}");
+
+            out.push_str(a);
 
             idx += byte_size;
         }
@@ -61,10 +23,10 @@ impl Chunk {
         out
     }
 
-    pub fn disassemble_op(&self, idx: usize) -> (usize, String, String) {
+    fn disassemble_op(&self, idx: usize) -> (usize, String, String) {
         let byte_idx_str = format!("{idx:04}");
 
-        let (byte_inc, op_str): (usize, String) = match self.ops[idx] {
+        let (byte_inc, op_str): (usize, String) = match self.chunk.ops[idx] {
             op::CONSTANT => self.debug_op_constant("OP_CONSTANT", idx),
             op::NIL => self.debug_op_simple("OP_NIL"),
             op::TRUE => self.debug_op_simple("OP_TRUE"),
@@ -105,27 +67,25 @@ impl Chunk {
 
                 closure_idx_inc += 1;
 
-                let constant_idx = self.ops[idx + closure_idx_inc];
-                let constant = &self.constants[constant_idx as usize];
+                let constant_idx = self.chunk.ops[idx + closure_idx_inc];
+                let constant = &self.chunk.constants[constant_idx as usize];
                 let name = "OP_CLOSURE";
-                closure_str.push_str(&format!("{name:16} {constant_idx:>4} '{constant}'"));
-                closure_str.push('\n');
+                closure_str.push_str(&format!("{name:16} {constant_idx:>4} '{constant}'\n"));
 
                 let function = unsafe { constant.as_object().function };
                 for _ in 0..unsafe { (*function).upvalue_count } {
                     let offset = idx + closure_idx_inc;
 
                     closure_idx_inc += 1;
-                    let is_local = self.ops[idx + closure_idx_inc];
+                    let is_local = self.chunk.ops[idx + closure_idx_inc];
                     let label = if is_local == 0 { "upvalue" } else { "local" };
 
                     closure_idx_inc += 1;
-                    let upvalue_idx = self.ops[idx + closure_idx_inc];
+                    let upvalue_idx = self.chunk.ops[idx + closure_idx_inc];
 
                     closure_str.push_str(&format!(
-                        "{offset:04} |                     {label} {upvalue_idx}"
+                        "{offset:04} |                     {label} {upvalue_idx}\n"
                     ));
-                    closure_str.push('\n');
                 }
 
                 (closure_idx_inc, closure_str)
@@ -146,31 +106,31 @@ impl Chunk {
     }
 
     fn debug_op_byte(&self, name: &str, idx: usize) -> (usize, String) {
-        let byte = self.ops[idx + 1];
+        let byte = self.chunk.ops[idx + 1];
         let string = format!("{name:16} {byte:>4}\n");
 
         (2, string)
     }
 
     fn debug_op_constant(&self, name: &str, idx: usize) -> (usize, String) {
-        let constant_idx = self.ops[idx + 1];
-        let constant = &self.constants[constant_idx as usize];
+        let constant_idx = self.chunk.ops[idx + 1];
+        let constant = &self.chunk.constants[constant_idx as usize];
         let string = format!("{name:16} {constant_idx:>4} '{constant}'\n");
 
         (2, string)
     }
 
     fn debug_op_invoke(&self, name: &str, idx: usize) -> (usize, String) {
-        let constant_idx = self.ops[idx + 1];
-        let constant = &self.constants[constant_idx as usize];
-        let arg_count = self.ops[idx + 2];
+        let constant_idx = self.chunk.ops[idx + 1];
+        let constant = &self.chunk.constants[constant_idx as usize];
+        let arg_count = self.chunk.ops[idx + 2];
         let string = format!("{name:16} ({arg_count} args) {constant_idx:>4} '{constant}'\n");
 
         (3, string)
     }
 
     fn debug_op_jump(&self, name: &str, idx: usize, is_forward: bool) -> (usize, String) {
-        let to_offset = u16::from_le_bytes([self.ops[idx + 1], self.ops[idx + 2]]);
+        let to_offset = u16::from_le_bytes([self.chunk.ops[idx + 1], self.chunk.ops[idx + 2]]);
         let offset_sign = if is_forward { 1 } else { -1 };
         // The +3 is to account for the 3 byte jump instruction.
         let to_idx = (idx as isize) + (to_offset as isize) * offset_sign + 3;
@@ -180,41 +140,48 @@ impl Chunk {
     }
 }
 
-/// Run-length encoded [`Vec`]. Useful for storing data with a lot of contiguous
-/// runs of the same value.
-#[derive(Debug, Default)]
-pub struct VecRun<T> {
-    values: Vec<Run<T>>,
-}
+#[cfg(test)]
+mod tests {
+    use crate::vm::{Compiler, Gc};
 
-impl<T: Eq> VecRun<T> {
-    fn push(&mut self, value: T) {
-        match self.values.last_mut() {
-            Some(run) if run.value == value && run.count < u8::MAX => {
-                run.count += 1;
-            }
-            _ => self.values.push(Run { value, count: 1 }),
-        };
-    }
-}
+    use super::Disassembler;
 
-impl<T> Index<usize> for VecRun<T> {
-    type Output = T;
+    parameterized_test::create! { assert_disassembly, (code, disassembly), {
+        let mut gc = Gc::default();
 
-    fn index(&self, index: usize) -> &Self::Output {
-        let mut count = index;
-        for run in &self.values {
-            match count.checked_sub(run.count as usize) {
-                Some(remaining) => count = remaining,
-                None => return &run.value,
-            }
+        if let Ok(function) = Compiler::compile(&code, code.len(), &mut gc) {
+            let chunk = unsafe { &(*function).chunk };
+
+            let d = Disassembler { chunk: &chunk };
+
+            let result = d.disassemble();
+
+            assert_eq!(result, disassembly);
+        } else {
+            assert!(false, "FAIL");
         }
-        panic!("index out of bounds");
-    }
-}
+    }}
 
-#[derive(Debug)]
-struct Run<T> {
-    value: T,
-    count: u8,
+    assert_disassembly! {
+        jump_to_false: (
+            "\
+            if (false) {
+                print 1;
+            } else {
+                print 2;
+            }",
+            "\
+            0000 OP_FALSE\n\
+            0001 OP_JUMP_IF_FALSE    1 -> 11\n\
+            0004 OP_POP\n\
+            0005 OP_CONSTANT         0 '1'\n\
+            0007 OP_PRINT\n\
+            0008 OP_JUMP             8 -> 15\n\
+            0011 OP_POP\n\
+            0012 OP_CONSTANT         1 '2'\n\
+            0014 OP_PRINT\n\
+            0015 OP_NIL\n\
+            0016 OP_RETURN\n"
+        ),
+    }
 }

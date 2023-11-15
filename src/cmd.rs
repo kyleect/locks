@@ -5,7 +5,7 @@ use anyhow::{bail, Context, Result};
 use clap::Parser;
 
 use crate::error::ErrorS;
-use crate::vm::VM;
+use crate::vm::{Compiler, Gc, VM};
 
 #[derive(Debug, Parser)]
 #[command(about, author, disable_help_subcommand = true, propagate_version = true, version)]
@@ -14,6 +14,7 @@ pub enum Cmd {
     Repl,
     Run { path: String },
     Exec { source: Option<String> },
+    Disassemble { path: String },
 }
 
 impl Cmd {
@@ -70,6 +71,21 @@ impl Cmd {
                     Ok(())
                 }
             },
+
+            Cmd::Disassemble { path } => {
+                let source = fs::read_to_string(path)
+                    .with_context(|| format!("could not read file: {path}"))?;
+
+                let mut gc = Gc::default();
+
+                let function = Compiler::compile(&source, source.len(), &mut gc);
+
+                if let Ok(f) = function {
+                    unsafe { (*f).chunk.debug(None) }
+                }
+
+                Ok(())
+            }
         }
     }
 }

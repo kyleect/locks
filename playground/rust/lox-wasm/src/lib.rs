@@ -25,6 +25,31 @@ pub fn loxRun(source: &str) {
     }
 }
 
+pub fn locksDisassemble(source: &str) {
+    console_error_panic_hook::set_once();
+
+    let output = &mut Output::new();
+
+    let mut gc = Gc::default();
+
+    let function = Compiler::compile(source, source.len(), &mut gc);
+
+    if let Ok(f) = function {
+        unsafe { (*f).chunk.debug(None) }
+    }
+
+    match VM::default().run(source, output) {
+        Ok(()) => postMessage(&Message::ExitSuccess.to_string()),
+        Err(errors) => {
+            let mut writer = HtmlWriter::new(output);
+            for e in errors.iter() {
+                report_error(&mut writer, source, e);
+            }
+            postMessage(&Message::ExitFailure.to_string());
+        }
+    }
+}
+
 #[allow(dead_code)]
 #[derive(Debug, Serialize)]
 #[serde(tag = "type")]

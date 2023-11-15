@@ -1,6 +1,7 @@
 mod allocator;
 mod chunk;
 mod compiler;
+mod disassembler;
 mod gc;
 mod object;
 mod op;
@@ -125,7 +126,7 @@ impl VM {
             if cfg!(feature = "vm-trace") {
                 let function = unsafe { (*self.frame.closure).function };
                 let idx = unsafe { self.frame.ip.offset_from((*function).chunk.ops.as_ptr()) };
-                unsafe { (*function).chunk.debug_op(idx as usize) };
+                unsafe { (*function).chunk.disassemble_op(idx as usize) };
             }
 
             match self.read_u8() {
