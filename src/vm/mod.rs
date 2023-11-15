@@ -67,11 +67,14 @@ pub struct VM {
 
 impl VM {
     pub fn run(&mut self, source: &str, stdout: &mut impl Write) -> Result<(), Vec<ErrorS>> {
+        // This will change with each call to `run`
+        let offset = self.source.len();
+
+        // Add current source to self.source
+        // This helps us keep track of what the offset should be on future calls to `run`
         self.source.reserve(source.len() + 1);
         self.source.push_str(source);
         self.source.push('\n');
-
-        let offset = self.source.len();
 
         let function = Compiler::compile(source, offset, &mut self.gc)?;
 
