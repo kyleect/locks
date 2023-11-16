@@ -6,6 +6,7 @@ import {
 } from '../../../vendor/lz-string';
 import { useLocks } from '../../hooks/useLocks';
 import { Example } from '../example';
+import { LocksDisassembleButton } from '../locks-disassemble-button';
 import { LocksRunButton } from '../locks-run-button';
 import { Output } from '../output';
 
@@ -23,7 +24,8 @@ const DocCard: React.FC<DocCardProps> = ({
   anchor,
   children,
 }) => {
-  const { isRunning, runLocks, stopLocks, locksResult } = useLocks();
+  const { isRunning, runLocks, disassembleLocks, stopLocks, locksResult } =
+    useLocks();
   const value = Array.isArray(code) ? code.join('\n') : code;
 
   return (
@@ -48,6 +50,12 @@ const DocCard: React.FC<DocCardProps> = ({
           <LocksRunButton
             isRunning={isRunning}
             onClick={isRunning ? stopLocks : () => runLocks(value)}
+          />
+
+          <LocksDisassembleButton
+            className="ms-2"
+            isRunning={isRunning}
+            onClick={isRunning ? stopLocks : () => disassembleLocks(value)}
           />
 
           <Link

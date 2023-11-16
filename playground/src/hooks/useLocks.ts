@@ -65,7 +65,39 @@ export function useLocks() {
       }
     };
 
-    webWorker.postMessage(code);
+    webWorker.postMessage({ code, action: 'run' });
+    setWorker(webWorker);
+  };
+
+  const disassembleLocks = (code: string) => {
+    stopWorker();
+    setLocksResult(null);
+
+    const webWorker = new Worker(new URL('../worker.ts', import.meta.url), {
+      type: 'module',
+    });
+
+    webWorker.onmessage = (event) => {
+      const msg: LoxOutMessage = JSON.parse(
+        event.data as string,
+      ) as LoxOutMessage;
+
+      switch (msg.type) {
+        case 'Output':
+          appendToLocksResult(msg.text);
+          break;
+        case 'ExitSuccess':
+          stopWorker();
+          break;
+        case 'ExitFailure':
+          stopWorker();
+          break;
+        default:
+          break;
+      }
+    };
+
+    webWorker.postMessage({ code, action: 'disassemble' });
     setWorker(webWorker);
   };
 
@@ -75,5 +107,5 @@ export function useLocks() {
 
   const isRunning = worker !== null;
 
-  return { isRunning, locksResult, runLocks, stopLocks };
+  return { isRunning, locksResult, runLocks, disassembleLocks, stopLocks };
 }
