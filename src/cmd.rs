@@ -83,11 +83,9 @@ impl Cmd {
                 if let Ok(f) = function {
                     unsafe {
                         let chunk = &(*f).chunk;
-                        let disassembler = Disassembler { chunk };
+                        let disassembler = Disassembler::new(&chunk);
 
-                        let x = disassembler.disassemble();
-
-                        eprintln!("{}", disassembler.disassemble());
+                        eprintln!("{}", disassembler.disassemble(None));
                     }
                 }
 

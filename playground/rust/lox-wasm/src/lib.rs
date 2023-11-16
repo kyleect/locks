@@ -43,9 +43,9 @@ pub fn locksDisassemble(source: &str) {
         Ok(f) => {
             let chunk = unsafe { &(*f).chunk };
 
-            let d = Disassembler { chunk: &chunk };
+            let d = Disassembler::new(&chunk);
 
-            let result = d.disassemble();
+            let result = d.disassemble(None);
             output.write(&result.as_bytes());
 
             postMessage(&Message::ExitSuccess.to_string());
