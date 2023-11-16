@@ -73,6 +73,10 @@
         "title": "Locks: Run Current File"
       },
       {
+        "command": "locks.disassembleCurrentFile",
+        "title": "Locks: Disassemble Current File"
+      },
+      {
         "command": "locks.openDocs",
         "title": "Locks: Open Docs"
       }

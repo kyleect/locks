@@ -5,7 +5,7 @@ use anyhow::{bail, Context, Result};
 use clap::Parser;
 
 use crate::error::ErrorS;
-use crate::vm::{Compiler, Gc, VM};
+use crate::vm::{Compiler, Disassembler, Gc, VM};
 
 #[derive(Debug, Parser)]
 #[command(about, author, disable_help_subcommand = true, propagate_version = true, version)]
@@ -81,7 +81,14 @@ impl Cmd {
                 let function = Compiler::compile(&source, source.len(), &mut gc);
 
                 if let Ok(f) = function {
-                    unsafe { (*f).chunk.debug(None) }
+                    unsafe {
+                        let chunk = &(*f).chunk;
+                        let disassembler = Disassembler { chunk };
+
+                        let x = disassembler.disassemble();
+
+                        eprintln!("{}", disassembler.disassemble());
+                    }
                 }
 
                 Ok(())

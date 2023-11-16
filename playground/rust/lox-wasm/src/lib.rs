@@ -2,6 +2,9 @@ use std::fmt::{self, Display, Formatter};
 use std::io::{self, Write};
 
 use locks::error::report_error;
+use locks::vm::Compiler;
+use locks::vm::Disassembler;
+use locks::vm::Gc;
 use locks::vm::VM;
 use serde::Serialize;
 use termcolor::{Color, WriteColor};
@@ -25,6 +28,8 @@ pub fn loxRun(source: &str) {
     }
 }
 
+#[wasm_bindgen]
+#[allow(non_snake_case)]
 pub fn locksDisassemble(source: &str) {
     console_error_panic_hook::set_once();
 
@@ -34,12 +39,17 @@ pub fn locksDisassemble(source: &str) {
 
     let function = Compiler::compile(source, source.len(), &mut gc);
 
-    if let Ok(f) = function {
-        unsafe { (*f).chunk.debug(None) }
-    }
+    match Compiler::compile(source, source.len(), &mut gc) {
+        Ok(f) => {
+            let chunk = unsafe { &(*f).chunk };
 
-    match VM::default().run(source, output) {
-        Ok(()) => postMessage(&Message::ExitSuccess.to_string()),
+            let d = Disassembler { chunk: &chunk };
+
+            let result = d.disassemble();
+            output.write(&result.as_bytes());
+
+            postMessage(&Message::ExitSuccess.to_string());
+        }
         Err(errors) => {
             let mut writer = HtmlWriter::new(output);
             for e in errors.iter() {

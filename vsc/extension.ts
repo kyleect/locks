@@ -69,6 +69,14 @@ export function activate(context: ExtensionContext) {
     terminal.show();
   };
 
+  const disassembleFileHandler = () => {
+    const terminal = window.createTerminal(`locks disassemble`);
+    terminal.sendText(
+      `${locksBinPath} disassemble ${window.activeTextEditor.document.uri.path}`
+    );
+    terminal.show();
+  };
+
   context.subscriptions.push(
     commands.registerCommand(
       "locks.startLanguageServer",
@@ -79,6 +87,10 @@ export function activate(context: ExtensionContext) {
       stopLanguageServerHandler
     ),
     commands.registerCommand("locks.runCurrentFile", runFileHandler),
+    commands.registerCommand(
+      "locks.disassembleCurrentFile",
+      disassembleFileHandler
+    ),
     commands.registerCommand("locks.openDocs", () => {
       env.openExternal(Uri.parse("https://kyleect.github.io/locks/#/docs"));
     })

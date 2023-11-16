@@ -14,6 +14,7 @@ use std::{mem, ptr};
 
 use arrayvec::ArrayVec;
 pub use compiler::Compiler;
+pub use disassembler::Disassembler;
 pub use gc::Gc;
 use hashbrown::hash_map::Entry;
 use hashbrown::HashMap;

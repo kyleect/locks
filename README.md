@@ -84,7 +84,47 @@ Or from stdin
 $ cat res/benchmarks/fib.locks | locks exec
 ```
 
-Or run the language server
+Disassemble locks code as visualized byte code
+
+```
+// ./res/examples/number/fizzbuzz.locks
+
+fn fizzBuzz(n) {
+  for (var i = 1; i <= n; i = i + 1) {
+      if (i % 15 == 0) {
+        print "FizzBuzz";
+      }
+      else if (i % 3 == 0) {
+        print "Fizz";
+      }
+      else if (i % 5 == 0) {
+        print "Buzz";
+      }
+      else {
+        print i;
+      }
+  }
+}
+
+fizzBuzz(100);
+```
+
+```shell
+$ locks disassemble ./res/examples/number/fizzbuzz.locks
+```
+
+```
+0000 OP_CLOSURE          0 == '<function fizzBuzz>'
+0002 OP_DEFINE_GLOBAL    1 == 'fizzBuzz'
+0004 OP_GET_GLOBAL       1 == 'fizzBuzz'
+0006 OP_CONSTANT         2 == '100'
+0008 OP_CALL             1
+0010 OP_POP
+0011 OP_NIL
+0012 OP_RETURN
+```
+
+Run the language server
 
 ```shell
 $ locks lsp
