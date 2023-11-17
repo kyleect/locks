@@ -23,7 +23,15 @@ impl Backend {
 
     pub fn get_diagnostics(&self, source: &str) -> Vec<Diagnostic> {
         let mut gc = Gc::default();
-        Compiler::compile(source, 0, &mut gc)
+
+        let program = match crate::syntax::parse(&source, source.len()) {
+            Ok(program) => program,
+            Err(error) => {
+                panic!("There was a parsing error! {:?}", error);
+            }
+        };
+
+        Compiler::compile(&program, &mut gc)
             .err()
             .unwrap_or_default()
             .iter()

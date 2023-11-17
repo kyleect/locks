@@ -78,7 +78,14 @@ impl Cmd {
 
                 let mut gc = Gc::default();
 
-                let function = Compiler::compile(&source, source.len(), &mut gc);
+                let program = match crate::syntax::parse(&source, source.len()) {
+                    Ok(program) => program,
+                    Err(error) => {
+                        panic!("There was a parsing error! {:?}", error);
+                    }
+                };
+
+                let function = Compiler::compile(&program, &mut gc);
 
                 if let Ok(f) = function {
                     unsafe {

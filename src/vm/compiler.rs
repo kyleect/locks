@@ -5,7 +5,7 @@ use arrayvec::ArrayVec;
 
 use crate::error::{ErrorS, NameError, OverflowError, Result, SyntaxError};
 use crate::syntax::ast::{
-    Expr, ExprLiteral, ExprS, OpInfix, OpPrefix, Stmt, StmtFn, StmtReturn, StmtS,
+    Expr, ExprLiteral, ExprS, OpInfix, OpPrefix, Program, Stmt, StmtFn, StmtReturn, StmtS,
 };
 use crate::types::Span;
 use crate::vm::gc::Gc;
@@ -37,14 +37,9 @@ impl Compiler {
     }
 
     /// Compile source string in to script function
-    pub fn compile(
-        source: &str,
-        offset: usize,
-        gc: &mut Gc,
-    ) -> Result<*mut ObjectFunction, Vec<ErrorS>> {
+    pub fn compile(program: &Program, gc: &mut Gc) -> Result<*mut ObjectFunction, Vec<ErrorS>> {
         let mut compiler = Self::new(gc);
 
-        let program = crate::syntax::parse(source, offset)?;
         for stmt in &program.stmts {
             compiler.compile_stmt(stmt, gc).map_err(|e| vec![e])?;
         }

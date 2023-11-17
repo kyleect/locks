@@ -184,7 +184,14 @@ mod tests {
     parameterized_test::create! { assert_disassembly, (code, disassembly), {
         let mut gc = Gc::default();
 
-        match Compiler::compile(&code, code.len(), &mut gc) {
+        let program = match crate::syntax::parse(&code, code.len()) {
+            Ok(program) => program,
+            Err(error) => {
+                panic!("There was a parsing error! {:?}", error);
+            }
+        };
+
+        match Compiler::compile(&program, &mut gc) {
             Ok(function) => {
                 let chunk = unsafe { &(*function).chunk };
 

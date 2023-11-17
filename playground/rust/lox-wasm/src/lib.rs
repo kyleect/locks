@@ -2,6 +2,7 @@ use std::fmt::{self, Display, Formatter};
 use std::io::{self, Write};
 
 use locks::error::report_error;
+use locks::syntax::parse;
 use locks::vm::Compiler;
 use locks::vm::Disassembler;
 use locks::vm::Gc;
@@ -37,18 +38,23 @@ pub fn locksDisassemble(source: &str) {
 
     let mut gc = Gc::default();
 
-    let function = Compiler::compile(source, source.len(), &mut gc);
+    let program = match parse(&source, source.len()) {
+        Ok(program) => program,
+        Err(error) => {
+            panic!("There was a parsing error! {:?}", error);
+        }
+    };
 
-    match Compiler::compile(source, source.len(), &mut gc) {
-        Ok(f) => {
-            let chunk = unsafe { &(*f).chunk };
+    match Compiler::compile(&program, &mut gc) {
+        Ok(function) => {
+            let chunk = unsafe { &(*function).chunk };
 
             let d = Disassembler::new(&chunk);
 
             let result = d.disassemble(None);
+            let encoded_result = askama_escape::escape(&result, askama_escape::Html).to_string();
 
-            output
-                .write(&askama_escape::escape(&result, askama_escape::Html).to_string().as_bytes());
+            let _ = output.write(&encoded_result.as_bytes());
 
             postMessage(&Message::ExitSuccess.to_string());
         }

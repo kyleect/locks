@@ -78,7 +78,9 @@ impl VM {
         self.source.push_str(source);
         self.source.push('\n');
 
-        let function = Compiler::compile(source, offset, &mut self.gc)?;
+        let program = crate::syntax::parse(source, offset)?;
+
+        let function = Compiler::compile(&program, &mut self.gc)?;
 
         #[cfg(feature = "pprof")]
         let guard = pprof::ProfilerGuardBuilder::default()
