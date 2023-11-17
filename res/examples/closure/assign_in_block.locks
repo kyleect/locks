@@ -1,0 +1,13 @@
+var function;
+
+{
+  var bonus = 10;
+
+  fn sum(a, b) {
+    return a + b + bonus;
+  }
+
+  function = sum;
+}
+
+function(5, 8); // out: 23
