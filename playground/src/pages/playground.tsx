@@ -10,6 +10,7 @@ import {
 } from '../../vendor/lz-string';
 
 import { Editor } from '../components/editor';
+import { LocksDisassembleButton } from '../components/locks-disassemble-button';
 import { LocksRunButton } from '../components/locks-run-button';
 import { Navbar } from '../components/navbar';
 import { Output } from '../components/output';
@@ -34,7 +35,8 @@ class LocalStorage {
 const Playground: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { isRunning, runLocks, stopLocks, locksResult } = useLocks();
+  const { isRunning, runLocks, disassembleLocks, stopLocks, locksResult } =
+    useLocks();
 
   /**
    * @remarks
@@ -128,6 +130,12 @@ const Playground: React.FC = () => {
                 aria-hidden="true"
               />
             </button>
+            <LocksDisassembleButton
+              isRunning={isRunning}
+              onClick={
+                isRunning ? stopLocks : () => disassembleLocks(editorText)
+              }
+            />
             <LocksRunButton
               isRunning={isRunning}
               onClick={isRunning ? stopLocks : () => runLocks(editorText)}
