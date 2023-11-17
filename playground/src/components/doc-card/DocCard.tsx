@@ -68,7 +68,7 @@ const DocCard: React.FC<DocCardProps> = ({
               role="img"
               aria-hidden="true"
             />{' '}
-            Playground
+            <span className="d-none d-lg-inline">Playground</span>
           </Link>
         </div>
         {typeof locksResult === 'string' && (

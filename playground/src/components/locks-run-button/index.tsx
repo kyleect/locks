@@ -31,7 +31,7 @@ const LocksRunButton: React.FC<LocksRunButtonProp> = ({
       aria-label="Run code"
     >
       <span className={runIcon} role="status" aria-hidden="true" />
-      {runText}
+      <span className="d-none d-lg-inline">{runText}</span>
     </button>
   );
 };
