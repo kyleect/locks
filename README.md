@@ -114,10 +114,61 @@ $ locks disassemble ./res/examples/number/fizzbuzz.locks
 ```
 
 ```
-0000 OP_CLOSURE          0 == '<function fizzBuzz>'
+0000 OP_CLOSURE          0 == '<fn fizzBuzz arity=1>'
+| 0000 OP_CONSTANT         0 == '1'
+| 0002 OP_GET_LOCAL        2
+| 0004 OP_GET_LOCAL        1
+| 0006 OP_LESS_EQUAL
+| 0007 OP_JUMP_IF_FALSE    7 -> 82
+| 0010 OP_POP
+| 0011 OP_GET_LOCAL        2
+| 0013 OP_CONSTANT         1 == '15'
+| 0015 OP_MODULUS
+| 0016 OP_CONSTANT         2 == '0'
+| 0018 OP_EQUAL
+| 0019 OP_JUMP_IF_FALSE   19 -> 29
+| 0022 OP_POP
+| 0023 OP_CONSTANT         3 == 'FizzBuzz'
+| 0025 OP_PRINT
+| 0026 OP_JUMP            26 -> 71
+| 0029 OP_POP
+| 0030 OP_GET_LOCAL        2
+| 0032 OP_CONSTANT         4 == '3'
+| 0034 OP_MODULUS
+| 0035 OP_CONSTANT         2 == '0'
+| 0037 OP_EQUAL
+| 0038 OP_JUMP_IF_FALSE   38 -> 48
+| 0041 OP_POP
+| 0042 OP_CONSTANT         5 == 'Fizz'
+| 0044 OP_PRINT
+| 0045 OP_JUMP            45 -> 71
+| 0048 OP_POP
+| 0049 OP_GET_LOCAL        2
+| 0051 OP_CONSTANT         6 == '5'
+| 0053 OP_MODULUS
+| 0054 OP_CONSTANT         2 == '0'
+| 0056 OP_EQUAL
+| 0057 OP_JUMP_IF_FALSE   57 -> 67
+| 0060 OP_POP
+| 0061 OP_CONSTANT         7 == 'Buzz'
+| 0063 OP_PRINT
+| 0064 OP_JUMP            64 -> 71
+| 0067 OP_POP
+| 0068 OP_GET_LOCAL        2
+| 0070 OP_PRINT
+| 0071 OP_GET_LOCAL        2
+| 0073 OP_CONSTANT         0 == '1'
+| 0075 OP_ADD
+| 0076 OP_SET_LOCAL        2
+| 0078 OP_POP
+| 0079 OP_LOOP            79 -> 2
+| 0082 OP_POP
+| 0083 OP_POP
+| 0084 OP_NIL
+| 0085 OP_RETURN
 0002 OP_DEFINE_GLOBAL    1 == 'fizzBuzz'
 0004 OP_GET_GLOBAL       1 == 'fizzBuzz'
-0006 OP_CONSTANT         2 == '100'
+0006 OP_CONSTANT         2 == '15'
 0008 OP_CALL             1
 0010 OP_POP
 0011 OP_NIL
