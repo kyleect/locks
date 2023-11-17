@@ -77,6 +77,7 @@ impl<'a> Disassembler<'a> {
             op::SUBTRACT => self.disassemble_op_simple("OP_SUBTRACT"),
             op::MULTIPLY => self.disassemble_op_simple("OP_MULTIPLY"),
             op::DIVIDE => self.disassemble_op_simple("OP_DIVIDE"),
+            op::MODULUS => self.disassemble_op_simple("OP_MODULUS"),
             op::NOT => self.disassemble_op_simple("OP_NOT"),
             op::NEGATE => self.disassemble_op_simple("OP_NEGATE"),
             op::PRINT => self.disassemble_op_simple("OP_PRINT"),
@@ -223,6 +224,16 @@ mod tests {
             0002 OP_POP\n\
             0003 OP_NIL\n\
             0004 OP_RETURN\n"
+        ),
+        modulus: (
+            "10 % 2;",
+            "\
+            0000 OP_CONSTANT         0 == '10'\n\
+            0002 OP_CONSTANT         1 == '2'\n\
+            0004 OP_MODULUS\n\
+            0005 OP_POP\n\
+            0006 OP_NIL\n\
+            0007 OP_RETURN\n"
         ),
         negative_number: (
             "-123;",
