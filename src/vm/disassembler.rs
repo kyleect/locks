@@ -275,7 +275,7 @@ mod tests {
         fn_define_empty: (
             "fn sum (a, b) { }",
             concat!(
-                "0000 OP_CLOSURE          0 == '<function sum>'\n",
+                "0000 OP_CLOSURE          0 == '<fn sum arity=2>'\n",
                 "| 0000 OP_NIL\n",
                 "| 0001 OP_RETURN\n",
                 "0002 OP_DEFINE_GLOBAL    1 == 'sum'\n",
@@ -286,7 +286,7 @@ mod tests {
         fn_define_empty_no_args: (
             "fn sum () { }",
             concat!(
-                "0000 OP_CLOSURE          0 == '<function sum>'\n",
+                "0000 OP_CLOSURE          0 == '<fn sum arity=0>'\n",
                 "| 0000 OP_NIL\n",
                 "| 0001 OP_RETURN\n",
                 "0002 OP_DEFINE_GLOBAL    1 == 'sum'\n",
@@ -297,7 +297,7 @@ mod tests {
         fn_define: (
             "fn sum (a, b) { return a + b; }",
             concat!(
-                "0000 OP_CLOSURE          0 == '<function sum>'\n",
+                "0000 OP_CLOSURE          0 == '<fn sum arity=2>'\n",
                 "| 0000 OP_GET_LOCAL        1\n",
                 "| 0002 OP_GET_LOCAL        2\n",
                 "| 0004 OP_ADD\n",
@@ -312,7 +312,7 @@ mod tests {
             fn sum (a, b) { return a + b; }\n\
             sum(100, 200);",
             concat!(
-                "0000 OP_CLOSURE          0 == '<function sum>'\n",
+                "0000 OP_CLOSURE          0 == '<fn sum arity=2>'\n",
                 "| 0000 OP_GET_LOCAL        1\n",
                 "| 0002 OP_GET_LOCAL        2\n",
                 "| 0004 OP_ADD\n",
@@ -366,8 +366,8 @@ mod tests {
             concat!(
                 "0000 OP_NIL\n",
                 "0001 OP_DEFINE_GLOBAL    0 == 'f'\n",
-                "0003 OP_CLOSURE          1 == '<function foo>'\n",
-                "| 0000 OP_CLOSURE          0 == '<function f_>'\n",
+                "0003 OP_CLOSURE          1 == '<fn foo arity=1>'\n",
+                "| 0000 OP_CLOSURE          0 == '<fn f_ arity=0>'\n",
                 "| 0001 CAPTURE [local -> 1]\n",
                 "  | 0000 OP_GET_UPVALUE      0\n",
                 "  | 0002 OP_PRINT\n",
@@ -388,6 +388,56 @@ mod tests {
                 "0018 OP_POP\n",
                 "0019 OP_NIL\n",
                 "0020 OP_RETURN\n",
+            ),
+        ),
+        class_init_and_method_call: (
+            "\
+            class Greeter {
+              init(greeting) {
+                this.greeting = greeting;
+              }
+              
+              greet(name) {
+                return this.greeting + \" \" + name;
+              }
+            }
+              
+            var greeter = Greeter(\"Hello\");
+              
+            print greeter.greet(\"World\"); // out: Hello World",
+            concat!(
+                "0000 OP_CLASS            0 == 'Greeter'\n",
+                "0002 OP_DEFINE_GLOBAL    0 == 'Greeter'\n",
+                "0004 OP_GET_GLOBAL       0 == 'Greeter'\n",
+                "0006 OP_CLOSURE          1 == '<fn init arity=1>'\n",
+                "| 0000 OP_GET_LOCAL        1\n",
+                "| 0002 OP_GET_LOCAL        0\n",
+                "| 0004 OP_SET_PROPERTY     0 == 'greeting'\n",
+                "| 0006 OP_POP\n",
+                "| 0007 OP_GET_LOCAL        0\n",
+                "| 0009 OP_RETURN\n",
+                "0008 OP_METHOD           2 == 'init'\n",
+                "0010 OP_CLOSURE          3 == '<fn greet arity=1>'\n",
+                "| 0000 OP_GET_LOCAL        0\n",
+                "| 0002 OP_GET_PROPERTY     0 == 'greeting'\n",
+                "| 0004 OP_CONSTANT         1 == ' '\n",
+                "| 0006 OP_ADD\n",
+                "| 0007 OP_GET_LOCAL        1\n",
+                "| 0009 OP_ADD\n",
+                "| 0010 OP_RETURN\n",
+                "0012 OP_METHOD           4 == 'greet'\n",
+                "0014 OP_POP\n",
+                "0015 OP_GET_GLOBAL       0 == 'Greeter'\n",
+                "0017 OP_CONSTANT         5 == 'Hello'\n",
+                "0019 OP_CALL             1\n",
+                "0021 OP_DEFINE_GLOBAL    6 == 'greeter'\n",
+                "0023 OP_GET_GLOBAL       6 == 'greeter'\n",
+                "0025 OP_GET_PROPERTY     4 == 'greet'\n",
+                "0027 OP_CONSTANT         7 == 'World'\n",
+                "0029 OP_CALL             1\n",
+                "0031 OP_PRINT\n",
+                "0032 OP_NIL\n",
+                "0033 OP_RETURN\n"
             )
         ),
     }

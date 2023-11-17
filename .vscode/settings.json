@@ -1,6 +1,7 @@
 {
   "terminal.integrated.defaultProfile.windows": "Git Bash",
   "rust-analyzer.linkedProjects": [
-    ".\\playground\\rust\\lox-wasm\\Cargo.toml"
+    ".\\playground\\rust\\lox-wasm\\Cargo.toml",
+    ".\\Cargo.toml"
   ]
 }

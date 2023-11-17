@@ -100,10 +100,11 @@ impl Display for Object {
             }
             ObjectType::Function => {
                 let name = unsafe { (*(*self.function).name).value };
+                let arity = unsafe { (*self.function).arity };
                 if name.is_empty() {
                     write!(f, "<script>")
                 } else {
-                    write!(f, "<function {name}>")
+                    write!(f, "<fn {name} arity={arity}>")
                 }
             }
             ObjectType::Instance => {

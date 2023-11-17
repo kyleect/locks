@@ -10,4 +10,4 @@ var function;
   function = sum;
 }
 
-function(5, 8); // out: 23
+print function(5, 8); // out: 23
