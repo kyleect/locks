@@ -46,7 +46,8 @@ pub fn locksDisassemble(source: &str) {
             let d = Disassembler::new(&chunk);
 
             let result = d.disassemble(None);
-            output.write(&result.as_bytes());
+            let encoded_result = html_escape::encode_text(&result);
+            output.write(&encoded_result.as_bytes());
 
             postMessage(&Message::ExitSuccess.to_string());
         }
