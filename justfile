@@ -52,9 +52,9 @@ run-trace *args:
     cargo run --features='gc-stress,gc-trace,vm-trace' -- {{args}}
 
 test *args:
-    cargo nextest run --features='gc-stress,gc-trace,vm-trace' --workspace {{args}}
+    cargo nextest run --features='gc-stress,gc-trace' --workspace {{args}}
 
 test-miri *args:
     MIRIFLAGS='-Zmiri-disable-isolation' cargo +nightly miri nextest run \
-        --features='gc-stress,gc-trace,vm-trace' --no-default-features \
+        --features='gc-stress,gc-trace' --no-default-features \
         --workspace {{args}}
