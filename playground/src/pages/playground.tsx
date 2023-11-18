@@ -57,7 +57,7 @@ const Playground: React.FC = () => {
 
     const compressedText = compressToEncodedURIComponent(editorText);
 
-    const hash = `#/code=${compressedText}`;
+    const hash = `#/?code=${compressedText}`;
 
     if (history.replaceState) {
       history.replaceState(null, '', hash);
@@ -65,7 +65,7 @@ const Playground: React.FC = () => {
       location.hash = hash;
     }
 
-    navigate(`/?code=${compressedText}`);
+    // navigate(`/?code=${compressedText}`);
 
     LocalStorage.editorText = compressedText;
   }, [editorText, navigate]);
