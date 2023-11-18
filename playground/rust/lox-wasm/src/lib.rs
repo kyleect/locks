@@ -3,10 +3,7 @@ use std::io::{self, Write};
 
 use locks::error::report_error;
 use locks::syntax::parse;
-use locks::vm::Compiler;
-use locks::vm::Disassembler;
-use locks::vm::Gc;
-use locks::vm::VM;
+use locks::vm::{Compiler, Disassembler, Gc, VM};
 use serde::Serialize;
 use termcolor::{Color, WriteColor};
 use wasm_bindgen::prelude::*;
@@ -38,7 +35,7 @@ pub fn locksDisassemble(source: &str) {
 
     let mut gc = Gc::default();
 
-    let program = match parse(&source, source.len()) {
+    let program = match parse(source, source.len()) {
         Ok(program) => program,
         Err(error) => {
             panic!("There was a parsing error! {:?}", error);
@@ -49,12 +46,12 @@ pub fn locksDisassemble(source: &str) {
         Ok(function) => {
             let chunk = unsafe { &(*function).chunk };
 
-            let d = Disassembler::new(&chunk);
+            let d = Disassembler::new(chunk);
 
             let result = d.disassemble(None);
             let encoded_result = askama_escape::escape(&result, askama_escape::Html).to_string();
 
-            let _ = output.write(&encoded_result.as_bytes());
+            let _ = output.write(encoded_result.as_bytes());
 
             postMessage(&Message::ExitSuccess.to_string());
         }
