@@ -50,6 +50,94 @@ const Docs: React.FC = () => (
           </Link>
         </h2>
 
+        <ul className="nav">
+          <li className="nav-item">
+            <Link className="nav-link" to="#example">
+              Example
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#comments">
+              Comments
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#variables">
+              Variables
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#nil">
+              Nil
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#numbers">
+              Numbers
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#booleans">
+              Booleans
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#if">
+              If
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#if-else">
+              If/Else
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#strings">
+              Strings
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#string-concatenation">
+              String Concatentation
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#functions">
+              Functions
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#functions-as-values">
+              Functions As Values
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#closures">
+              Closures
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#for-loops">
+              For Loops
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#while-loops">
+              While Loops
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#classes">
+              Classes
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#inheritance ">
+              Inheritance
+            </Link>
+          </li>
+        </ul>
+
         <DocCard
           title="Example"
           anchor="example"
