@@ -20,7 +20,7 @@ A toy language branched from [Lox](https://www.craftinginterpreters.com/) to lea
 - Garbage Collection
 - [Online Playground](https://kyleect.github.io/locks/), via WebAssembly (/w shareable [links](https://kyleect.github.io/locks/#/code=GYOwBAFgpgNjD2AKEBDAtlAlGA3gWACgwwAnKAFwFcTwAiACVgTFrAGoxUMBuQgX0KEADiQCWIcpCZJaAdXgkYAE1qZeBIA))
 - [Interactive Documentation](https://kyleect.github.io/locks/#/docs)
-- Language Server Protocol
+- Language Server
 - REPL
 - [VS Code Extension](#vs-code-extension)
 - [Docker](#docker)
