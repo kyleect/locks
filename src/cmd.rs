@@ -92,7 +92,7 @@ impl Cmd {
                         let chunk = &(*f).chunk;
                         let disassembler = Disassembler::new(chunk);
 
-                        eprintln!("{}", disassembler.disassemble(None));
+                        println!("{}", disassembler.disassemble(None));
                     }
                 }
 

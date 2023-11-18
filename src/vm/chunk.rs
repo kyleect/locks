@@ -5,7 +5,6 @@ use arrayvec::ArrayVec;
 use crate::error::{OverflowError, Result};
 use crate::types::Span;
 use crate::vm::value::Value;
-use crate::vm::Disassembler;
 
 #[derive(Debug, Default)]
 pub struct Chunk {
@@ -33,16 +32,6 @@ impl Chunk {
             }
         };
         Ok(idx.try_into().expect("constant index overflow"))
-    }
-
-    pub fn debug(&self, name: Option<&str>) {
-        if let Some(name) = name {
-            eprintln!("== {name} ==");
-        }
-
-        let result = Disassembler::new(self).disassemble(None);
-
-        eprintln!("{result}");
     }
 }
 

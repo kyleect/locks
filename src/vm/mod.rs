@@ -132,7 +132,7 @@ impl VM {
                 let function = unsafe { (*self.frame.closure).function };
                 let idx = unsafe { self.frame.ip.offset_from((*function).chunk.ops.as_ptr()) };
                 let (_, op_idx_str, op_str) = disassembler.disassemble_op(idx as usize, 0);
-                println!("{}{}", op_idx_str, op_str);
+                println!("{} {}", op_idx_str, op_str);
             }
 
             match self.read_u8() {
