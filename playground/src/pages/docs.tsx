@@ -2,6 +2,7 @@
 /* eslint-disable no-restricted-globals */
 import React from 'react';
 
+import { Link } from 'react-router-dom';
 import { DocCard } from '../components/doc-card';
 import { Navbar } from '../components/navbar';
 
@@ -23,7 +24,31 @@ const Docs: React.FC = () => (
           Documentation
         </h2>
 
+        <ul className="nav">
+          <li className="nav-item">
+            <Link className="nav-link" to="#syntax">
+              Syntax
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#runtime">
+              Runtime
+            </Link>
+          </li>
+        </ul>
+
         <p>Welcome to the Locks language documentation.</p>
+
+        <h2 id="syntax">
+          Syntax{' '}
+          <Link to="#syntax">
+            <span
+              className="me-1 bi bi-link-45deg link-secondary align-text-bottom"
+              role="img"
+              aria-hidden="true"
+            />
+          </Link>
+        </h2>
 
         <DocCard
           title="Example"
@@ -66,14 +91,12 @@ const Docs: React.FC = () => (
           ]}
           height="675px"
         />
-
         <DocCard
           title="Comments"
           anchor="comments"
           code="// Line comments are supported"
           height="30px"
         />
-
         <DocCard
           title="Variables"
           anchor="variables"
@@ -85,7 +108,6 @@ const Docs: React.FC = () => (
           Supported value types: string, number, boolean, function,{' '}
           <code>nil</code>. Variables default to <code>nil</code>.
         </DocCard>
-
         <DocCard
           title="Nil"
           anchor="nil"
@@ -101,7 +123,6 @@ const Docs: React.FC = () => (
           A null value. This is the default value for variables and functions
           without a return.
         </DocCard>
-
         <DocCard
           title="Numbers"
           anchor="numbers"
@@ -121,7 +142,6 @@ const Docs: React.FC = () => (
         >
           A 64bit float value.
         </DocCard>
-
         <DocCard
           title="Booleans"
           anchor="booleans"
@@ -137,7 +157,6 @@ const Docs: React.FC = () => (
           <code>and</code>/<code>or</code> are logical operators. <code>!</code>{' '}
           negates a boolean.
         </DocCard>
-
         <DocCard
           title="If"
           anchor="if"
@@ -152,7 +171,6 @@ const Docs: React.FC = () => (
           ]}
           height="150px"
         />
-
         <DocCard
           title="If/Else"
           anchor="if-else"
@@ -169,7 +187,6 @@ const Docs: React.FC = () => (
           ]}
           height="200px"
         />
-
         <DocCard
           title="Strings"
           anchor="strings"
@@ -178,7 +195,6 @@ const Docs: React.FC = () => (
         >
           Strings are created using double quotes.
         </DocCard>
-
         <DocCard
           title="String Concatenation"
           anchor="string-concatenation"
@@ -188,7 +204,6 @@ const Docs: React.FC = () => (
           Strings can be concatenated together using the <code>+</code>{' '}
           operator.
         </DocCard>
-
         <DocCard
           title="Functions"
           anchor="functions"
@@ -201,7 +216,6 @@ const Docs: React.FC = () => (
           ]}
           height="100px"
         />
-
         <DocCard
           title="Functions As Values"
           anchor="functions-as-values"
@@ -219,7 +233,6 @@ const Docs: React.FC = () => (
           Functions can be assign to variables, passed to and returned from
           other functions.
         </DocCard>
-
         <DocCard
           title="Closures"
           anchor="closures"
@@ -238,7 +251,6 @@ const Docs: React.FC = () => (
         >
           Functions can capture variables from their surrounding scope.
         </DocCard>
-
         <DocCard
           title="For Loops"
           anchor="for-loops"
@@ -260,7 +272,6 @@ const Docs: React.FC = () => (
           ]}
           height="300px"
         />
-
         <DocCard
           title="While Loops"
           anchor="while-loops"
@@ -283,7 +294,6 @@ const Docs: React.FC = () => (
           ]}
           height="300px"
         />
-
         <DocCard
           title="Classes"
           anchor="classes"
@@ -304,7 +314,6 @@ const Docs: React.FC = () => (
           ]}
           height="300px"
         />
-
         <DocCard
           title="Inheritance"
           anchor="inheritance"
@@ -331,6 +340,61 @@ const Docs: React.FC = () => (
           ]}
           height="400px"
         />
+
+        <h2 id="runtime">
+          Runtime{' '}
+          <Link to="#runtime">
+            <span
+              className="me-1 bi bi-link-45deg link-secondary align-text-bottom"
+              role="img"
+              aria-hidden="true"
+            />
+          </Link>
+        </h2>
+
+        <div className="vstack gap-4 ">
+          <h3>Installing</h3>
+
+          <div className="shadow rounded p-3">
+            <ol>
+              <li>
+                Download runtime from latest passing{' '}
+                <a
+                  href="https://github.com/kyleect/locks/actions/workflows/ci.yml"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  build
+                </a>
+                .
+              </li>
+              <li>
+                Place <code>locks[.exe]</code> in your <code>PATH</code>.
+              </li>
+            </ol>
+          </div>
+
+          <h3>Usage</h3>
+
+          <div className="shadow rounded p-3">
+            <h4>Run A File</h4>
+            <pre>$ locks run res/benchmarks/fib.locks</pre>
+          </div>
+          <div className="shadow rounded p-3">
+            <h4>Run Input</h4>
+            <pre>$ locks exec &squo;print &quot;Hello&quot;;&squo;</pre>
+            <pre>$ cat res/benchmarks/fib.locks | locks exec</pre>
+          </div>
+          <div className="shadow rounded p-3">
+            <h4>Disassemble File</h4>
+            Visualize compiled byte code from file
+            <pre>$ locks disassemble ./res/examples/number/fizzbuzz.locks</pre>
+          </div>
+          <div className="shadow rounded p-3">
+            <h4>Start REPL</h4>
+            <pre>$ locks repl</pre>
+          </div>
+        </div>
       </div>
     </div>
   </>
