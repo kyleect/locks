@@ -3,8 +3,8 @@ class Foo {
     fn init() {
       return "bar";
     }
-    print init(); // out: bar
+    print(init()); // out: bar
   }
 }
 
-print Foo(); // out: <object Foo>
+print(Foo()); // out: <object Foo>

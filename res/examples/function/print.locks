@@ -1,4 +1,4 @@
 fn foo() {}
-print foo; // out: <fn foo arity=0>
+print(foo); // out: <fn foo arity=0>
 
-print clock; // out: <native clock>
+print(clock); // out: <native clock>

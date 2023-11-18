@@ -51,7 +51,7 @@
   },
   "Print": {
     "prefix": "print",
-    "body": ["print $1;$0"],
+    "body": ["print($1);$0"],
     "description": "Print value"
   },
   "While": {

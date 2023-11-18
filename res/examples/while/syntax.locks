@@ -5,7 +5,7 @@
 // out: 3
 //
 let c = 0;
-while (c < 3) print c = c + 1;
+while (c < 3) print(c = c + 1);
 
 // Block body.
 //
@@ -15,7 +15,7 @@ while (c < 3) print c = c + 1;
 //
 let a = 0;
 while (a < 3) {
-  print a;
+  print(a);
   a = a + 1;
 }
 

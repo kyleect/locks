@@ -5,4 +5,4 @@ fn f() {
   return B;
 }
 
-print f(); // out: <class B>
+print(f()); // out: <class B>

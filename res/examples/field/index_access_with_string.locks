@@ -4,8 +4,8 @@ class Record {
 
 let record = Record();
 
-print record["key"]; // out: value
+print(record["key"]); // out: value
 
 record["key"] = "new value";
 
-print record["key"]; // out: new value
+print(record["key"]); // out: new value

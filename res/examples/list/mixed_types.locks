@@ -7,4 +7,4 @@ fn example() {
 
 let list = [[1, 2, 3], Class, "test", 123, example];
 
-print list; // out: [[1, 2, 3], <class Class>, "test", 123, <fn example arity=0>]
+print(list); // out: [[1, 2, 3], <class Class>, "test", 123, <fn example arity=0>]

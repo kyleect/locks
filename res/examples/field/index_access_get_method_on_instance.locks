@@ -12,4 +12,4 @@ class Box {
 
 let box = Box(123);
 
-print box["get"](); // out: 123
+print(box["get"]()); // out: 123

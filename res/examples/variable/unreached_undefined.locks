@@ -1,6 +1,6 @@
 if (false) {
-  print notDefined;
+  print(notDefined);
 }
 
 // out: ok
-print "ok";
+print("ok");

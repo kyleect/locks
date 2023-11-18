@@ -2,4 +2,4 @@ class Class {}
 
 let c = Class();
 
-print c[0]; // out: TypeError: "instance" is not indexable
+print(c[0]); // out: TypeError: "instance" is not indexable

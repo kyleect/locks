@@ -1,11 +1,11 @@
 class Foo {
   fn init() {
-    print "init";
+    print("init");
     return;
-    print "nope";
+    print("nope");
   }
 }
 
 let foo = Foo(); // out: init
-print foo.init(); // out: init
+print(foo.init()); // out: init
 // out: <object Foo>

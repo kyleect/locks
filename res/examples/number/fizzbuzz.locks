@@ -1,16 +1,16 @@
 fn fizzBuzz(n) {
   for (let i = 1; i <= n; i = i + 1) {
       if (i % 15 == 0) {
-        print "FizzBuzz";
+        print("FizzBuzz");
       }
       else if (i % 3 == 0) {
-        print "Fizz";
+        print("Fizz");
       }
       else if (i % 5 == 0) {
-        print "Buzz";
+        print("Buzz");
       }
       else {
-        print i;
+        print(i);
       }
   }
 }

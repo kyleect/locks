@@ -1,2 +1,2 @@
 // out: NameError: name "notDefined" is not defined
-print notDefined;
+print(notDefined);

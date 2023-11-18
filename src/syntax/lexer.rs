@@ -138,8 +138,6 @@ pub enum Token {
     Nil,
     #[token("or")]
     Or,
-    #[token("print")]
-    Print,
     #[token("return")]
     Return,
     #[token("super")]

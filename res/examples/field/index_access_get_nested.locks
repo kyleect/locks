@@ -20,4 +20,4 @@ class Box {
 
 let obj = Object(123);
 
-print obj["box"]["get"](); // out: 123
+print(obj["box"]["get"]()); // out: 123

@@ -1,1 +1,1 @@
-print len(nil); // out: TypeError: "nil" object has no length
+print(len(nil)); // out: TypeError: "nil" object has no length

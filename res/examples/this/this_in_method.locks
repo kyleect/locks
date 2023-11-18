@@ -3,4 +3,4 @@ class Foo {
   fn baz() { return "baz"; }
 }
 
-print Foo().bar().baz(); // out: baz
+print(Foo().bar().baz()); // out: baz

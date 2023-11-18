@@ -315,6 +315,7 @@ impl ObjectNative {
 pub enum Native {
     Clock,
     Length,
+    Print,
 }
 
 impl Display for Native {
@@ -322,6 +323,7 @@ impl Display for Native {
         match self {
             Native::Clock => write!(f, "clock"),
             Native::Length => write!(f, "len"),
+            Native::Print => write!(f, "print"),
         }
     }
 }

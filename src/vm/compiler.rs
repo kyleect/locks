@@ -251,10 +251,6 @@ impl Compiler {
                 // END:
                 self.patch_jump(jump_to_end, span)?;
             }
-            Stmt::Print(print) => {
-                self.compile_expr(&print.value, gc)?;
-                self.emit_u8(op::PRINT, span);
-            }
             Stmt::Return(return_) => {
                 match self.ctx.type_ {
                     FunctionType::Script => {
@@ -399,8 +395,17 @@ impl Compiler {
 
                 let ops = unsafe { &mut (*self.ctx.function).chunk.ops };
 
+                let last_op = ops.last().expect("...");
+
+                if last_op == &op::TRUE {
+                    println!("OP IS TRUE? {:?}", ops);
+                }
+
                 match ops.len().checked_sub(2) {
-                    Some(idx) if ops[idx] == op::GET_PROPERTY => ops[idx] = op::INVOKE,
+                    // Some(idx) if ops[idx] == op::GET_PROPERTY => {
+                    //     println!("PROP -> INVOKE {} : {}", ops[idx], last_op);
+                    //     ops[idx] = op::INVOKE;
+                    // }
                     Some(idx) if ops[idx] == op::GET_SUPER => ops[idx] = op::SUPER_INVOKE,
                     Some(_) | None => self.emit_u8(op::CALL, span),
                 }
@@ -519,7 +524,11 @@ impl Compiler {
                 };
             }
             Expr::Literal(literal) => match literal {
-                ExprLiteral::Bool(true) => self.emit_u8(op::TRUE, span),
+                ExprLiteral::Bool(true) => {
+                    println!("emitting true bool");
+
+                    self.emit_u8(op::TRUE, span)
+                }
                 ExprLiteral::Bool(false) => self.emit_u8(op::FALSE, span),
                 ExprLiteral::Nil => self.emit_u8(op::NIL, span),
                 ExprLiteral::Number(number) => {

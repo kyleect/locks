@@ -3,9 +3,9 @@ class Foo {
 
   fn call() {
     let value = 100;
-    print value; // out: 100
+    print(value); // out: 100
 
-    print this.value; // out: 123
+    print(this.value); // out: 123
   }
 }
 

@@ -1,6 +1,6 @@
 {
   let a = "outer";
   {
-    print a; // out: outer
+    print(a); // out: outer
   }
 }

@@ -1,6 +1,6 @@
 class Foo {
   fn method() {
-    print method; // out: NameError: name "method" is not defined
+    print(method); // out: NameError: name "method" is not defined
   }
 }
 

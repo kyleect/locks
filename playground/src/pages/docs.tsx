@@ -169,16 +169,16 @@ const Docs: React.FC = () => (
             'fn fizzBuzz(n) {',
             '  for (let i = 1; i <= n; i = i + 1) {',
             '      if (i % 15 == 0) {',
-            '        print "FizzBuzz";',
+            '        print("FizzBuzz");',
             '      }',
             '      else if (i % 3 == 0) {',
-            '        print "Fizz";',
+            '        print("Fizz");',
             '      }',
             '      else if (i % 5 == 0) {',
-            '        print "Buzz";',
+            '        print("Buzz");',
             '      }',
             '      else {',
-            '        print i;',
+            '        print(i);',
             '      }',
             '  }',
             '}',
@@ -214,9 +214,9 @@ const Docs: React.FC = () => (
           anchor="variables"
           code={[
             'let value;',
-            'print value; // out: nil',
+            'print(value); // out: nil',
             'value = 42;',
-            'print value; // out: 42;',
+            'print(value); // out: 42;',
           ]}
           height="75px"
         >
@@ -231,10 +231,10 @@ const Docs: React.FC = () => (
           anchor="nil"
           code={[
             'let value = nil;',
-            'print nil; // out: nil',
+            'print(nil); // out: nil',
             '',
             'fn noReturn() {}',
-            'print noReturn(); // out: nil',
+            'print(noReturn()); // out: nil',
           ]}
           height="110px"
         >
@@ -245,16 +245,16 @@ const Docs: React.FC = () => (
           title="Numbers"
           anchor="numbers"
           code={[
-            'print 123; // out: 123',
-            'print 123.45; // out: 123.45',
-            'print -123; // out: -123',
-            'print -123.45; // out: -123.45',
-            'print (5 + 7) * 2.5; // out: 30;',
-            'print 5 % 1; // out: 0',
-            'print 5 % 2; // out: 1',
-            'print 5 % 3; // out: 2',
-            'print 5 % 4; // out: 1',
-            'print 5 % 5; // out: 0',
+            'print(123); // out: 123',
+            'print(123.45); // out: 123.45',
+            'print(-123); // out: -123',
+            'print(-123.45); // out: -123.45',
+            'print((5 + 7) * 2.5); // out: 30;',
+            'print(5 % 1); // out: 0',
+            'print(5 % 2); // out: 1',
+            'print(5 % 3); // out: 2',
+            'print(5 % 4); // out: 1',
+            'print(5 % 5); // out: 0',
           ]}
           height="300px"
         >
@@ -264,10 +264,10 @@ const Docs: React.FC = () => (
           title="Booleans"
           anchor="booleans"
           code={[
-            'print true; // out: true',
-            'print true and false; // out: false',
-            'print true or false; // out: true',
-            'print !true; // out: false',
+            'print(true); // out: true',
+            'print(true and false); // out: false',
+            'print(true or false); // out: true',
+            'print(!true); // out: false',
           ]}
           height="100px"
         >
@@ -282,7 +282,7 @@ const Docs: React.FC = () => (
             'let isTrue = true;',
             '',
             'if (isTrue) {',
-            '  print "Was true!";',
+            '  print("Was true!");',
             '}',
             '',
             '// out: Was true!',
@@ -296,9 +296,9 @@ const Docs: React.FC = () => (
             'let isTrue = true;',
             '',
             'if (isTrue) {',
-            '  print "Was true!";',
+            '  print("Was true!");',
             '} else {',
-            '  print "Was false!";',
+            '  print("Was false!");',
             '}',
             '',
             '// out: Was true!',
@@ -309,8 +309,8 @@ const Docs: React.FC = () => (
           title="Strings"
           anchor="strings"
           code={[
-            'print "Hello World"; // out: Hello World',
-            'print len("Hello World"); // out: 11',
+            'print("Hello World"); // out: Hello World',
+            'print(len("Hello World")); // out: 11',
           ]}
           height="50px"
         >
@@ -319,7 +319,7 @@ const Docs: React.FC = () => (
         <DocCard
           title="String Concatenation"
           anchor="string-concatenation"
-          code={['print "Hello" +" "+ "World"; // out: Hello World']}
+          code={['print("Hello" +" "+ "World"); // out: Hello World']}
           height="30px"
         >
           Strings can be concatenated together using the <code>+</code>{' '}
@@ -333,7 +333,7 @@ const Docs: React.FC = () => (
             '  return a + b;',
             '}',
             '',
-            'print sum(60, 40); // out: 100',
+            'print(sum(60, 40)); // out: 100',
           ]}
           height="100px"
         />
@@ -343,7 +343,7 @@ const Docs: React.FC = () => (
           code={[
             'fn sum (a, b) => a + b;',
             '',
-            'print sum(60, 40); // out: 100',
+            'print(sum(60, 40)); // out: 100',
           ]}
           height="100px"
         />
@@ -357,7 +357,7 @@ const Docs: React.FC = () => (
             '',
             'let add = sum;',
             '',
-            'print add(70, 20); // out: 90',
+            'print(add(70, 20)); // out: 90',
           ]}
           height="150px"
         >
@@ -376,7 +376,7 @@ const Docs: React.FC = () => (
             '  return person;',
             '}',
             '',
-            'print greet("Hello")("World"); // out: Hello World',
+            'print(greet("Hello")("World")); // out: Hello World',
           ]}
           height="200px"
         >
@@ -386,8 +386,8 @@ const Docs: React.FC = () => (
           title="For Loops"
           anchor="for-loops"
           code={[
-            'for (let i = 0; i < 10; i = i + 1) {',
-            '  print i;',
+            'for (var i = 0; i < 10; i = i + 1) {',
+            '  print(i);',
             '}',
             '',
             '// out: 0',
@@ -409,7 +409,7 @@ const Docs: React.FC = () => (
           code={[
             'let a = 1;',
             'while (a < 10) {',
-            '  print a;',
+            '  print(a);',
             '  a = a + 1;',
             '}',
             '',
@@ -444,7 +444,7 @@ const Docs: React.FC = () => (
             '',
             'let greeter = Greeter("Hello");',
             '',
-            'print greeter.greet("World"); // out: Hello World!!!',
+            'print(greeter.greet("World")); // out: Hello World!!!',
           ]}
           height="325px"
         />
@@ -473,7 +473,7 @@ const Docs: React.FC = () => (
             '',
             'let greeter = HelloGreeter();',
             '',
-            'print greeter.greet("World"); // out: Hello World!!!',
+            'print(greeter.greet("World")); // out: Hello World!!!',
           ]}
           height="425px"
         />
@@ -496,7 +496,7 @@ const Docs: React.FC = () => (
             '',
             'let box = Box(123);',
             '',
-            'print box.get(); // out: 123',
+            'print(box.get()); // out: 123',
           ]}
           height="300px"
         />
@@ -517,11 +517,11 @@ const Docs: React.FC = () => (
             '',
             'let box = Box("Hello");',
             '',
-            'print box.get(); // out: Hello',
+            'print(box.get()); // out: Hello',
             '',
             'box.value = "World";',
             '',
-            'print box.get(); // out: World',
+            'print(box.get()); // out: World',
           ]}
           height="350px"
         />
@@ -531,11 +531,11 @@ const Docs: React.FC = () => (
           anchor="lists"
           code={[
             'let list = [10, 20, 30];',
-            'print len(list); // out: 3',
+            'print(len(list)); // out: 3',
             'let last = list[2];',
-            'print last; // out: 30',
+            'print(last); // out: 30',
             'list[1] = list[1] * 2;',
-            'print list[1]; // out: 40',
+            'print(list[1]); // out: 40',
           ]}
           height="125px"
         >
@@ -1010,7 +1010,7 @@ const Docs: React.FC = () => (
           </div>
           <div className="shadow rounded p-3">
             <h4>Run Input</h4>
-            <pre>$ locks exec &squo;print &quot;Hello&quot;;&squo;</pre>
+            <pre>$ locks exec &squo;print(&quot;Hello&quot;;&squo);</pre>
             <pre>$ cat res/benchmarks/fib.locks | locks exec</pre>
           </div>
           <div className="shadow rounded p-3">

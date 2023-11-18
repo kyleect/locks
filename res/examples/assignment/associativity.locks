@@ -4,6 +4,6 @@ let c = "c";
 
 // Assignment is right-associative.
 a = b = c;
-print a; // out: c
-print b; // out: c
-print c; // out: c
+print(a); // out: c
+print(b); // out: c
+print(c); // out: c

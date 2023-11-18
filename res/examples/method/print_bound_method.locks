@@ -1,5 +1,8 @@
 class Foo {
-  fn method() { }
+  fn method() {}
 }
+
 let foo = Foo();
-print foo.method; // out: <bound method method>
+let method = foo.method;
+
+print(method); // out: <bound method method>

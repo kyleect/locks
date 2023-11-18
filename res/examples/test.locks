@@ -1,0 +1,11 @@
+class Class {
+  fn method() {}
+}
+
+fn test(value) {
+  return value;
+}
+
+let instance = Class();
+
+print(test(instance.method)); // out: <bound method method>

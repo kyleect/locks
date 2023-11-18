@@ -165,12 +165,11 @@ impl VM {
                 op::MODULUS => self.op_modulus(),
                 op::NOT => self.op_not(),
                 op::NEGATE => self.op_negate(),
-                op::PRINT => self.op_print(stdout),
                 op::JUMP => self.op_jump(),
                 op::JUMP_IF_FALSE => self.op_jump_if_false(),
                 op::LOOP => self.op_loop(),
-                op::CALL => self.op_call(),
-                op::INVOKE => self.op_invoke(),
+                op::CALL => self.op_call(stdout),
+                op::INVOKE => self.op_invoke(stdout),
                 op::SUPER_INVOKE => self.op_super_invoke(),
                 op::CLOSURE => self.op_closure(),
                 op::CLOSE_UPVALUE => self.op_close_upvalue(),
@@ -591,12 +590,6 @@ impl VM {
         }
     }
 
-    fn op_print(&mut self, stdout: &mut impl Write) -> Result<()> {
-        let value = self.pop();
-        writeln!(stdout, "{value}")
-            .or_else(|_| self.err(IoError::WriteError { file: "stdout".to_string() }))
-    }
-
     fn op_jump(&mut self) -> Result<()> {
         let offset = self.read_u16() as usize;
         self.frame.ip = unsafe { self.frame.ip.add(offset) };
@@ -630,19 +623,19 @@ impl VM {
     /// Will return [`Err(TypeError::NotCallable)`] otherwise.
     ///
     /// This consumes 1 byte op for the `arg_count`
-    fn op_call(&mut self) -> Result<()> {
+    fn op_call(&mut self, stdout: &mut impl Write) -> Result<()> {
         let arg_count = self.read_u8() as usize;
         let callee = unsafe { *self.peek(arg_count) };
-        self.call_value(callee, arg_count)
+        self.call_value(callee, arg_count, stdout)
     }
 
-    fn op_invoke(&mut self) -> Result<()> {
+    fn op_invoke(&mut self, stdout: &mut impl Write) -> Result<()> {
         let name = unsafe { self.read_value().as_object().string };
         let arg_count = self.read_u8() as usize;
         let instance = unsafe { (*self.peek(arg_count)).as_object().instance };
 
         match unsafe { (*instance).fields.get(&name) } {
-            Some(&value) => self.call_value(value, arg_count),
+            Some(&value) => self.call_value(value, arg_count, stdout),
             None => match unsafe { (*(*instance).class).methods.get(&name) } {
                 Some(&method) => self.call_closure(method, arg_count),
                 None => self.err(AttributeError::NoSuchAttribute {
@@ -830,7 +823,12 @@ impl VM {
     /// - [`ObjectType::Native`]
     ///
     /// Will return [`Err(TypeError::NotCallable)`] otherwise.
-    fn call_value(&mut self, value: Value, arg_count: usize) -> Result<()> {
+    fn call_value(
+        &mut self,
+        value: Value,
+        arg_count: usize,
+        stdout: &mut impl Write,
+    ) -> Result<()> {
         if value.is_object() {
             let object = value.as_object();
             match object.type_() {
@@ -839,7 +837,7 @@ impl VM {
                 }
                 ObjectType::Class => self.call_class(unsafe { object.class }, arg_count),
                 ObjectType::Closure => self.call_closure(unsafe { object.closure }, arg_count),
-                ObjectType::Native => self.call_native(unsafe { object.native }, arg_count),
+                ObjectType::Native => self.call_native(unsafe { object.native }, arg_count, stdout),
                 _ => self.err(TypeError::NotCallable { type_: value.type_().to_string() }),
             }
         } else {
@@ -921,7 +919,12 @@ impl VM {
     /// Call [`ObjectNative`] function
     ///
     /// These are functions provided by the language runtime and not written in the language
-    fn call_native(&mut self, native: *mut ObjectNative, arg_count: usize) -> Result<()> {
+    fn call_native(
+        &mut self,
+        native: *mut ObjectNative,
+        arg_count: usize,
+        stdout: &mut impl Write,
+    ) -> Result<()> {
         let value = match { unsafe { (*native).native } } {
             Native::Clock => {
                 self.pop();
@@ -968,6 +971,27 @@ impl VM {
                     }
                     _ => {
                         return self.err(TypeError::NoLength { type_: obj.type_().to_string() });
+                    }
+                }
+            }
+            Native::Print => {
+                if arg_count != 1 {
+                    return self.err(TypeError::ArityMismatch {
+                        name: "print".to_string(),
+                        exp_args: 1,
+                        got_args: arg_count,
+                    });
+                }
+
+                let arg = self.pop();
+                self.pop();
+
+                match writeln!(stdout, "{arg}")
+                    .or_else(|_| self.err(IoError::WriteError { file: "stdout".to_string() }))
+                {
+                    Ok(_) => Value::NIL,
+                    Err(x) => {
+                        return Err(x);
                     }
                 }
             }
@@ -1097,13 +1121,10 @@ impl Default for VM {
         let mut gc = Gc::default();
 
         let mut globals = HashMap::with_capacity_and_hasher(256, BuildHasherDefault::default());
-        let clock_string = gc.alloc("clock");
-        let clock_native = Value::from(gc.alloc(ObjectNative::new(Native::Clock)));
-        globals.insert(clock_string, clock_native);
 
-        let len_string = gc.alloc("len");
-        let len_native = Value::from(gc.alloc(ObjectNative::new(Native::Length)));
-        globals.insert(len_string, len_native);
+        globals.insert(gc.alloc("clock"), Value::from(gc.alloc(ObjectNative::new(Native::Clock))));
+        globals.insert(gc.alloc("len"), Value::from(gc.alloc(ObjectNative::new(Native::Length))));
+        globals.insert(gc.alloc("print"), Value::from(gc.alloc(ObjectNative::new(Native::Print))));
 
         let init_string = gc.alloc("init");
 

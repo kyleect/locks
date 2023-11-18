@@ -1,13 +1,13 @@
 let list = [100, 200, 300];
 
-print list[0]; // out: 100
-print list[1]; // out: 200
-print list[2]; // out: 300
+print(list[0]); // out: 100
+print(list[1]); // out: 200
+print(list[2]); // out: 300
 
 list[1] = 400;
 
-print list[0]; // out: 100
-print list[1]; // out: 400
-print list[2]; // out: 300
+print(list[0]); // out: 100
+print(list[1]); // out: 400
+print(list[2]); // out: 300
 
 list[3] = 1000; // out: IndexError: the length is 3 but the index is 3 (out of bounds)

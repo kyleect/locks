@@ -1,2 +1,2 @@
 fn f() {}
-print f(); // out: nil
+print(f()); // out: nil

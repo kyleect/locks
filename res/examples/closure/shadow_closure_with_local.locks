@@ -2,11 +2,11 @@
   let foo = "closure";
   fn f() {
     {
-      print foo; // out: closure
+      print(foo); // out: closure
       let foo = "shadow";
-      print foo; // out: shadow
+      print(foo); // out: shadow
     }
-    print foo; // out: closure
+    print(foo); // out: closure
   }
   f();
 }

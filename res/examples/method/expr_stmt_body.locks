@@ -11,8 +11,8 @@ class Box {
 
 let box = Box("Hello");
 
-print box.get(); // out: Hello
+print(box.get()); // out: Hello
 
 box.value = "World";
 
-print box.get(); // out: World
+print(box.get()); // out: World

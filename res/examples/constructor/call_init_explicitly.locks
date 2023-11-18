@@ -2,7 +2,7 @@ class Foo {
   let field;
   
   fn init(arg) {
-    print "Foo.init(" + arg + ")";
+    print("Foo.init(" + arg + ")");
     this.field = "init";
   }
 }
@@ -11,7 +11,7 @@ let foo = Foo("one"); // out: Foo.init(one)
 foo.field = "field";
 
 let foo2 = foo.init("two"); // out: Foo.init(two)
-print foo2; // out: <object Foo>
+print(foo2); // out: <object Foo>
 
 // Make sure init() doesn't create a fresh instance.
-print foo.field; // out: init
+print(foo.field); // out: init

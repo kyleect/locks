@@ -1,6 +1,6 @@
 let a = "global";
 {
   let a = "shadow";
-  print a; // out: shadow
+  print(a); // out: shadow
 }
-print a; // out: global
+print(a); // out: global

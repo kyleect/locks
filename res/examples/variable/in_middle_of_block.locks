@@ -1,10 +1,10 @@
 {
   let a = "a";
-  print a; // out: a
+  print(a); // out: a
   let b = a + " b";
-  print b; // out: a b
+  print(b); // out: a b
   let c = a + " c";
-  print c; // out: a c
+  print(c); // out: a c
   let d = b + " d";
-  print d; // out: a b d
+  print(d); // out: a b d
 }

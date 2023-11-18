@@ -1,13 +1,13 @@
-print !true;     // out: false
-print !false;    // out: true
-print !!true;    // out: true
+print(!true);     // out: false
+print(!false);    // out: true
+print(!!true);    // out: true
 
-print !123;      // out: false
-print !0;        // out: false
+print(!123);      // out: false
+print(!0);        // out: false
 
-print !nil;     // out: true
+print(!nil);     // out: true
 
-print !"";       // out: false
+print(!"");       // out: false
 
 fn foo() {}
-print !foo;      // out: false
+print(!foo);      // out: false
