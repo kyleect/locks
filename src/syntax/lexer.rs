@@ -146,6 +146,8 @@ pub enum Token {
     Var,
     #[token("while")]
     While,
+    #[token("extends")]
+    Extends,
 
     #[regex(r"//.*", logos::skip)]
     #[regex(r"[ \r\n\t\f]+", logos::skip)]

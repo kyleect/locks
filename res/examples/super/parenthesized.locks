@@ -2,7 +2,7 @@ class A {
   method() {}
 }
 
-class B < A {
+class B extends A {
   method() {
     // out: SyntaxError: unexpected ")"
     (super).method();

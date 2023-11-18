@@ -23,7 +23,7 @@ Decl = {
 }
 
 DeclClass: ast::Stmt =
-    "class" <name:identifier> <super_:("<" <Spanned<ExprVar>>)?> "{" <methods:Spanned<Function>*> "}" =>
+    "class" <name:identifier> <super_:("extends" <Spanned<ExprVar>>)?> "{" <methods:Spanned<Function>*> "}" =>
         ast::Stmt::Class(ast::StmtClass { <> });
 
 DeclFn: ast::Stmt = "fn" <function:Function> => ast::Stmt::Fn(<>);
@@ -275,5 +275,6 @@ extern {
         "true" => lexer::Token::True,
         "var" => lexer::Token::Var,
         "while" => lexer::Token::While,
+        "extends" => lexer::Token::Extends,
     }
 }

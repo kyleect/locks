@@ -1,4 +1,4 @@
 class Foo {}
 
 // out: SyntaxError: unexpected "("
-class Bar < (Foo) {}
+class Bar extends (Foo) {}

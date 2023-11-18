@@ -1,5 +1,5 @@
 {
   class A {}
-  class B < A {}
+  class B extends A {}
   print B; // out: <class B>
 }

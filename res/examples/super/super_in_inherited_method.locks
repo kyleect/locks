@@ -4,7 +4,7 @@ class A {
   }
 }
 
-class B < A {
+class B extends A {
   test() {
     super.say();
   }
@@ -14,7 +14,7 @@ class B < A {
   }
 }
 
-class C < B {
+class C extends B {
   say() {
     print "C";
   }

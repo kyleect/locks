@@ -1,6 +1,9 @@
 default:
     @just --list
 
+install:
+    mv target/release/locks.exe ~/.cargo/bin
+
 build:
     cargo build --release
 

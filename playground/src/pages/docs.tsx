@@ -328,7 +328,7 @@ const Docs: React.FC = () => (
             '  }',
             '}',
             '',
-            'class HelloGreeter < Greeter {',
+            'class HelloGreeter extends Greeter {',
             '  init() {',
             '    super.init("Hello");',
             '  }',

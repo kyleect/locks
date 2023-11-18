@@ -8,7 +8,7 @@ class A {
   }
 }
 
-class B < A {}
+class B extends A {}
 
 var b = B("value");
 b.test(); // out: value

@@ -9,6 +9,11 @@
     "body": ["class $1 {", "  $2", "}", "$0"],
     "description": "Define a class"
   },
+  "ClassExtend": {
+    "prefix": "classext",
+    "body": ["class $1 extends $2 {", "  $3", "}", "$0"],
+    "description": "Extend a class"
+  },
   "Variable": {
     "prefix": "var",
     "body": ["var $1 = $2;", "$0"],

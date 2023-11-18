@@ -1,6 +1,6 @@
 class Base {}
 
-class Derived < Base {
+class Derived extends Base {
   foo() {
     // out: AttributeError: "Base" object has no attribute "doesNotExist"
     super.doesNotExist(1);

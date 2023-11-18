@@ -1,4 +1,4 @@
 fn foo() {}
 
 // out: TypeError: superclass should be of type "class", not "function"
-class Subclass < foo {}
+class Subclass extends foo {}

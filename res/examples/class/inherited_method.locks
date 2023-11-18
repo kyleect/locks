@@ -4,13 +4,13 @@ class Foo {
   }
 }
 
-class Bar < Foo {
+class Bar extends Foo {
   inBar() {
     print "in bar";
   }
 }
 
-class Baz < Bar {
+class Baz extends Bar {
   inBaz() {
     print "in baz";
   }
