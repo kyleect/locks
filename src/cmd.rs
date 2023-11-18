@@ -48,8 +48,8 @@ impl Cmd {
                     let mut vm = VM::default();
                     let stdout = &mut io::stdout().lock();
 
-                    if let Err(e) = vm.run(&source, stdout) {
-                        report_err(&source, e);
+                    if let Err(e) = vm.run(source, stdout) {
+                        report_err(source, e);
                         bail!("program exited with errors");
                     }
                     Ok(())
@@ -90,7 +90,7 @@ impl Cmd {
                 if let Ok(f) = function {
                     unsafe {
                         let chunk = &(*f).chunk;
-                        let disassembler = Disassembler::new(&chunk);
+                        let disassembler = Disassembler::new(chunk);
 
                         eprintln!("{}", disassembler.disassemble(None));
                     }

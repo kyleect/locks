@@ -1,4 +1,5 @@
-use super::{chunk::Chunk, op};
+use super::chunk::Chunk;
+use super::op;
 
 /// Disassemble byte code chunks in to text
 pub struct Disassembler<'a> {
@@ -12,10 +13,7 @@ impl<'a> Disassembler<'a> {
 
     /// Visualize the byte code as text
     pub fn disassemble(&self, level: Option<usize>) -> String {
-        let level = match level {
-            Some(level) => level,
-            None => 0,
-        };
+        let level = level.unwrap_or(0);
 
         let mut out = String::new();
 
@@ -177,9 +175,8 @@ impl<'a> Disassembler<'a> {
 
 #[cfg(test)]
 mod tests {
-    use crate::vm::{Compiler, Gc};
-
     use super::Disassembler;
+    use crate::vm::{Compiler, Gc};
 
     parameterized_test::create! { assert_disassembly, (code, disassembly), {
         let mut gc = Gc::default();

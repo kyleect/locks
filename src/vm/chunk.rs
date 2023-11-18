@@ -40,7 +40,7 @@ impl Chunk {
             eprintln!("== {name} ==");
         }
 
-        let result = Disassembler::new(&self).disassemble(None);
+        let result = Disassembler::new(self).disassemble(None);
 
         eprintln!("{result}");
     }
