@@ -65,8 +65,6 @@ const Playground: React.FC = () => {
       location.hash = hash;
     }
 
-    // navigate(`/?code=${compressedText}`);
-
     LocalStorage.editorText = compressedText;
   }, [editorText, navigate]);
 
