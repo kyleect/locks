@@ -25,6 +25,8 @@ pub enum Error {
     SyntaxError(SyntaxError),
     #[error("TypeError: {0}")]
     TypeError(TypeError),
+    #[error("IndexError: {0}")]
+    IndexError(IndexError),
 }
 
 impl AsDiagnostic for Error {
@@ -36,6 +38,7 @@ impl AsDiagnostic for Error {
             Error::OverflowError(e) => e.as_diagnostic(span),
             Error::SyntaxError(e) => e.as_diagnostic(span),
             Error::TypeError(e) => e.as_diagnostic(span),
+            Error::IndexError(e) => e.as_diagnostic(span),
         }
     }
 }
@@ -50,7 +53,15 @@ macro_rules! impl_from_error {
     )+};
 }
 
-impl_from_error!(AttributeError, IoError, NameError, OverflowError, SyntaxError, TypeError);
+impl_from_error!(
+    AttributeError,
+    IoError,
+    NameError,
+    OverflowError,
+    SyntaxError,
+    TypeError,
+    IndexError
+);
 
 #[derive(Debug, Error, Eq, PartialEq)]
 pub enum AttributeError {
@@ -185,6 +196,8 @@ pub enum TypeError {
     InitInvalidReturnType { type_: String },
     #[error("{type_:?} object is not callable")]
     NotCallable { type_: String },
+    #[error("{type_:?} is not indexable")]
+    NotIndexable { type_: String },
     #[error(r#"superclass should be of type "class", not {type_:?}"#)]
     SuperclassInvalidType { type_: String },
     #[error("unsupported operand type(s) for {op}: {lt_type:?} and {rt_type:?}")]
@@ -201,6 +214,21 @@ impl AsDiagnostic for TypeError {
     fn as_diagnostic(&self, span: &Span) -> Diagnostic<()> {
         Diagnostic::error()
             .with_code("TypeError")
+            .with_message(self.to_string())
+            .with_labels(vec![Label::primary((), span.clone())])
+    }
+}
+
+#[derive(Debug, Error, Eq, PartialEq)]
+pub enum IndexError {
+    #[error("the length is {length} but the index is {wanted_index} (out of bounds)")]
+    OutOfBounds { wanted_index: usize, length: usize },
+}
+
+impl AsDiagnostic for IndexError {
+    fn as_diagnostic(&self, span: &Span) -> Diagnostic<()> {
+        Diagnostic::error()
+            .with_code("IndexError")
             .with_message(self.to_string())
             .with_labels(vec![Label::primary((), span.clone())])
     }

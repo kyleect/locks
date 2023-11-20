@@ -21,13 +21,13 @@ use hashbrown::HashMap;
 use rustc_hash::FxHasher;
 
 use crate::error::{
-    AttributeError, Error, ErrorS, IoError, NameError, OverflowError, Result, TypeError,
+    AttributeError, Error, ErrorS, IndexError, IoError, NameError, OverflowError, Result, TypeError,
 };
 use crate::vm::allocator::GLOBAL;
 use crate::vm::gc::GcAlloc;
 use crate::vm::object::{
     Native, ObjectBoundMethod, ObjectClass, ObjectClosure, ObjectFunction, ObjectInstance,
-    ObjectNative, ObjectString, ObjectType, ObjectUpvalue,
+    ObjectList, ObjectNative, ObjectString, ObjectType, ObjectUpvalue,
 };
 use crate::vm::value::Value;
 
@@ -191,6 +191,9 @@ impl VM {
                 op::INHERIT => self.op_inherit(),
                 op::METHOD => self.op_method(),
                 op::FIELD => self.op_field(),
+                op::CREATE_LIST => self.op_create_list(),
+                op::GET_INDEX => self.op_get_index(),
+                op::SET_INDEX => self.op_set_index(),
                 _ => util::unreachable(),
             }?;
 
@@ -209,6 +212,84 @@ impl VM {
             self.frame.stack, self.stack_top,
             "VM finished executing but stack is not empty"
         );
+        Ok(())
+    }
+
+    fn op_create_list(&mut self) -> Result<()> {
+        let length = self.read_u8();
+
+        let mut values = vec![];
+
+        for _ in 0..length {
+            let value = self.pop();
+
+            values.push(value);
+        }
+
+        values.reverse();
+
+        let list = self.gc.alloc(ObjectList::new(values));
+        let value = list.into();
+
+        self.push(value);
+
+        Ok(())
+    }
+
+    fn op_get_index(&mut self) -> Result<()> {
+        let index = self.pop();
+        let target = self.pop();
+
+        if target.is_object() {
+            if target.as_object().type_() == ObjectType::List {
+                let list = unsafe { &(*target.as_object().list) };
+                let list_idx = index.as_number() as usize;
+
+                if list_idx >= list.values.len() {
+                    return self.err(IndexError::OutOfBounds {
+                        wanted_index: list_idx,
+                        length: list.values.len(),
+                    });
+                }
+
+                let value = list.values[list_idx];
+                self.push(value);
+            } else {
+                return self.err(TypeError::NotIndexable {
+                    type_: target.as_object().type_().to_string(),
+                });
+            }
+        } else {
+            return self.err(TypeError::NotIndexable { type_: target.type_().to_string() });
+        }
+
+        Ok(())
+    }
+
+    fn op_set_index(&mut self) -> Result<()> {
+        let value = self.pop();
+        let index = self.pop();
+        let target = self.pop();
+
+        if target.is_object() {
+            if target.as_object().type_() == ObjectType::List {
+                let list = unsafe { &mut (*target.as_object().list) };
+                let list_idx = index.as_number() as usize;
+
+                if list_idx >= list.values.len() {
+                    return self.err(IndexError::OutOfBounds {
+                        wanted_index: list_idx,
+                        length: list.values.len(),
+                    });
+                }
+
+                list.values[list_idx] = value;
+                self.push(value);
+            } else {
+                return self.err(TypeError::NotIndexable { type_: target.type_().to_string() });
+            }
+        }
+
         Ok(())
     }
 
@@ -852,9 +933,38 @@ impl VM {
                     });
                 }
                 util::now().into()
-            }
+            } // Native::Length => {
+              //     if arg_count != 1 {
+              //         return self.err(TypeError::ArityMismatch {
+              //             name: "len".to_string(),
+              //             exp_args: 1,
+              //             got_args: arg_count,
+              //         });
+              //     }
+
+              //     let arg = self.pop();
+
+              //     // let obj = arg.as_object();
+
+              //     // let length = match obj.type_() {
+              //     //     ObjectType::BoundMethod => Value::NIL,
+              //     //     ObjectType::Class => Value::NIL,
+              //     //     ObjectType::Closure => Value::NIL,
+              //     //     ObjectType::Function => Value::NIL,
+              //     //     ObjectType::Native => Value::NIL,
+              //     //     ObjectType::Instance => Value::NIL,
+              //     //     ObjectType::String => Value::NIL,
+              //     //     ObjectType::List => Value::from(0.0),
+              //     //     ObjectType::Upvalue => Value::from(0.0),
+              //     // };
+
+              //     // length
+              //     arg
+              // }
         };
+
         self.push(value);
+
         Ok(())
     }
 
@@ -980,6 +1090,10 @@ impl Default for VM {
         let clock_string = gc.alloc("clock");
         let clock_native = Value::from(gc.alloc(ObjectNative::new(Native::Clock)));
         globals.insert(clock_string, clock_native);
+
+        // let len_string = gc.alloc("len");
+        // let len_native = Value::from(gc.alloc(ObjectNative::new(Native::Length)));
+        // globals.insert(len_string, len_native);
 
         let init_string = gc.alloc("init");
 

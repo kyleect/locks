@@ -5,7 +5,7 @@ fn main() {
         .expect("failed to process LALRPOP grammar");
 
     if cfg!(test) {
-        for path in ["res/examples/**/*.lox", "res/benchmarks/**/*.lox"] {
+        for path in ["res/examples/**/*.locks", "res/benchmarks/**/*.locks"] {
             build_deps::rerun_if_changed_paths(path).expect("could not read path");
         }
     }

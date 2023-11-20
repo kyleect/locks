@@ -69,6 +69,14 @@ impl Gc {
                 }
                 ObjectType::Native => {}
                 ObjectType::String => {}
+                ObjectType::List => {
+                    let list = unsafe { object.list };
+                    let values = unsafe { &(*list).values };
+
+                    for &value in values {
+                        self.mark(value);
+                    }
+                }
                 ObjectType::Upvalue => {
                     let upvalue = unsafe { object.upvalue };
                     self.mark(unsafe { (*upvalue).closed });

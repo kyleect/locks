@@ -1,0 +1,9 @@
+class Class {
+  let values;
+  
+  fn init() {
+    this.values = [10, 20, 30];
+  }
+}
+
+print Class().values[0]; // out: 10

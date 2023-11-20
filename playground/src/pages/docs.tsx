@@ -143,6 +143,11 @@ const Docs: React.FC = () => (
               Class Field/Method Index Access
             </Link>
           </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#lists ">
+              Lists
+            </Link>
+          </li>
         </ul>
         <DocCard
           title="Example"
@@ -445,6 +450,16 @@ const Docs: React.FC = () => (
             'print greeter.greet("World"); // out: Hello World!!!',
           ]}
           height="400px"
+        />
+        <DocCard
+          title="Lists"
+          anchor="lists"
+          code={[
+            'var list = [10, 20, 30];',
+            'var last = list[2];',
+            'print last; // out: 30',
+          ]}
+          height="100px"
         />
 
         <DocCard

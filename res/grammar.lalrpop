@@ -119,6 +119,8 @@ ExprAssign = {
             },
             value,
         })),
+    <target:Spanned<ExprCall>> "[" <index:number> "]" "=" <value:ExprS> =>
+        ast::Expr::SetIndex(Box::new(ast::ExprSetIndex {<>})),
     <object:Spanned<ExprCall>> "." <name:identifier> "=" <value:ExprS> =>
         ast::Expr::Set(Box::new(ast::ExprSet { <> })),
     <object:Spanned<ExprCall>> "[" <name:identifier> "]" "=" <value:ExprS> =>
@@ -180,6 +182,8 @@ ExprCall: ast::Expr = {
         ast::Expr::Get(Box::new(ast::ExprGet { <> })),
     <object:Spanned<ExprCall>> "[" <name:identifier> "]" =>
         ast::Expr::Get(Box::new(ast::ExprGet { <> })),
+    <target:Spanned<ExprCall>> "[" <index:number> "]" =>
+        ast::Expr::GetIndex(Box::new(ast::ExprGetIndex {<>})),
     "super" "." <name:identifier> =>
         ast::Expr::Super(ast::ExprSuper {
             super_: ast::Identifier {
@@ -204,6 +208,11 @@ ExprCall: ast::Expr = {
             },
             name,
         }),
+    ExprList,
+}
+
+ExprList: ast::Expr = {
+    "[" <values:Args> "]" => ast::Expr::Literal(ast::ExprLiteral::List(<>)),
     ExprPrimary,
 }
 
@@ -217,7 +226,7 @@ ExprPrimary: ast::Expr = {
 
     // Variables
     ExprIdentifier,
-    ExprThis,
+    ExprThis,    
 
     // Grouping
     "(" <Expr> ")",
@@ -238,13 +247,16 @@ ExprThis: ast::Expr = "this" => ast::Expr::Identifier(ast::ExprIdentifier {
     }
 });
 
-// Utilities
+/// Utilities
+
+// Expr + Span (start..end)
 Spanned<T>: ast::Spanned<T> = <l:@L> <t:T> <r:@R> => (t, l..r);
 
 Function: ast::StmtFn =
     <name:identifier> "(" <params:Params> ")" <body:StmtBlockInternal> =>
         ast::StmtFn { <> };
 
+// Comma separated list of string parameters a function/method takes
 Params: Vec<String> = {
     <first:identifier> <mut params:("," <identifier>)*> => {
         params.insert(0, first);
@@ -253,6 +265,7 @@ Params: Vec<String> = {
     () => Vec::new(),
 };
 
+// Comma separated list of expression arugments passed to a function/method call
 Args: Vec<ast::ExprS> = {
     <first:ExprS> <mut args:("," <ExprS>)*> => {
         args.insert(0, first);

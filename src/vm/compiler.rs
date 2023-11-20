@@ -398,11 +398,13 @@ impl Compiler {
                 }
 
                 let ops = unsafe { &mut (*self.ctx.function).chunk.ops };
+
                 match ops.len().checked_sub(2) {
                     Some(idx) if ops[idx] == op::GET_PROPERTY => ops[idx] = op::INVOKE,
                     Some(idx) if ops[idx] == op::GET_SUPER => ops[idx] = op::SUPER_INVOKE,
                     Some(_) | None => self.emit_u8(op::CALL, span),
                 }
+
                 self.emit_u8(arg_count, span);
             }
             Expr::Get(get) => {
@@ -411,6 +413,33 @@ impl Compiler {
                 let name = gc.alloc(&get.name).into();
                 self.emit_u8(op::GET_PROPERTY, span);
                 self.emit_constant(name, span)?;
+            }
+            Expr::GetIndex(get_index) => {
+                let target = &get_index.target;
+                self.compile_expr(target, gc)?;
+
+                let index = &get_index.index;
+
+                let value = (*index).into();
+                self.emit_u8(op::CONSTANT, span);
+                self.emit_constant(value, span)?;
+
+                self.emit_u8(op::GET_INDEX, span);
+            }
+            Expr::SetIndex(set_index) => {
+                let target = &set_index.target;
+                self.compile_expr(target, gc)?;
+
+                let index = &set_index.index;
+
+                let value = (*index).into();
+                self.emit_u8(op::CONSTANT, span);
+                self.emit_constant(value, span)?;
+
+                let value = &set_index.value;
+                self.compile_expr(value, gc)?;
+
+                self.emit_u8(op::SET_INDEX, span);
             }
             Expr::Infix(infix) => {
                 self.compile_expr(&infix.lt, gc)?;
@@ -504,6 +533,20 @@ impl Compiler {
                     let value = string.into();
                     self.emit_u8(op::CONSTANT, span);
                     self.emit_constant(value, span)?;
+                }
+                ExprLiteral::List(values) => {
+                    for value in values.iter() {
+                        let _ = self.compile_expr(value.into(), gc);
+                    }
+
+                    self.emit_u8(op::CREATE_LIST, span);
+
+                    let list_length = values
+                        .len()
+                        .try_into()
+                        .map_err(|_| (OverflowError::TooManyArgs.into(), span.clone()))?;
+
+                    self.emit_u8(list_length, span);
                 }
             },
             Expr::Prefix(prefix) => {
