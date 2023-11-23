@@ -10,5 +10,5 @@ class A {
 
 class B extends A {}
 
-var b = B("value");
+let b = B("value");
 b.test(); // out: value

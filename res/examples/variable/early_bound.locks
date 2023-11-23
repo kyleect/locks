@@ -1,10 +1,10 @@
-var a = "outer";
+let a = "outer";
 {
   fn foo() {
     print a;
   }
 
   foo(); // out: outer
-  var a = "inner";
+  let a = "inner";
   foo(); // out: outer
 }

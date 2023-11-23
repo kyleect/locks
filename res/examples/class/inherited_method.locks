@@ -16,7 +16,7 @@ class Baz extends Bar {
   }
 }
 
-var baz = Baz();
+let baz = Baz();
 baz.inFoo(); // out: in foo
 baz.inBar(); // out: in bar
 baz.inBaz(); // out: in baz

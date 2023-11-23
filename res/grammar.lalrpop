@@ -28,7 +28,7 @@ DeclClass: ast::Stmt =
 
 DeclFn: ast::Stmt = "fn" <function:Function> => ast::Stmt::Fn(<>);
 
-DeclVar: ast::Stmt = "var" <name:identifier> <value:("=" <ExprS>)?> ";" =>
+DeclVar: ast::Stmt = "let" <name:identifier> <value:("=" <ExprS>)?> ";" =>
     ast::Stmt::Var(ast::StmtVar {
         var: ast::Var { name, depth: None },
         value,
@@ -273,7 +273,7 @@ extern {
         "super" => lexer::Token::Super,
         "this" => lexer::Token::This,
         "true" => lexer::Token::True,
-        "var" => lexer::Token::Var,
+        "let" => lexer::Token::Let,
         "while" => lexer::Token::While,
         "extends" => lexer::Token::Extends,
     }

@@ -15,9 +15,9 @@ class Zoo {
   mouse()  { return this.fox; }
 }
 
-var zoo = Zoo();
-var sum = 0;
-var start = clock();
+let zoo = Zoo();
+let sum = 0;
+let start = clock();
 while (sum < 200000000) {
   sum = sum + zoo.ant()
             + zoo.banana()

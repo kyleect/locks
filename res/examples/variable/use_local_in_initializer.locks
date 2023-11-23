@@ -1,5 +1,5 @@
-var a = "outer";
+let a = "outer";
 {
   // out: NameError: cannot access variable "a" in its own initializer
-  var a = a;
+  let a = a;
 }

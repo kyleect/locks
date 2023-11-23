@@ -1,2 +1,2 @@
 // out: SyntaxError: unexpected "nil"
-var nil = "value";
+let nil = "value";

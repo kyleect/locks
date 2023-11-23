@@ -143,7 +143,7 @@ const Docs: React.FC = () => (
           anchor="example"
           code={[
             'fn fizzBuzz(n) {',
-            '  for (var i = 1; i <= n; i = i + 1) {',
+            '  for (let i = 1; i <= n; i = i + 1) {',
             '      if (i % 15 == 0) {',
             '        print "FizzBuzz";',
             '      }',
@@ -188,7 +188,7 @@ const Docs: React.FC = () => (
         <DocCard
           title="Variables"
           anchor="variables"
-          code={['var value;', '', 'print value; // nil']}
+          code={['let value;', '', 'print value; // nil']}
           height="70px"
         >
           Variables are declared using the <code>var</code> keyword with an
@@ -200,7 +200,7 @@ const Docs: React.FC = () => (
           title="Nil"
           anchor="nil"
           code={[
-            'var value = nil;',
+            'let value = nil;',
             'print nil; // out: nil',
             '',
             'fn noReturn() {}',
@@ -249,7 +249,7 @@ const Docs: React.FC = () => (
           title="If"
           anchor="if"
           code={[
-            'var isTrue = true;',
+            'let isTrue = true;',
             '',
             'if (isTrue) {',
             '  print "Was true!";',
@@ -263,7 +263,7 @@ const Docs: React.FC = () => (
           title="If/Else"
           anchor="if-else"
           code={[
-            'var isTrue = true;',
+            'let isTrue = true;',
             '',
             'if (isTrue) {',
             '  print "Was true!";',
@@ -312,7 +312,7 @@ const Docs: React.FC = () => (
             '  return a + b;',
             '}',
             '',
-            'var add = sum;',
+            'let add = sum;',
             '',
             'print add(70, 20); // out: 90',
           ]}
@@ -343,7 +343,7 @@ const Docs: React.FC = () => (
           title="For Loops"
           anchor="for-loops"
           code={[
-            'for (var i = 0; i < 10; i = i + 1) {',
+            'for (let i = 0; i < 10; i = i + 1) {',
             '  print i;',
             '}',
             '',
@@ -364,7 +364,7 @@ const Docs: React.FC = () => (
           title="While Loops"
           anchor="while-loops"
           code={[
-            'var a = 1;',
+            'let a = 1;',
             'while (a < 10) {',
             '  print a;',
             '  a = a + 1;',
@@ -396,7 +396,7 @@ const Docs: React.FC = () => (
             '  }',
             '}',
             '',
-            'var greeter = Greeter("Hello");',
+            'let greeter = Greeter("Hello");',
             '',
             'print greeter.greet("World"); // out: Hello World',
           ]}
@@ -422,7 +422,7 @@ const Docs: React.FC = () => (
             '  }',
             '}',
             '',
-            'var greeter = HelloGreeter();',
+            'let greeter = HelloGreeter();',
             '',
             'print greeter.greet("World"); // out: Hello World',
           ]}

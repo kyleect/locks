@@ -1,2 +1,2 @@
 // out: SyntaxError: unexpected "false"
-var false = "value";
+let false = "value";

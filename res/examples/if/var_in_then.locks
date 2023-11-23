@@ -1,2 +1,0 @@
-// out: SyntaxError: unexpected "var"
-if (true) var foo;

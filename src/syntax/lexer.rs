@@ -142,8 +142,8 @@ pub enum Token {
     This,
     #[token("true")]
     True,
-    #[token("var")]
-    Var,
+    #[token("let")]
+    Let,
     #[token("while")]
     While,
     #[token("extends")]

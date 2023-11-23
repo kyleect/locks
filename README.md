@@ -37,7 +37,7 @@ Check out the [documentation](https://kyleect.github.io/locks/#/docs) the start 
 
 ```
 fn fizzBuzz(n) {
-  for (var i = 1; i <= n; i = i + 1) {
+  for (let i = 1; i <= n; i = i + 1) {
       if (i % 15 == 0) {
         print "FizzBuzz";
       }
@@ -90,7 +90,7 @@ Disassemble locks code as visualized byte code
 // ./res/examples/number/fizzbuzz.locks
 
 fn fizzBuzz(n) {
-  for (var i = 1; i <= n; i = i + 1) {
+  for (let i = 1; i <= n; i = i + 1) {
       if (i % 15 == 0) {
         print "FizzBuzz";
       }

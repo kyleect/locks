@@ -15,5 +15,5 @@ class B extends A {
 }
 
 
-var closure = B().getClosure();
+let closure = B().getClosure();
 closure("arg"); // out: A.method(arg)

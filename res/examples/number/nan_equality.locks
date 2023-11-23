@@ -1,4 +1,4 @@
-var nan = 0/0;
+let nan = 0/0;
 
 print nan == 0; // out: false
 print nan != 1; // out: true

@@ -1,9 +1,9 @@
 {
-  var foo = "closure";
+  let foo = "closure";
   fn f() {
     {
       print foo; // out: closure
-      var foo = "shadow";
+      let foo = "shadow";
       print foo; // out: shadow
     }
     print foo; // out: closure

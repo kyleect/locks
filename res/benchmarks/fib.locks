@@ -3,6 +3,6 @@ fn fib(n) {
   return fib(n - 2) + fib(n - 1);
 }
 
-var start = clock();
+let start = clock();
 print fib(39) == 63245986;
 print clock() - start;

@@ -5,10 +5,10 @@ class Foo {
   }
 }
 
-var foo = Foo("one"); // out: Foo.init(one)
+let foo = Foo("one"); // out: Foo.init(one)
 foo.field = "field";
 
-var foo2 = foo.init("two"); // out: Foo.init(two)
+let foo2 = foo.init("two"); // out: Foo.init(two)
 print foo2; // out: <object Foo>
 
 // Make sure init() doesn't create a fresh instance.

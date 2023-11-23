@@ -206,7 +206,7 @@ mod tests {
 
     assert_disassembly! {
         assignment_string: (
-            "var a = \"Hello\";",
+            "let a = \"Hello\";",
             "\
             0000 OP_CONSTANT         0 == 'Hello'\n\
             0002 OP_DEFINE_GLOBAL    1 == 'a'\n\
@@ -214,7 +214,7 @@ mod tests {
             0005 OP_RETURN\n"
         ),
         assignment_number: (
-            "var a = 123;",
+            "let a = 123;",
             "\
             0000 OP_CONSTANT         0 == '123'\n\
             0002 OP_DEFINE_GLOBAL    1 == 'a'\n\
@@ -250,9 +250,9 @@ mod tests {
         ),
         assign_negated_number: (
             "\
-            var a = 123;\n\
-            var b = -a;\n\
-            var c = a + b;\n\
+            let a = 123;\n\
+            let b = -a;\n\
+            let c = a + b;\n\
             print c;",
             "\
             0000 OP_CONSTANT         0 == '123'\n\
@@ -346,7 +346,7 @@ mod tests {
         ),
         closure: (
             r#"
-            var f;
+            let f;
 
             fn foo(param) {
                 fn f_() {
@@ -399,7 +399,7 @@ mod tests {
               }
             }
               
-            var greeter = Greeter(\"Hello\");
+            let greeter = Greeter(\"Hello\");
               
             print greeter.greet(\"World\"); // out: Hello World",
             concat!(

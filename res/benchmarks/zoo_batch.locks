@@ -15,12 +15,12 @@ class Zoo {
   mouse()  { return this.fox; }
 }
 
-var zoo = Zoo();
-var sum = 0;
-var start = clock();
-var batch = 0;
+let zoo = Zoo();
+let sum = 0;
+let start = clock();
+let batch = 0;
 while (clock() - start < 10) {
-  for (var i = 0; i < 10000; i = i + 1) {
+  for (let i = 0; i < 10000; i = i + 1) {
     sum = sum + zoo.ant()
               + zoo.banana()
               + zoo.tuna()

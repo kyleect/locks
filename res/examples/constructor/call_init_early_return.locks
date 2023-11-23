@@ -6,6 +6,6 @@ class Foo {
   }
 }
 
-var foo = Foo(); // out: init
+let foo = Foo(); // out: init
 print foo.init(); // out: init
 // out: <object Foo>

@@ -1,7 +1,7 @@
-var function;
+let function;
 
 {
-  var bonus = 10;
+  let bonus = 10;
 
   fn sum(a, b) {
     return a + b + bonus;

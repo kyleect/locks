@@ -11,6 +11,6 @@ class Derived extends Base {
   }
 }
 
-var derived = Derived("a", "b");
+let derived = Derived("a", "b");
 print derived.a; // out: a
 print derived.b; // out: b
