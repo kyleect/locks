@@ -78,8 +78,8 @@ impl Compiler {
 
                 if let Some(super_) = &class.super_ {
                     match &super_.0 {
-                        Expr::Var(var) => {
-                            if var.var.name == class.name {
+                        Expr::Identifier(identifier) => {
+                            if identifier.identifier.name == class.name {
                                 return Err((
                                     NameError::ClassInheritFromSelf {
                                         name: class.name.to_string(),
@@ -228,11 +228,11 @@ impl Compiler {
                 }
                 self.emit_u8(op::RETURN, span);
             }
-            Stmt::Var(var) => {
-                let name = &var.var.name;
+            Stmt::Assign(assign) => {
+                let name = &assign.identifier.name;
                 if self.is_global() {
                     let name = gc.alloc(name);
-                    match &var.value {
+                    match &assign.value {
                         Some(value) => self.compile_expr(value, gc)?,
                         None => self.emit_u8(op::NIL, span),
                     }
@@ -240,7 +240,7 @@ impl Compiler {
                     self.emit_constant(name.into(), span)?;
                 } else {
                     self.declare_local(name, span)?;
-                    match &var.value {
+                    match &assign.value {
                         Some(value) => self.compile_expr(value, gc)?,
                         None => self.emit_u8(op::NIL, span),
                     }
@@ -334,7 +334,7 @@ impl Compiler {
         match expr {
             Expr::Assign(assign) => {
                 self.compile_expr(&assign.value, gc)?;
-                self.set_variable(&assign.var.name, span, gc)?;
+                self.set_variable(&assign.identifier.name, span, gc)?;
             }
             Expr::Call(call) => {
                 let arg_count = call
@@ -488,7 +488,9 @@ impl Compiler {
                 self.emit_u8(op::GET_SUPER, span);
                 self.emit_constant(name, span)?;
             }
-            Expr::Var(var) => self.get_variable(&var.var.name, span, gc)?,
+            Expr::Identifier(identifier) => {
+                self.get_variable(&identifier.identifier.name, span, gc)?
+            }
         }
         Ok(())
     }

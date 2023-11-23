@@ -20,7 +20,7 @@ pub enum Stmt {
     If(Box<StmtIf>),
     Print(StmtPrint),
     Return(StmtReturn),
-    Var(StmtVar),
+    Assign(StmtAssign),
     While(Box<StmtWhile>),
     Error,
 }
@@ -76,8 +76,8 @@ pub struct StmtReturn {
 }
 
 #[derive(Clone, Debug, PartialEq)]
-pub struct StmtVar {
-    pub var: Var,
+pub struct StmtAssign {
+    pub identifier: Identifier,
     pub value: Option<ExprS>,
 }
 
@@ -97,12 +97,12 @@ pub enum Expr {
     Prefix(Box<ExprPrefix>),
     Set(Box<ExprSet>),
     Super(ExprSuper),
-    Var(ExprVar),
+    Identifier(ExprIdentifier),
 }
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct ExprAssign {
-    pub var: Var,
+    pub identifier: Identifier,
     pub value: ExprS,
 }
 
@@ -202,17 +202,17 @@ pub struct ExprSet {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ExprSuper {
-    pub super_: Var,
+    pub super_: Identifier,
     pub name: String,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct ExprVar {
-    pub var: Var,
+pub struct ExprIdentifier {
+    pub identifier: Identifier,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Var {
+pub struct Identifier {
     pub name: String,
     /// This field is initialized as [`None`] by the parser, and is later
     /// filled by the resolver.

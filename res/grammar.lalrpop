@@ -18,19 +18,22 @@ DeclS = Spanned<Decl>;
 Decl = {
     DeclClass,
     DeclFn,
-    DeclVar,
+    DeclLetVar,
     Stmt,
 }
 
 DeclClass: ast::Stmt =
-    "class" <name:identifier> <super_:("extends" <Spanned<ExprVar>>)?> "{" <methods:Spanned<Function>*> "}" =>
+    "class" <name:identifier> <super_:("extends" <Spanned<ExprIdentifier>>)?> "{" <methods:Spanned<Function>*> "}" =>
         ast::Stmt::Class(ast::StmtClass { <> });
 
 DeclFn: ast::Stmt = "fn" <function:Function> => ast::Stmt::Fn(<>);
 
-DeclVar: ast::Stmt = "let" <name:identifier> <value:("=" <ExprS>)?> ";" =>
-    ast::Stmt::Var(ast::StmtVar {
-        var: ast::Var { name, depth: None },
+DeclLetVar: ast::Stmt = "let" <name:identifier> <value:("=" <ExprS>)?> ";" =>
+    ast::Stmt::Assign(ast::StmtAssign {
+        identifier: ast::Identifier {
+            name,
+            depth: None
+        },
         value,
     });
 
@@ -67,7 +70,7 @@ StmtClosed: ast::Stmt = {
 }
 
 ForInit: Option<ast::StmtS> = {
-    <Spanned<DeclVar>> => Some(<>),
+    <Spanned<DeclLetVar>> => Some(<>),
     <Spanned<StmtExpr>> => Some(<>),
     ";" => None,
 }
@@ -105,7 +108,10 @@ Expr = ExprAssign;
 ExprAssign = {
     <name:identifier> "=" <value:ExprS> =>
         ast::Expr::Assign(Box::new(ast::ExprAssign {
-            var: ast::Var { name, depth: None },
+            identifier: ast::Identifier {
+                name,
+                depth: None
+            },
             value,
         })),
     <object:Spanned<ExprCall>> "." <name:identifier> "=" <value:ExprS> =>
@@ -163,7 +169,7 @@ ExprCall: ast::Expr = {
         ast::Expr::Get(Box::new(ast::ExprGet { <> })),
     "super" "." <name:identifier> =>
         ast::Expr::Super(ast::ExprSuper {
-            super_: ast::Var {
+            super_: ast::Identifier {
                 name: "super".to_string(),
                 depth: None,
             },
@@ -181,19 +187,27 @@ ExprPrimary: ast::Expr = {
     number => ast::Expr::Literal(ast::ExprLiteral::Number(<>)),
 
     // Variables
-    ExprVar,
+    ExprIdentifier,
     ExprThis,
 
     // Grouping
     "(" <Expr> ")",
 }
 
-ExprVar: ast::Expr = <name:identifier> =>
-    ast::Expr::Var(ast::ExprVar { var: ast::Var { name, depth: None } });
-ExprThis: ast::Expr = "this" => ast::Expr::Var(ast::ExprVar { var: ast::Var {
-    name: "this".to_string(),
-    depth: None,
-}});
+ExprIdentifier: ast::Expr = <name:identifier> =>
+    ast::Expr::Identifier(ast::ExprIdentifier {
+        identifier: ast::Identifier {
+            name,
+            depth: None
+        }
+    });
+
+ExprThis: ast::Expr = "this" => ast::Expr::Identifier(ast::ExprIdentifier {
+    identifier: ast::Identifier {
+        name: "this".to_string(),
+        depth: None,
+    }
+});
 
 // Utilities
 Spanned<T>: ast::Spanned<T> = <l:@L> <t:T> <r:@R> => (t, l..r);
