@@ -1,3 +1,2 @@
 let a = "1";
-let a = "2";
-print a; // out: 2
+let a = "2";  // out: NameError: name "a" is already defined

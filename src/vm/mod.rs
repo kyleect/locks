@@ -270,8 +270,16 @@ impl VM {
     fn op_define_global(&mut self) -> Result<()> {
         let name = unsafe { self.read_value().as_object().string };
         let value = self.pop();
-        self.globals.insert(name, value);
-        Ok(())
+
+        match self.globals.get(&name) {
+            Some(_) => {
+                self.err(NameError::AlreadyDefined { name: unsafe { (*name).value.to_string() } })
+            }
+            None => {
+                self.globals.insert(name, value);
+                Ok(())
+            }
+        }
     }
 
     fn op_set_global(&mut self) -> Result<()> {
