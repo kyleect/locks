@@ -188,13 +188,19 @@ const Docs: React.FC = () => (
         <DocCard
           title="Variables"
           anchor="variables"
-          code={['let value;', '', 'print value; // nil']}
-          height="70px"
+          code={[
+            'let value;',
+            'print value; // out: nil',
+            'value = 42;',
+            'print value; // out: 42;',
+          ]}
+          height="75px"
         >
-          Variables are declared using the <code>var</code> keyword with an
+          Variables are declared using the <code>let</code> keyword with an
           identifier/name matching <code>[a-zA-Z_][a-zA-Z0-9_]*</code>.
           Supported value types: string, number, boolean, function,{' '}
-          <code>nil</code>. Variables default to <code>nil</code>.
+          <code>nil</code>. Variables default to <code>nil</code>. Variables can
+          be reassigned.
         </DocCard>
         <DocCard
           title="Nil"
