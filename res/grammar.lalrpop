@@ -125,6 +125,7 @@ StmtSimple = {
     StmtExpr,
     StmtPrint,
     StmtReturn,
+    StmtBreak,
 }
 
 StmtBlock: ast::Stmt = StmtBlockInternal => ast::Stmt::Block(<>);
@@ -140,6 +141,8 @@ StmtPrint: ast::Stmt = "print" <value:ExprS> ";" =>
 
 StmtReturn: ast::Stmt = "return" <value:ExprS?> ";" =>
     ast::Stmt::Return(ast::StmtReturn { <> });
+
+StmtBreak: ast::Stmt = "break" ";" => ast::Stmt::Break;
 
 // Expressions
 ExprS = Spanned<Expr>;
@@ -368,5 +371,6 @@ extern {
         "let" => lexer::Token::Let,
         "while" => lexer::Token::While,
         "extends" => lexer::Token::Extends,
+        "break" => lexer::Token::Break,
     }
 }

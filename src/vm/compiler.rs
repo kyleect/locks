@@ -315,6 +315,9 @@ impl Compiler {
                 // Discard the condition.
                 self.emit_u8(op::POP, span);
             }
+            Stmt::Break => {
+                self.emit_u8(op::BREAK, span);
+            }
         }
         Ok(())
     }

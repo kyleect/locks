@@ -87,5 +87,6 @@ iota! {
     FIELD,
     CREATE_LIST,
     GET_INDEX,
-    SET_INDEX
+    SET_INDEX,
+    BREAK
 }

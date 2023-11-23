@@ -22,6 +22,7 @@ pub enum Stmt {
     Return(StmtReturn),
     Assign(StmtAssign),
     While(Box<StmtWhile>),
+    Break,
     Error,
 }
 
@@ -38,6 +39,7 @@ impl Debug for Stmt {
             Self::Return(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
             Self::Assign(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
             Self::While(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::Break => write!(f, "break"),
             Self::Error => write!(f, "Error"),
         }
     }

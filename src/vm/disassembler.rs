@@ -81,6 +81,7 @@ impl<'a> Disassembler<'a> {
             op::PRINT => self.disassemble_op_simple("OP_PRINT"),
             op::JUMP => self.disassemble_op_jump("OP_JUMP", op_idx, true),
             op::JUMP_IF_FALSE => self.disassemble_op_jump("OP_JUMP_IF_FALSE", op_idx, true),
+            op::BREAK => self.disassemble_op_jump("OP_BREAK", op_idx, true),
             op::LOOP => self.disassemble_op_jump("OP_LOOP", op_idx, false),
             op::CALL => self.disassemble_op_byte("OP_CALL", op_idx),
             op::INVOKE => self.disassemble_op_invoke("OP_INVOKE", op_idx),
@@ -217,6 +218,21 @@ mod tests {
             0004 OP_CREATE_LIST      2\n\
             0006 OP_CONSTANT         2 == '0'\n\
             0008 OP_GET_INDEX\n\
+            0009 OP_POP\n\
+            0010 OP_NIL\n\
+            0011 OP_RETURN\n"
+        ),
+        while_loop_with_break: (
+            "\
+            while (true) {
+                break;
+            }",
+            "\
+            0000 OP_TRUE\n\
+            0001 OP_JUMP_IF_FALSE    1 -> 9\n\
+            0004 OP_POP\n\
+            0005 OP_BREAK            5 -> 9\n\
+            0006 OP_LOOP             6 -> 0\n\
             0009 OP_POP\n\
             0010 OP_NIL\n\
             0011 OP_RETURN\n"
