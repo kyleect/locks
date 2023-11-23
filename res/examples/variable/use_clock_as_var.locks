@@ -1,0 +1,1 @@
+let clock = "new clock"; // out: NameError: name "clock" is already defined
