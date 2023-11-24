@@ -1,0 +1,8 @@
+class Test {
+  test() { // out: SyntaxError: unexpected "test"
+    
+  }
+  
+}
+
+let t = Test();

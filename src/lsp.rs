@@ -2,14 +2,12 @@
 
 use anyhow::{Context, Result};
 use tower_lsp::lsp_types::{
-    Diagnostic, DiagnosticSeverity, DidChangeTextDocumentParams, DidOpenTextDocumentParams,
-    InitializeParams, InitializeResult, Position, Range, ServerCapabilities, ServerInfo,
-    TextDocumentSyncKind,
+    DidChangeTextDocumentParams, DidOpenTextDocumentParams, InitializeParams, InitializeResult,
+    ServerCapabilities, ServerInfo, TextDocumentSyncKind,
 };
 use tower_lsp::{jsonrpc, Client, LanguageServer, LspService, Server};
 
-use crate::types::Span;
-use crate::vm::{Compiler, Gc};
+use crate::diagnose::Diagnoser;
 
 #[derive(Debug)]
 struct Backend {
@@ -19,29 +17,6 @@ struct Backend {
 impl Backend {
     pub fn new(client: Client) -> Self {
         Self { client }
-    }
-
-    pub fn get_diagnostics(&self, source: &str) -> Vec<Diagnostic> {
-        let mut gc = Gc::default();
-
-        let program = match crate::syntax::parse(source, source.len()) {
-            Ok(program) => program,
-            Err(error) => {
-                panic!("There was a parsing error! {:?}", error);
-            }
-        };
-
-        Compiler::compile(&program, &mut gc)
-            .err()
-            .unwrap_or_default()
-            .iter()
-            .map(|(err, span)| Diagnostic {
-                range: get_range(source, span),
-                severity: Some(DiagnosticSeverity::ERROR),
-                message: err.to_string(),
-                ..Default::default()
-            })
-            .collect()
     }
 }
 
@@ -68,7 +43,7 @@ impl LanguageServer for Backend {
         let source = &params.text_document.text;
         let uri = params.text_document.uri;
         let version = Some(params.text_document.version);
-        let diagnostics = self.get_diagnostics(source);
+        let diagnostics = Diagnoser::get_diagnostics(source);
         self.client.publish_diagnostics(uri, diagnostics, version).await;
     }
 
@@ -76,20 +51,9 @@ impl LanguageServer for Backend {
         let source = &params.content_changes.first().unwrap().text;
         let uri = params.text_document.uri;
         let version = Some(params.text_document.version);
-        let diagnostics = self.get_diagnostics(source);
+        let diagnostics = Diagnoser::get_diagnostics(source);
         self.client.publish_diagnostics(uri, diagnostics, version).await;
     }
-}
-
-fn get_range(source: &str, span: &Span) -> Range {
-    Range { start: get_position(source, span.start), end: get_position(source, span.end) }
-}
-
-fn get_position(source: &str, idx: usize) -> Position {
-    let before = &source[..idx];
-    let line = before.lines().count() - 1;
-    let character = before.lines().last().unwrap().len();
-    Position { line: line as _, character: character as _ }
 }
 
 pub fn serve() -> Result<()> {
