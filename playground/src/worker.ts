@@ -1,4 +1,4 @@
-import init, { loxRun, locksDisassemble } from 'lox-wasm';
+import init, { loxRun, locksDisassemble, loxDiagnose } from 'lox-wasm';
 
 onmessage = async (event) => {
   await init();
@@ -13,6 +13,10 @@ onmessage = async (event) => {
 
     case 'disassemble':
       locksDisassemble(code as string);
+      break;
+
+    case 'diagnose':
+      loxDiagnose(code as string);
       break;
 
     default:

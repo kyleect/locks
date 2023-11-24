@@ -1,12 +1,24 @@
 use std::fmt::{self, Display, Formatter};
 use std::io::{self, Write};
 
+use locks::diagnose::{Diagnoser, Diagnosis};
 use locks::error::report_error;
 use locks::syntax::parse;
 use locks::vm::{Compiler, Disassembler, Gc, VM};
 use serde::Serialize;
 use termcolor::{Color, WriteColor};
 use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen]
+#[allow(non_snake_case)]
+pub fn loxDiagnose(source: &str) {
+    console_error_panic_hook::set_once();
+
+    let diagnostics = Diagnoser::get_diagnostics(source);
+
+    postMessage(&Message::Diagnostics { diagnostics }.to_string());
+    postMessage(&Message::ExitSuccess.to_string());
+}
 
 #[wasm_bindgen]
 #[allow(non_snake_case)]
@@ -72,6 +84,7 @@ enum Message {
     ExitFailure,
     ExitSuccess,
     Output { text: String },
+    Diagnostics { diagnostics: Vec<Diagnosis> },
 }
 
 impl Display for Message {

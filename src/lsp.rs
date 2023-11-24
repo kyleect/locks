@@ -2,12 +2,13 @@
 
 use anyhow::{Context, Result};
 use tower_lsp::lsp_types::{
-    DidChangeTextDocumentParams, DidOpenTextDocumentParams, InitializeParams, InitializeResult,
-    ServerCapabilities, ServerInfo, TextDocumentSyncKind,
+    Diagnostic, DiagnosticSeverity, DidChangeTextDocumentParams, DidOpenTextDocumentParams,
+    InitializeParams, InitializeResult, Position, Range, ServerCapabilities, ServerInfo,
+    TextDocumentSyncKind,
 };
 use tower_lsp::{jsonrpc, Client, LanguageServer, LspService, Server};
 
-use crate::diagnose::Diagnoser;
+use crate::diagnose::{Diagnoser, Diagnosis, DiagnosisPosition, DiagnosisRange, DiagnosisSeverity};
 
 #[derive(Debug)]
 struct Backend {
@@ -44,7 +45,13 @@ impl LanguageServer for Backend {
         let uri = params.text_document.uri;
         let version = Some(params.text_document.version);
         let diagnostics = Diagnoser::get_diagnostics(source);
-        self.client.publish_diagnostics(uri, diagnostics, version).await;
+        self.client
+            .publish_diagnostics(
+                uri,
+                diagnostics.iter().map(|x| (*x).clone().into()).collect(),
+                version,
+            )
+            .await;
     }
 
     async fn did_change(&self, params: DidChangeTextDocumentParams) {
@@ -52,7 +59,48 @@ impl LanguageServer for Backend {
         let uri = params.text_document.uri;
         let version = Some(params.text_document.version);
         let diagnostics = Diagnoser::get_diagnostics(source);
-        self.client.publish_diagnostics(uri, diagnostics, version).await;
+        self.client
+            .publish_diagnostics(
+                uri,
+                diagnostics.iter().map(|x| (*x).clone().into()).collect(),
+                version,
+            )
+            .await;
+    }
+}
+
+impl From<Diagnosis> for Diagnostic {
+    fn from(value: Diagnosis) -> Self {
+        Diagnostic {
+            range: value.range.into(),
+            severity: value.severity.map(|x| x.into()),
+            message: value.message,
+            ..Default::default()
+        }
+    }
+}
+
+impl From<DiagnosisPosition> for Position {
+    fn from(value: DiagnosisPosition) -> Self {
+        Position { line: value.line, character: value.character }
+    }
+}
+
+impl From<DiagnosisRange> for Range {
+    fn from(value: DiagnosisRange) -> Self {
+        Range { start: value.start.into(), end: value.end.into() }
+    }
+}
+
+impl From<DiagnosisSeverity> for DiagnosticSeverity {
+    fn from(value: DiagnosisSeverity) -> Self {
+        match value {
+            DiagnosisSeverity::ERROR => DiagnosticSeverity::ERROR,
+            DiagnosisSeverity::HINT => DiagnosticSeverity::HINT,
+            DiagnosisSeverity::INFORMATION => DiagnosticSeverity::INFORMATION,
+            DiagnosisSeverity::WARNING => DiagnosticSeverity::WARNING,
+            _ => panic!("Invalid diagnosis severity {:?}", value),
+        }
     }
 }
 

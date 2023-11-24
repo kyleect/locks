@@ -68,6 +68,13 @@ const Playground: React.FC = () => {
     LocalStorage.editorText = compressedText;
   }, [editorText, navigate]);
 
+  const onEditorChange = React.useCallback(
+    (value: string) => {
+      setEditorText(value);
+    },
+    [setEditorText],
+  );
+
   useEffect(() => {
     if (searchParams.get('code')) {
       const code = searchParams.get('code')?.trim() ?? '';
@@ -148,7 +155,7 @@ const Playground: React.FC = () => {
         id="content"
         onDragEnd={resizeHandler}
       >
-        <Editor text={editorText} onChange={setEditorText} />
+        <Editor text={editorText} onChange={onEditorChange} />
         <Output text={locksResult ?? ''} />
       </Split>
     </>
