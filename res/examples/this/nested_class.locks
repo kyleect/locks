@@ -1,12 +1,12 @@
 class Outer {
-  method() {
+  fn method() {
     print this; // out: <object Outer>
 
     fn f() {
       print this; // out: <object Outer>
 
       class Inner {
-        method() {
+        fn method() {
           print this; // out: <object Inner>
         }
       }

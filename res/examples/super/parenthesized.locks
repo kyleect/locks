@@ -1,9 +1,9 @@
 class A {
-  method() {}
+  fn method() {}
 }
 
 class B extends A {
-  method() {
+  fn method() {
     // out: SyntaxError: unexpected ")"
     (super).method();
   }

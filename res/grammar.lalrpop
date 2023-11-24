@@ -23,7 +23,7 @@ Decl = {
 }
 
 DeclClass: ast::Stmt =
-    "class" <name:identifier> <super_:("extends" <Spanned<ExprIdentifier>>)?> "{" <methods:Spanned<Function>*> "}" =>
+    "class" <name:identifier> <super_:("extends" <Spanned<ExprIdentifier>>)?> "{" <methods:("fn" <Spanned<Function>>)*> "}" =>
         ast::Stmt::Class(ast::StmtClass { <> });
 
 DeclFn: ast::Stmt = "fn" <function:Function> => ast::Stmt::Fn(<>);

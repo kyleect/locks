@@ -1,17 +1,17 @@
 class Foo {
-  inFoo() {
+  fn inFoo() {
     print "in foo";
   }
 }
 
 class Bar extends Foo {
-  inBar() {
+  fn inBar() {
     print "in bar";
   }
 }
 
 class Baz extends Bar {
-  inBaz() {
+  fn inBaz() {
     print "in baz";
   }
 }

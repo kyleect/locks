@@ -390,11 +390,11 @@ mod tests {
         class_init_and_method_call: (
             "\
             class Greeter {
-              init(greeting) {
+              fn init(greeting) {
                 this.greeting = greeting;
               }
               
-              greet(name) {
+              fn greet(name) {
                 return this.greeting + \" \" + name;
               }
             }

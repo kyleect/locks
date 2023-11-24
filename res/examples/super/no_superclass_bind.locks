@@ -1,5 +1,5 @@
 class Base {
-  foo() {
+  fn foo() {
     // out: SyntaxError: "super" used in class without a superclass
     super.doesNotExist;
   }

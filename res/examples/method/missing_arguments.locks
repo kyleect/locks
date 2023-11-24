@@ -1,5 +1,5 @@
 class Foo {
-  method(a, b) {}
+  fn method(a, b) {}
 }
 
 // out: TypeError: method() takes 2 arguments but 1 were given
