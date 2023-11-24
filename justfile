@@ -1,14 +1,23 @@
 default:
     @just --list
 
-install:
+install: build
     mv target/release/locks.exe ~/.cargo/bin
+
+install-debug: build-debug
+    mv target/debug/locks.exe ~/.cargo/bin
 
 build:
     cargo build --release
 
+build-debug:
+    cargo build
+
 build-docker:
     docker build -t kyleect/locks:1.0.0 .
+
+build-vsc:
+    cd vsc && just build
 
 run-repl-docker:
     docker run --rm -it kyleect/locks:1.0.0 locks repl
