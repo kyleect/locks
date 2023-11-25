@@ -21,7 +21,7 @@ impl Diagnoser {
                         message: err.to_string(),
                         ..Default::default()
                     })
-                    .collect()
+                    .collect();
             }
         };
 
