@@ -1,5 +1,5 @@
 class Foo {
-  let field;
+  public let field;
   
   fn init(arg) {
     print "Foo.init(" + arg + ")";

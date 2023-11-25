@@ -127,7 +127,7 @@ impl<'a> Disassembler<'a> {
             op::CLASS => self.disassemble_op_constant("OP_CLASS", op_idx),
             op::INHERIT => self.disassemble_op_simple("OP_INHERIT"),
             op::METHOD => self.disassemble_op_constant("OP_METHOD", op_idx),
-            op::FIELD => self.disassemble_op_constant("OP_FIELD", op_idx),
+            op::FIELD => self.disassemble_op_field(op_idx),
             byte => self.disassemble_op_simple(&format!("OP_UNKNOWN({byte:#X})")),
         };
 
@@ -151,6 +151,22 @@ impl<'a> Disassembler<'a> {
         let string = format!("{name:16} {constant_idx:>4} == '{constant}'\n");
 
         (2, string)
+    }
+
+    fn disassemble_op_field(&self, op_idx: usize) -> (usize, String) {
+        let constant_idx = self.chunk.ops[op_idx + 1];
+        let constant = &self.chunk.constants[constant_idx as usize];
+
+        let access_modifier_idx = self.chunk.ops[op_idx + 2];
+        let access_modifier = &self.chunk.constants[access_modifier_idx as usize];
+
+        let string = format!(
+            "OP_FIELD {access_modifier:7} {constant_idx:>4} == '{constant}'\n",
+            access_modifier = access_modifier,
+            constant_idx = constant_idx
+        );
+
+        (3, string)
     }
 
     fn disassemble_op_invoke(&self, name: &str, op_idx: usize) -> (usize, String) {
@@ -396,51 +412,23 @@ mod tests {
               fn init(greeting) {
                 this.greeting = greeting;
               }
-              
+
               fn greet(name) {
                 return this.greeting + \" \" + name;
               }
             }
-              
+
             let greeter = Greeter(\"Hello\");
-              
+
             print greeter.greet(\"World\"); // out: Hello World",
             concat!(
                 "0000 OP_CLASS            0 == 'Greeter'\n",
                 "0002 OP_DEFINE_GLOBAL    0 == 'Greeter'\n",
                 "0004 OP_GET_GLOBAL       0 == 'Greeter'\n",
                 "0006 OP_NIL\n",
-                "0007 OP_FIELD            1 == 'greeting'\n",
-                "0009 OP_POP\n",
-                "0010 OP_GET_GLOBAL       0 == 'Greeter'\n",
-                "0012 OP_CLOSURE          2 == '<fn init arity=1>'\n",
-                "| 0000 OP_GET_LOCAL        1\n",
-                "| 0002 OP_GET_LOCAL        0\n",
-                "| 0004 OP_SET_PROPERTY     0 == 'greeting'\n",
-                "| 0006 OP_POP\n| 0007 OP_GET_LOCAL        0\n",
-                "| 0009 OP_RETURN\n",
-                "0014 OP_METHOD           3 == 'init'\n",
-                "0016 OP_CLOSURE          4 == '<fn greet arity=1>'\n",
-                "| 0000 OP_GET_LOCAL        0\n",
-                "| 0002 OP_GET_PROPERTY     0 == 'greeting'\n",
-                "| 0004 OP_CONSTANT         1 == ' '\n",
-                "| 0006 OP_ADD\n",
-                "| 0007 OP_GET_LOCAL        1\n",
-                "| 0009 OP_ADD\n",
-                "| 0010 OP_RETURN\n",
-                "0018 OP_METHOD           5 == 'greet'\n",
-                "0020 OP_POP\n",
-                "0021 OP_GET_GLOBAL       0 == 'Greeter'\n",
-                "0023 OP_CONSTANT         6 == 'Hello'\n",
-                "0025 OP_CALL             1\n",
-                "0027 OP_DEFINE_GLOBAL    7 == 'greeter'\n",
-                "0029 OP_GET_GLOBAL       7 == 'greeter'\n",
-                "0031 OP_GET_PROPERTY     5 == 'greet'\n",
-                "0033 OP_CONSTANT         8 == 'World'\n",
-                "0035 OP_CALL             1\n",
-                "0037 OP_PRINT\n",
-                "0038 OP_NIL\n",
-                "0039 OP_RETURN\n"
+                "0007 OP_FIELD public    1 == 'greeting'\n",
+                "     [     8]1[    7]1[ 4]",
+                "0010 OP_POP\n","0011 OP_GET_GLOBAL       0 == 'Greeter'\n","0013 OP_CLOSURE          3 == '<fn init arity=1>'\n","| 0000 OP_GET_LOCAL        1\n","| 0002 OP_GET_LOCAL        0\n","| 0004 OP_SET_PROPERTY     0 == 'greeting'\n","| 0006 OP_POP\n","| 0007 OP_GET_LOCAL        0\n","| 0009 OP_RETURN\n","0015 OP_METHOD           4 == 'init'\n","0017 OP_CLOSURE          5 == '<fn greet arity=1>'\n","| 0000 OP_GET_LOCAL        0\n","| 0002 OP_GET_PROPERTY     0 == 'greeting'\n","| 0004 OP_CONSTANT         1 == ' '\n","| 0006 OP_ADD\n","| 0007 OP_GET_LOCAL        1\n","| 0009 OP_ADD\n","| 0010 OP_RETURN\n","0019 OP_METHOD           6 == 'greet'\n","0021 OP_POP\n","0022 OP_GET_GLOBAL       0 == 'Greeter'\n","0024 OP_CONSTANT         7 == 'Hello'\n","0026 OP_CALL             1\n","0028 OP_DEFINE_GLOBAL    8 == 'greeter'\n","0030 OP_GET_GLOBAL       8 == 'greeter'\n","0032 OP_GET_PROPERTY     6 == 'greet'\n","0034 OP_CONSTANT         9 == 'World'\n","0036 OP_CALL             1\n","0038 OP_PRINT\n","0039 OP_NIL\n","0040 OP_RETURN\n",""
             )
         ),
     }

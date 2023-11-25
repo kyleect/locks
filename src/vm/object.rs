@@ -199,7 +199,7 @@ pub struct ObjectClass {
     pub common: ObjectCommon,
     pub name: *mut ObjectString,
     pub methods: HashMap<*mut ObjectString, *mut ObjectClosure, BuildHasherDefault<FxHasher>>,
-    pub fields: HashMap<*mut ObjectString, Value, BuildHasherDefault<FxHasher>>,
+    pub fields: HashMap<*mut ObjectString, *mut ObjectClassField, BuildHasherDefault<FxHasher>>,
 }
 
 impl ObjectClass {
@@ -207,6 +207,13 @@ impl ObjectClass {
         let common = ObjectCommon { type_: ObjectType::Class, is_marked: false };
         Self { common, name, methods: HashMap::default(), fields: HashMap::default() }
     }
+}
+
+#[derive(Clone, Copy, Eq, PartialEq, Debug)]
+#[repr(C)]
+pub struct ObjectClassField {
+    pub access_modifier: Value,
+    pub default_value: Value,
 }
 
 #[derive(Debug)]
@@ -247,7 +254,7 @@ impl ObjectFunction {
 pub struct ObjectInstance {
     pub common: ObjectCommon,
     pub class: *mut ObjectClass,
-    pub fields: HashMap<*mut ObjectString, Value, BuildHasherDefault<FxHasher>>,
+    pub fields: HashMap<*mut ObjectString, *mut ObjectClassField, BuildHasherDefault<FxHasher>>,
 }
 
 impl ObjectInstance {

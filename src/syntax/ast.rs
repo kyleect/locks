@@ -1,4 +1,4 @@
-use std::fmt::{self, Display, Formatter};
+use std::fmt::{self, Debug, Display, Formatter};
 
 pub use crate::types::Spanned;
 
@@ -22,6 +22,7 @@ pub enum Stmt {
     Return(StmtReturn),
     Assign(StmtAssign),
     While(Box<StmtWhile>),
+    AccessModifier,
     Error,
 }
 
@@ -35,7 +36,7 @@ pub struct StmtClass {
     pub name: String,
     pub super_: Option<ExprS>,
     pub methods: Vec<Spanned<StmtFn>>,
-    pub fields: Vec<Spanned<StmtAssign>>,
+    pub fields: Vec<StmtFieldAssign>,
 }
 
 /// An expression statement evaluates an expression and discards the result.
@@ -80,6 +81,42 @@ pub struct StmtReturn {
 pub struct StmtAssign {
     pub identifier: Identifier,
     pub value: Option<ExprS>,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct StmtFieldAssign {
+    pub access_modifier: Option<AccessModifier>,
+    pub field: Spanned<StmtAssign>,
+}
+
+#[derive(Clone, Copy, Eq, PartialEq)]
+pub enum AccessModifier {
+    Invalid,
+    Private,
+    Public,
+}
+
+impl From<&str> for AccessModifier {
+    fn from(value: &str) -> Self {
+        let access_modifier = match value {
+            "public" => AccessModifier::Public,
+            "private" => AccessModifier::Private,
+            _ => AccessModifier::Invalid,
+        };
+        access_modifier
+    }
+}
+
+impl Display for AccessModifier {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        write!(f, "{self}")
+    }
+}
+
+impl Debug for AccessModifier {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        write!(f, "{self}")
+    }
 }
 
 #[derive(Clone, Debug, PartialEq)]

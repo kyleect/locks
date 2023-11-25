@@ -1,0 +1,10 @@
+class Test {
+  public let value = 123;
+}
+
+let test = Test();
+
+print test.value; // out: 123
+
+test.value = 456;
+print test.value; // out:  456

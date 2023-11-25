@@ -62,9 +62,9 @@ impl Gc {
                 }
                 ObjectType::Instance => {
                     self.mark(unsafe { (*object.instance).class });
-                    for (&name, &value) in unsafe { (*object.instance).fields.iter() } {
+                    for (&name, &ref value) in unsafe { (*object.instance).fields.iter() } {
                         self.mark(name);
-                        self.mark(value);
+                        self.mark((unsafe { *(*value) }).default_value);
                     }
                 }
                 ObjectType::Native => {}

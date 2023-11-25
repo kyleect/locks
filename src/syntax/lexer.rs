@@ -148,6 +148,10 @@ pub enum Token {
     While,
     #[token("extends")]
     Extends,
+    #[token("public")]
+    Public,
+    #[token("private")]
+    Private,
 
     #[regex(r"//.*", logos::skip)]
     #[regex(r"[ \r\n\t\f]+", logos::skip)]

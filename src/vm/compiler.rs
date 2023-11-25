@@ -5,7 +5,8 @@ use arrayvec::ArrayVec;
 
 use crate::error::{ErrorS, NameError, OverflowError, Result, SyntaxError};
 use crate::syntax::ast::{
-    Expr, ExprLiteral, ExprS, OpInfix, OpPrefix, Program, Stmt, StmtFn, StmtReturn, StmtS,
+    AccessModifier, Expr, ExprLiteral, ExprS, OpInfix, OpPrefix, Program, Stmt, StmtFn, StmtReturn,
+    StmtS,
 };
 use crate::types::Span;
 use crate::vm::gc::Gc;
@@ -120,8 +121,10 @@ impl Compiler {
                     // Get class `Value` by name and push it on to the VM's stack
                     self.get_variable(&class.name, span, gc)?;
 
-                    for (field_assign, span) in &class.fields {
-                        let name = &field_assign.identifier.name;
+                    for field_assign in &class.fields {
+                        let (assign, span) = &field_assign.field;
+
+                        let name = &assign.identifier.name;
 
                         if name == "init" {
                             return Err((
@@ -134,15 +137,30 @@ impl Compiler {
                         //
                         // This value is the field's default value.
                         // Otherwise its initalized to `nil`.
-                        match &field_assign.value {
+                        match &assign.value {
                             Some(value) => self.compile_expr(value, gc)?,
-                            None => self.emit_u8(op::NIL, span),
+                            None => self.emit_u8(op::NIL, &span),
                         }
 
-                        self.emit_u8(op::FIELD, span);
+                        self.emit_u8(op::FIELD, &span);
                         // Emit field name's constant index
                         let name = gc.alloc(name).into();
-                        self.emit_constant(name, span)?;
+                        self.emit_constant(name, &span)?;
+
+                        let access_modifier = match &field_assign.access_modifier {
+                            // Emit field's access modifier
+                            Some(x) => x,
+                            None => &AccessModifier::Public,
+                        };
+
+                        let access_modifier_string = match access_modifier {
+                            AccessModifier::Invalid => String::from("invalid"),
+                            AccessModifier::Private => String::from("private"),
+                            AccessModifier::Public => String::from("public"),
+                        };
+
+                        let access_modifier_idx = gc.alloc(&access_modifier_string).into();
+                        self.emit_constant(access_modifier_idx, span)?;
                     }
 
                     self.emit_u8(op::POP, span);
@@ -315,6 +333,7 @@ impl Compiler {
                 // Discard the condition.
                 self.emit_u8(op::POP, span);
             }
+            Stmt::AccessModifier => todo!(),
         }
         Ok(())
     }

@@ -31,6 +31,8 @@ use crate::vm::object::{
 };
 use crate::vm::value::Value;
 
+use self::object::ObjectClassField;
+
 const GC_HEAP_GROW_FACTOR: usize = 2;
 const FRAMES_MAX: usize = 64;
 const STACK_MAX: usize = FRAMES_MAX * STACK_MAX_PER_FRAME;
@@ -333,7 +335,7 @@ impl VM {
         match unsafe { (*instance).fields.get(&name) } {
             Some(&field) => {
                 self.pop();
-                self.push(field);
+                self.push(unsafe { (*field).default_value });
             }
             None => match unsafe { (*(*instance).class).methods.get(&name) } {
                 Some(&method) => {
@@ -371,8 +373,13 @@ impl VM {
         let value = unsafe { *self.peek(0) };
         let has_field = unsafe { (*instance).fields.get(&name) };
 
-        if let Some(_) = has_field {
-            unsafe { (*instance).fields.insert(name, value) };
+        if let Some(field) = has_field {
+            let mut field = ObjectClassField {
+                access_modifier: (unsafe { *(*field) }).access_modifier.clone(),
+                default_value: value,
+            };
+
+            unsafe { (*instance).fields.insert(name, &mut field) };
             return Ok(());
         }
 
@@ -544,7 +551,7 @@ impl VM {
         let instance = unsafe { (*self.peek(arg_count)).as_object().instance };
 
         match unsafe { (*instance).fields.get(&name) } {
-            Some(&value) => self.call_value(value, arg_count),
+            Some(&field) => self.call_value((unsafe { *field }).default_value, arg_count),
             None => match unsafe { (*(*instance).class).methods.get(&name) } {
                 Some(&method) => self.call_closure(method, arg_count),
                 None => self.err(AttributeError::NoSuchAttribute {
@@ -628,9 +635,12 @@ impl VM {
 
     fn op_field(&mut self) -> Result<()> {
         let name = unsafe { self.read_value().as_object().string };
+        let access_modifier = self.read_value();
         let value = self.pop();
         let class = unsafe { (*self.peek(0)).as_object().class };
-        unsafe { (*class).fields.insert(name, value) };
+        let mut field = ObjectClassField { access_modifier, default_value: value };
+
+        unsafe { (*class).fields.insert(name, &mut field) };
         Ok(())
     }
 

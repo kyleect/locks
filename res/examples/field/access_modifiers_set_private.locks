@@ -1,0 +1,7 @@
+class Test {
+  private let value = 123;
+}
+
+let test = Test();
+
+test.value = 456; // out: AttributeError: field "value" is private

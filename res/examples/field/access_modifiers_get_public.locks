@@ -1,0 +1,5 @@
+class Test {
+  public let value = 123;
+}
+
+print Test().value; // out: 123
