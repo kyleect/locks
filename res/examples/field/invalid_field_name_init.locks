@@ -1,3 +1,6 @@
+// Class fields can not be named "init"
+// This name is reserved for class constructors
+
 class Foo {
   let init; // out: NameError: "init" is a reserved name
 }
