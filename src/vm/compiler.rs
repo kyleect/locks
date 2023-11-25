@@ -333,7 +333,6 @@ impl Compiler {
                 // Discard the condition.
                 self.emit_u8(op::POP, span);
             }
-            Stmt::AccessModifier => todo!(),
         }
         Ok(())
     }

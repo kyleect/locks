@@ -22,7 +22,6 @@ pub enum Stmt {
     Return(StmtReturn),
     Assign(StmtAssign),
     While(Box<StmtWhile>),
-    AccessModifier,
     Error,
 }
 
