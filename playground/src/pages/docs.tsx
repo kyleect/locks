@@ -394,19 +394,20 @@ const Docs: React.FC = () => (
           code={[
             'class Greeter {',
             '  let greeting;',
+            '  let flair = "!!!";',
             '',
             '  fn init(greeting) {',
             '    this.greeting = greeting;',
             '  }',
             '',
             '  fn greet(name) {',
-            '    return this.greeting + " " + name;',
+            '    return this.greeting + " " + name + this.flair;',
             '  }',
             '}',
             '',
             'let greeter = Greeter("Hello");',
             '',
-            'print greeter.greet("World"); // out: Hello World',
+            'print greeter.greet("World"); // out: Hello World!!!',
           ]}
           height="300px"
         />
@@ -416,13 +417,14 @@ const Docs: React.FC = () => (
           code={[
             'class Greeter {',
             '  let greeting;',
+            '  let flair = "!!!";',
             '',
             '  fn init(greeting) {',
             '    this.greeting = greeting;',
             '  }',
             '',
             '  fn greet(name) {',
-            '    return this.greeting + " " + name;',
+            '    return this.greeting + " " + name + this.flair;',
             '  }',
             '}',
             '',
@@ -434,7 +436,7 @@ const Docs: React.FC = () => (
             '',
             'let greeter = HelloGreeter();',
             '',
-            'print greeter.greet("World"); // out: Hello World',
+            'print greeter.greet("World"); // out: Hello World!!!',
           ]}
           height="400px"
         />
