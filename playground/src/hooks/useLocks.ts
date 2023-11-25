@@ -23,10 +23,15 @@ type LocksDiagnosisRange = {
   end: LocksDiagnosisPosition;
 };
 
+// eslint-disable-next-line no-unused-vars, no-shadow
 enum LocksDiagnosisSeverity {
+  // eslint-disable-next-line no-unused-vars
   ERROR = 1,
+  // eslint-disable-next-line no-unused-vars
   WARNING = 2,
+  // eslint-disable-next-line no-unused-vars
   INFORMATION = 3,
+  // eslint-disable-next-line no-unused-vars
   HINT = 4,
 }
 

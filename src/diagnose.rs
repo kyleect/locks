@@ -1,7 +1,7 @@
-use crate::vm::{Compiler, Gc};
 use serde::{Deserialize, Serialize};
 
 use crate::types::Span;
+use crate::vm::{Compiler, Gc};
 
 #[derive(Debug, Default)]
 pub struct Diagnoser {}
