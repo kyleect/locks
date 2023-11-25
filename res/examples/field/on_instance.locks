@@ -1,4 +1,7 @@
-class Foo {}
+class Foo {
+  let bar;
+  let baz;
+}
 
 let foo = Foo();
 

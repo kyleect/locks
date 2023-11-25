@@ -1,4 +1,6 @@
 class Foo {
+  let field;
+  
   fn init(arg) {
     print "Foo.init(" + arg + ")";
     this.field = "init";

@@ -1,0 +1,11 @@
+class Greeter {
+  fn init(greeting) {
+    this.greeting = greeting; // out: AttributeError: "Greeter" object has no attribute "greeting"
+  }
+  
+  fn greet(name) {
+    return this.greeting + " " + name;
+  }
+}
+
+Greeter("Hello").greet("World");

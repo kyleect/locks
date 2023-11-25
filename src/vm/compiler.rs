@@ -50,6 +50,8 @@ impl Compiler {
         Ok(compiler.ctx.function)
     }
 
+    /// Compile an statement into bytecode ops.
+    /// Write ops to [`Chunk`].
     fn compile_stmt(&mut self, (stmt, span): &StmtS, gc: &mut Gc) -> Result<()> {
         match stmt {
             Stmt::Block(block) => {
@@ -63,19 +65,28 @@ impl Compiler {
                 let has_super = class.super_.is_some();
 
                 let name = gc.alloc(&class.name).into();
+                // Allocates class by name
+                // Pushes class `Value` on to VM's stack
                 self.emit_u8(op::CLASS, span);
+                // Emit the name of the class
+                // This get's consumed when the VM works `op::CLASS`
                 self.emit_constant(name, span)?;
 
                 if self.is_global() {
+                    // Add class `Value` by name to VM's globals
+                    // This pops the `Value` from `op::CLASS` off the VM's stack
                     self.emit_u8(op::DEFINE_GLOBAL, span);
                     self.emit_constant(name, span)?;
                 } else {
+                    // The `Value` from `op::CLASS` is popped from VM's stack
+                    // when `Local` is no longer in scope
                     self.declare_local(&class.name, span)?;
                     self.define_local();
                 }
 
                 self.class_ctx.push(ClassCtx { has_super });
 
+                // Does the class extend another class?
                 if let Some(super_) = &class.super_ {
                     match &super_.0 {
                         Expr::Identifier(identifier) => {
@@ -96,11 +107,39 @@ impl Compiler {
                     self.declare_local("super", &NO_SPAN)?;
                     self.define_local();
 
+                    // Get parent class `Value` and push it on the VM's stack
                     self.compile_expr(super_, gc)?;
+                    // Get new class `Value` and push it on the VM's stack
                     self.get_variable(&class.name, span, gc)?;
+                    // This will consume both values just pushed on VM's stack
                     self.emit_u8(op::INHERIT, span);
                 }
 
+                // Initialize class fields, if they exist
+                if !class.fields.is_empty() {
+                    // Get class `Value` by name and push it on to the VM's stack
+                    self.get_variable(&class.name, span, gc)?;
+
+                    for (field_assign, span) in &class.fields {
+                        // Compile value expression if it exists and push it on the VM's stack.
+                        //
+                        // This value is the field's default value.
+                        // Otherwise its initalized to `nil`.
+                        match &field_assign.value {
+                            Some(value) => self.compile_expr(value, gc)?,
+                            None => self.emit_u8(op::NIL, span),
+                        }
+
+                        self.emit_u8(op::FIELD, span);
+                        // Emit field name's constant index
+                        let name = gc.alloc(&field_assign.identifier.name).into();
+                        self.emit_constant(name, span)?;
+                    }
+
+                    self.emit_u8(op::POP, span);
+                }
+
+                // Initialize class methods, if they exist
                 if !class.methods.is_empty() {
                     self.get_variable(&class.name, span, gc)?;
                     for (method, span) in &class.methods {
@@ -329,7 +368,8 @@ impl Compiler {
         Ok(())
     }
 
-    /// Compute an expression and push it onto the stack.
+    /// Compile an expression into bytecode ops.
+    /// Write ops to [`Chunk`].
     fn compile_expr(&mut self, (expr, span): &ExprS, gc: &mut Gc) -> Result<()> {
         match expr {
             Expr::Assign(assign) => {
@@ -496,18 +536,37 @@ impl Compiler {
     }
 
     /// Pushes the current ctx to parent and assigns it to the given ctx.
+    ///
+    /// Emits no byte ops
     fn begin_ctx(&mut self, ctx: CompilerCtx) {
         let ctx = mem::replace(&mut self.ctx, ctx);
         self.ctx.parent = Some(Box::new(ctx));
     }
 
     /// Pops the current ctx and extracts a [`Function`] from it.
+    ///
+    /// Emits no byte ops
     fn end_ctx(&mut self) -> (*mut ObjectFunction, ArrayVec<Upvalue, 256>) {
         let parent = self.ctx.parent.take().expect("tried to end context in a script");
         let ctx = mem::replace(&mut self.ctx, *parent);
         (ctx.function, ctx.upvalues)
     }
 
+    /// Attempts to resolve a varible by name in order of scope: local, closure, global.
+    ///
+    /// This variable's value will get pushed to the [`VM`]'s stack.
+    ///
+    /// Emits one of the following byte code formats:
+    ///
+    /// - locals
+    ///   - `0000 OP_GET_LOCAL`
+    ///   - `0001 local_idx`
+    /// - closure upvalues
+    ///   - `0000 OP_GET_UPVALUE`
+    ///   - `0001 upvalue_idx`
+    /// - globals
+    ///   - `0000 OP_GET_GLOBAL`
+    ///   - `0001 chunk_constant_idx`
     fn get_variable(&mut self, name: &str, span: &Span, gc: &mut Gc) -> Result<()> {
         if name == "this" && self.class_ctx.is_empty() {
             return Err((SyntaxError::ThisOutsideClass.into(), span.clone()));
@@ -526,6 +585,19 @@ impl Compiler {
         Ok(())
     }
 
+    /// Attempts to resolve a varible by name in order of scope: local, closure, global then set it's value
+    ///
+    /// Emits one of the following byte code formats:
+    ///
+    /// - locals
+    ///   - `0000 OP_SET_LOCAL`
+    ///   - `0001 local_idx`
+    /// - closure upvalues
+    ///   - `0000 OP_SET_UPVALUE`
+    ///   - `0001 upvalue_idx`
+    /// - globals
+    ///   - `0000 OP_SET_GLOBAL`
+    ///   - `0001 chunk_constant_idx`
     fn set_variable(&mut self, name: &str, span: &Span, gc: &mut Gc) -> Result<()> {
         if let Some(local_idx) = self.ctx.resolve_local(name, false, span)? {
             self.emit_u8(op::SET_LOCAL, span);
@@ -541,6 +613,9 @@ impl Compiler {
         Ok(())
     }
 
+    /// Add [`Local`] variable to [`CompilerCtx`] by `name`
+    ///
+    /// Emits no byte ops
     fn declare_local(&mut self, name: &str, span: &Span) -> Result<()> {
         for local in self.ctx.locals.iter().rev() {
             if local.depth < self.ctx.scope_depth {
@@ -566,6 +641,10 @@ impl Compiler {
             .map_err(|_| (OverflowError::TooManyLocals.into(), span.clone()))
     }
 
+    /// Set `is_initialized = true` on the last declared [`Local`] variable in [`CompilerCtx`].
+    /// Will panic on an undeclared (e.g. undefined) [`Local`].
+    ///
+    /// Emits no byte ops
     fn define_local(&mut self) {
         self.ctx
             .locals
@@ -603,6 +682,9 @@ impl Compiler {
         Ok(())
     }
 
+    /// Returns the number of ops in the [`Chunk`].
+    ///
+    /// Emits no byte ops
     fn start_loop(&self) -> usize {
         unsafe { (*self.ctx.function).chunk.ops.len() }
     }
@@ -648,10 +730,17 @@ impl Compiler {
         }
     }
 
+    /// Write 1 byte op to [`Chunk`]
     fn emit_u8(&mut self, byte: u8, span: &Span) {
         unsafe { (*self.ctx.function).chunk.write_u8(byte, span) };
     }
 
+    /// Add [`Value`] to [`Chunk`]'s constants table.
+    ///
+    /// If [`Value`] already exists in [`Chunk`]'s constants table, that index will be returned instead.
+    ///
+    /// Emits a 1 byte op with the format
+    /// - `0000 chunk_constant_idx`
     fn emit_constant(&mut self, value: Value, span: &Span) -> Result<()> {
         let constant_idx = unsafe { (*self.ctx.function).chunk.write_constant(value, span)? };
         self.emit_u8(constant_idx, span);
@@ -659,6 +748,7 @@ impl Compiler {
     }
 
     /// Checks if the current `ctx` is global.
+    /// e.g. `self.ctx.scope_depth == 0`.
     fn is_global(&self) -> bool {
         self.ctx.scope_depth == 0
     }

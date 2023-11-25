@@ -23,19 +23,24 @@ Decl = {
 }
 
 DeclClass: ast::Stmt =
-    "class" <name:identifier> <super_:("extends" <Spanned<ExprIdentifier>>)?> "{" <methods:("fn" <Spanned<Function>>)*> "}" =>
+    "class" <name:identifier> <super_:("extends" <Spanned<ExprIdentifier>>)?> "{"
+        <fields:("let" <Spanned<StmtAssign>>)*>
+        <methods:("fn" <Spanned<Function>>)*>
+    "}" =>
         ast::Stmt::Class(ast::StmtClass { <> });
 
 DeclFn: ast::Stmt = "fn" <function:Function> => ast::Stmt::Fn(<>);
 
-DeclLetVar: ast::Stmt = "let" <name:identifier> <value:("=" <ExprS>)?> ";" =>
-    ast::Stmt::Assign(ast::StmtAssign {
-        identifier: ast::Identifier {
-            name,
-            depth: None
-        },
-        value,
-    });
+DeclLetVar: ast::Stmt = "let" <assign:StmtAssign> =>
+    ast::Stmt::Assign(<>);
+
+StmtAssign: ast::StmtAssign = <name:identifier> <value:("=" <ExprS>)?> ";" => ast::StmtAssign {
+    identifier: ast::Identifier {
+        name,
+        depth: None
+    },
+    value,
+};
 
 // Statements
 // https://en.wikipedia.org/wiki/Dangling_else#Avoiding_the_conflict_in_LR_parsers

@@ -1,4 +1,6 @@
 class A {
+  let field;
+  
   fn init(param) {
     this.field = param;
   }

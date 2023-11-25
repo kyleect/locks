@@ -393,6 +393,8 @@ const Docs: React.FC = () => (
           anchor="classes"
           code={[
             'class Greeter {',
+            '  let greeting;',
+            '',
             '  fn init(greeting) {',
             '    this.greeting = greeting;',
             '  }',
@@ -413,6 +415,8 @@ const Docs: React.FC = () => (
           anchor="inheritance"
           code={[
             'class Greeter {',
+            '  let greeting;',
+            '',
             '  fn init(greeting) {',
             '    this.greeting = greeting;',
             '  }',

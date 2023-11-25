@@ -14,12 +14,7 @@ let foo = Foo();
 let method = foo.method;
 
 // Setting a property shadows the instance method.
-foo.method = foo.other;
-foo.method(1);
-// out: other
-// out: 1
+foo.method = foo.other; // out: TypeError: methods on instances can not be reassigned (e.g. instance<Foo>.method = "...")
 
-// The old method handle still points to the original method.
+foo.method(1);
 method(2);
-// out: method
-// out: 2

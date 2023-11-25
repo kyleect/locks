@@ -1,0 +1,15 @@
+class Greeter {
+  let greeting;
+
+  fn init(greeting) {
+    this.greeting = greeting;
+  }
+  
+  fn greet(name) {
+    return this.greeting + " " + name;
+  }
+}
+
+let greeter = Greeter("Hello");
+
+print greeter.greet("World"); // out: Hello World

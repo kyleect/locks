@@ -56,6 +56,8 @@ impl_from_error!(AttributeError, IoError, NameError, OverflowError, SyntaxError,
 pub enum AttributeError {
     #[error("{type_:?} object has no attribute {name:?}")]
     NoSuchAttribute { type_: String, name: String },
+    #[error("{class_name:?} has no field {field_name:?}")]
+    NoSuchField { class_name: String, field_name: String },
 }
 
 impl AsDiagnostic for AttributeError {
@@ -187,6 +189,10 @@ pub enum TypeError {
     UnsupportedOperandInfix { op: String, lt_type: String, rt_type: String },
     #[error("unsupported operand type for {op}: {rt_type:?}")]
     UnsupportedOperandPrefix { op: String, rt_type: String },
+    #[error(
+        "methods on instances can not be reassigned (e.g. instance<{type_}>.{name} = \"...\")"
+    )]
+    InvalidMethodAssignment { name: String, type_: String },
 }
 
 impl AsDiagnostic for TypeError {

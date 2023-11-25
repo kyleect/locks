@@ -1,4 +1,7 @@
 class Foo {
+  let name;
+  let fun;
+
   fn sayName(a) {
     print this.name;
     print a;

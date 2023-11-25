@@ -1,4 +1,6 @@
-class Foo {}
+class Foo {
+  let bar;
+}
 
 fn bar(a, b) {
   print "bar";

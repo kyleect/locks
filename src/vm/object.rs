@@ -199,12 +199,13 @@ pub struct ObjectClass {
     pub common: ObjectCommon,
     pub name: *mut ObjectString,
     pub methods: HashMap<*mut ObjectString, *mut ObjectClosure, BuildHasherDefault<FxHasher>>,
+    pub fields: HashMap<*mut ObjectString, Value, BuildHasherDefault<FxHasher>>,
 }
 
 impl ObjectClass {
     pub fn new(name: *mut ObjectString) -> Self {
         let common = ObjectCommon { type_: ObjectType::Class, is_marked: false };
-        Self { common, name, methods: HashMap::default() }
+        Self { common, name, methods: HashMap::default(), fields: HashMap::default() }
     }
 }
 
@@ -252,7 +253,10 @@ pub struct ObjectInstance {
 impl ObjectInstance {
     pub fn new(class: *mut ObjectClass) -> Self {
         let common = ObjectCommon { type_: ObjectType::Instance, is_marked: false };
-        Self { common, class, fields: HashMap::default() }
+
+        let fields = unsafe { (*class).fields.clone() };
+
+        Self { common, class, fields }
     }
 }
 

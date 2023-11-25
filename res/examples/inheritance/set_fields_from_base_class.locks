@@ -1,4 +1,7 @@
 class Foo {
+  let field1;
+  let field2;
+  
   fn foo(a, b) {
     this.field1 = a;
     this.field2 = b;

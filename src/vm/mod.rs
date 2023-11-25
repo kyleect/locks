@@ -63,6 +63,7 @@ pub struct VM {
     /// Pointer to the next empty slot in the stack
     stack_top: *mut Value,
 
+    // String allocated for the "init" constructor method on classes
     init_string: *mut ObjectString,
     pub source: String,
 }
@@ -189,6 +190,7 @@ impl VM {
                 op::CLASS => self.op_class(),
                 op::INHERIT => self.op_inherit(),
                 op::METHOD => self.op_method(),
+                op::FIELD => self.op_field(),
                 _ => util::unreachable(),
             }?;
 
@@ -367,8 +369,26 @@ impl VM {
             }
         };
         let value = unsafe { *self.peek(0) };
-        unsafe { (*instance).fields.insert(name, value) };
-        Ok(())
+        let has_field = unsafe { (*instance).fields.get(&name) };
+
+        if let Some(_) = has_field {
+            unsafe { (*instance).fields.insert(name, value) };
+            return Ok(());
+        }
+
+        let class_has_method = unsafe { (*(*instance).class).methods.get(&name) };
+
+        if let Some(_) = class_has_method {
+            return self.err(TypeError::InvalidMethodAssignment {
+                name: unsafe { (*name).value.to_owned() },
+                type_: unsafe { (*(*(*instance).class).name).value.to_owned() },
+            });
+        }
+
+        self.err(AttributeError::NoSuchAttribute {
+            type_: unsafe { (*(*(*instance).class).name).value.to_string() },
+            name: unsafe { (*name).value.to_string() },
+        })
     }
 
     fn op_get_super(&mut self) -> Result<()> {
@@ -601,7 +621,16 @@ impl VM {
             }
         };
 
+        unsafe { (*class).fields = (*super_).fields.clone() };
         unsafe { (*class).methods = (*super_).methods.clone() };
+        Ok(())
+    }
+
+    fn op_field(&mut self) -> Result<()> {
+        let name = unsafe { self.read_value().as_object().string };
+        let value = self.pop();
+        let class = unsafe { (*self.peek(0)).as_object().class };
+        unsafe { (*class).fields.insert(name, value) };
         Ok(())
     }
 
@@ -794,7 +823,9 @@ impl VM {
         u16::from_le_bytes([byte1, byte2])
     }
 
-    /// Reads a [`Value`] from the current [`Chunk`].
+    /// Get constant [`Value`] by index from [`Chunk`].
+    ///
+    /// Consumes the 1 byte op
     fn read_value(&mut self) -> Value {
         let constant_idx = self.read_u8() as usize;
         let function = unsafe { (*self.frame.closure).function };

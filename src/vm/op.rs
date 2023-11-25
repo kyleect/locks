@@ -83,5 +83,6 @@ iota! {
     RETURN,
     CLASS,
     INHERIT,
-    METHOD
+    METHOD,
+    FIELD
 }

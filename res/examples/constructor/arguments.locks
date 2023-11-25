@@ -1,4 +1,7 @@
 class Foo {
+  let a;
+  let b;
+  
   fn init(a, b) {
     print "init"; // out: init
     this.a = a;

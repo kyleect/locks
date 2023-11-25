@@ -1,4 +1,6 @@
-class Foo {}
+class Foo {
+  let bar;
+}
 
 let foo = Foo();
 foo.bar = "not fn";

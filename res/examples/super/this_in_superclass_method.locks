@@ -1,10 +1,12 @@
 class Base {
+  let a;
   fn init(a) {
     this.a = a;
   }
 }
 
 class Derived extends Base {
+  let b;
   fn init(a, b) {
     super.init(a);
     this.b = b;
