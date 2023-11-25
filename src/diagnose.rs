@@ -102,10 +102,8 @@ impl DiagnosisRange {
 
 #[cfg(test)]
 mod tests {
-
-    use crate::diagnose::{Diagnosis, DiagnosisPosition, DiagnosisRange, DiagnosisSeverity};
-
     use super::Diagnoser;
+    use crate::diagnose::{Diagnosis, DiagnosisPosition, DiagnosisRange, DiagnosisSeverity};
 
     #[test]
     fn it_works() {
