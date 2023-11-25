@@ -1,0 +1,3 @@
+class Foo {
+  let init; // out: NameError: "init" is a reserved name
+}

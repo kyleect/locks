@@ -121,6 +121,15 @@ impl Compiler {
                     self.get_variable(&class.name, span, gc)?;
 
                     for (field_assign, span) in &class.fields {
+                        let name = &field_assign.identifier.name;
+
+                        if name == "init" {
+                            return Err((
+                                NameError::ReservedName { name: (&name).to_string() }.into(),
+                                span.clone(),
+                            ));
+                        }
+
                         // Compile value expression if it exists and push it on the VM's stack.
                         //
                         // This value is the field's default value.
@@ -132,7 +141,7 @@ impl Compiler {
 
                         self.emit_u8(op::FIELD, span);
                         // Emit field name's constant index
-                        let name = gc.alloc(&field_assign.identifier.name).into();
+                        let name = gc.alloc(name).into();
                         self.emit_constant(name, span)?;
                     }
 

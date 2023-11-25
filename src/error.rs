@@ -94,6 +94,8 @@ pub enum NameError {
     ClassInheritFromSelf { name: String },
     #[error("name {name:?} is not defined")]
     NotDefined { name: String },
+    #[error("{name:?} is a reserved name")]
+    ReservedName { name: String },
 }
 
 impl AsDiagnostic for NameError {
