@@ -677,6 +677,13 @@ impl VM {
         let access_modifier = self.read_value();
         let value = self.pop();
         let class = unsafe { (*self.peek(0)).as_object().class };
+        eprintln!(
+            "op_field!!: {:?} {:?} {:?} {:?}",
+            unsafe { (*name).value },
+            access_modifier,
+            value,
+            unsafe { (*(*class).name).value }
+        );
         let mut field = ObjectClassField { access_modifier, default_value: value };
 
         unsafe { (*class).fields.insert(name, &mut field) };
