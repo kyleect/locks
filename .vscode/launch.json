@@ -3,6 +3,34 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "locks exec code (hardcoded)",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/target/debug/locks.exe",
+      "args": [
+        "exec",
+        "[10, 20, 30];"
+      ],
+      "stopAtEntry": false,
+      "cwd": "${fileDirname}",
+      "environment": [],
+      "console": "externalTerminal"
+    },
+    {
+      "name": "locks run file (hardcoded path)",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/target/debug/locks.exe",
+      "args": [
+        "run",
+        "./res/examples/constructor/arguments.locks"
+      ],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "console": "externalTerminal"
+    },
+    {
       "type": "extensionHost",
       "request": "launch",
       "name": "VS Code Language Extension",

@@ -638,8 +638,9 @@ impl VM {
     /// The [`ObjectClass`] is pushed on to the VM's stack.
     fn op_class(&mut self) -> Result<()> {
         let name = unsafe { self.read_value().as_object().string };
-        let class = self.alloc(ObjectClass::new(name)).into();
-        self.push(class);
+        let class = self.alloc(ObjectClass::new(name));
+        let class_value = class.into();
+        self.push(class_value);
         Ok(())
     }
 
@@ -675,18 +676,25 @@ impl VM {
     fn op_field(&mut self) -> Result<()> {
         let name = unsafe { self.read_value().as_object().string };
         let access_modifier = self.read_value();
-        let value = self.pop();
+        let default_value = self.pop();
         let class = unsafe { (*self.peek(0)).as_object().class };
-        eprintln!(
-            "op_field!!: {:?} {:?} {:?} {:?}",
-            unsafe { (*name).value },
-            access_modifier,
-            value,
-            unsafe { (*(*class).name).value }
-        );
-        let mut field = ObjectClassField { access_modifier, default_value: value };
+
+        {
+            let field_name = unsafe { (*name).value };
+            let class_name = unsafe { (*(*class).name).value };
+
+            let log = format!(
+                "op_field!!: {:?} {:?} {:?} {:?}",
+                field_name, access_modifier, default_value, class_name
+            );
+
+            eprint!("{log}");
+        }
+
+        let mut field = ObjectClassField { access_modifier, default_value };
 
         unsafe { (*class).fields.insert(name, &mut field) };
+
         Ok(())
     }
 
