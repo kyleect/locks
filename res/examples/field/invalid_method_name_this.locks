@@ -1,0 +1,3 @@
+class Foo {
+  fn this () {} // out: SyntaxError: unexpected "this"
+}

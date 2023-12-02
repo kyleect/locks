@@ -1,0 +1,3 @@
+class Foo {
+  fn super () {} // out: SyntaxError: unexpected "super"
+}

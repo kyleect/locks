@@ -1,0 +1,3 @@
+class Foo {
+  let super; // out: SyntaxError: unexpected "super"
+}
