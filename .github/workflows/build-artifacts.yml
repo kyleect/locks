@@ -1,4 +1,4 @@
-name: ci
+name: build-artifacts
 on:
   push:
     branches: [main]
