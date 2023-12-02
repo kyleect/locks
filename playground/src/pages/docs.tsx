@@ -460,7 +460,7 @@ const Docs: React.FC = () => (
               <li>
                 Download runtime from latest passing{' '}
                 <a
-                  href="https://github.com/kyleect/locks/actions/workflows/ci.yml"
+                  href="https://github.com/kyleect/locks/actions/workflows/build-artifacts.yml"
                   target="_blank"
                   rel="noreferrer"
                 >
