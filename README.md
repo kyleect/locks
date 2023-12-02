@@ -7,7 +7,7 @@
 
 # 🔓 locks
 
-A toy language branched from [Lox](https://www.craftinginterpreters.com/) to learn language implementation. Forked from [loxcraft](https://github.com/ajeetdsouza/loxcraft)
+A toy language branched from [Lox](https://www.craftinginterpreters.com/) to learn language implementation. Forked from [loxcraft](https://github.com/ajeetdsouza/loxcraft).
 
 [![ci](https://github.com/kyleect/locks/actions/workflows/ci.yml/badge.svg)](https://github.com/kyleect/locks/actions/workflows/ci.yml)
 
@@ -25,7 +25,34 @@ A toy language branched from [Lox](https://www.craftinginterpreters.com/) to lea
 - [VS Code Extension](#vs-code-extension)
 - [Docker](#docker)
 
-Future [goals](https://github.com/kyleect/locks/issues/1)
+## Fork
+
+This project was forked from [loxcraft](https://github.com/ajeetdsouza/loxcraft).
+
+### Changes Made
+
+- Rewrote & decoupled disassembler to build a string of the disassembled bytecode instead of printing it
+- CLI enhancements
+  - Add `dissassemble` command to print disassembled bytecode from a `*.locks` file
+  - Add `exec` command to execute Locks code from the arg or piped in from `stdin`
+- Syntax changes
+  - Functions declarations: `fun` -> `fn`
+  - Variable declarations: `var` -> `let`
+  - Class fields must now be declared using `let field;` or `let field = "defaultValue";`
+  - Class method declarations require `fn` like functions
+  - Setting undeclared fields on classes will generate an error
+- [Dockerize](Dockerfile) the Locks binary executable
+- Implemented a [VS Code Extension](vsc)
+  - Integrates the existing [language server](src/lsp.rs) to display parsing/compiler errors
+  - Syntax Highlighting, Auto Pair Complete
+  - Snippets
+  - Commands/tasks to run, and disassemble Locks code
+  - Debug config for running VS Code Extension in VS Code
+- Add builds (Locks binary executable & VS Code extension) as artifacts to the Github workflow
+- Revamped the [Online Playground](https://kyleect.github.io/locks/)
+  - Added a [documentation](https://kyleect.github.io/locks/#/docs) page with runnable code examples. This reuses the same webassembly build of the Locks runtime that the playground uses.
+  - Add a "Disassemble" button to the playground page and to all code examples on the docs page
+  - Restyled playground
 
 ## Getting Started
 
