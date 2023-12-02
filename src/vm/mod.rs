@@ -212,7 +212,12 @@ impl VM {
         Ok(())
     }
 
-    /// Read next [`Value`] from the stack
+    /// Get a constant [`Value`] from the [`CallFrame`]'s constant's table
+    /// push it on to the stack.
+    ///
+    /// The index of the constant is [`CallFrame`]'s instruction pointer (IP)
+    ///
+    /// Increments current [`CallFrame`]'s IP + 1.
     fn op_constant(&mut self) -> Result<()> {
         let constant = self.read_value();
         self.push(constant);
@@ -532,6 +537,18 @@ impl VM {
         Ok(())
     }
 
+    /// Attempt to call [`Value`] on the top of the VM's stack as callable
+    ///
+    /// [`Value`] must be an [`Object`] of one of the following [`ObjectType`]:
+    ///
+    /// - [`ObjectType::BoundMethod`]
+    /// - [`ObjectType::Class`]
+    /// - [`ObjectType::Closure`]
+    /// - [`ObjectType::Native`]
+    ///
+    /// Will return [`Err(TypeError::NotCallable)`] otherwise.
+    ///
+    /// This consumes 1 byte op for the `arg_count`
     fn op_call(&mut self) -> Result<()> {
         let arg_count = self.read_u8() as usize;
         let callee = unsafe { *self.peek(arg_count) };
@@ -569,6 +586,13 @@ impl VM {
         }
     }
 
+    /// Create an [`ObjectClosure`] from the [`ObjectFunction`] ([`Value`]) at the
+    /// VM's instruction pointer (IP).
+    ///
+    /// This also captures the required [`ObjectUpvalue`]s as defined by the [`ObjectFunction`]'s
+    /// `upvalue_count`. The values to capture are stored in the VM's `open_upvalues`.
+    ///
+    /// The [`ObjectClosure`] is pushed on to the VM's stack.
     fn op_closure(&mut self) -> Result<()> {
         let function = unsafe { self.read_value().as_object().function };
 
@@ -600,6 +624,9 @@ impl VM {
         Ok(())
     }
 
+    /// Create an [`ObjectClass`] from the [`Value`] at the VM's instruction pointer (IP).
+    ///
+    /// The [`ObjectClass`] is pushed on to the VM's stack.
     fn op_class(&mut self) -> Result<()> {
         let name = unsafe { self.read_value().as_object().string };
         let class = self.alloc(ObjectClass::new(name)).into();
@@ -607,6 +634,11 @@ impl VM {
         Ok(())
     }
 
+    /// Marks the [`ObjectClass`] on the top of the VM's stack as a child inheriting from a super/parent class
+    ///
+    /// This consumes 0 additional ops
+    ///
+    /// This pops the child [`ObjectClass`] of the VM's stack.
     fn op_inherit(&mut self) -> Result<()> {
         let class = unsafe { self.pop().as_object().class };
         let super_ = {
@@ -626,6 +658,11 @@ impl VM {
         Ok(())
     }
 
+    /// Define a field on the [`ObjectClass`] on the top of the VM's stack
+    ///
+    /// This consumes 2 byte ops for field name, & access modifier
+    ///
+    /// This pop's the [`Value`] from the VM's stack for the field value.
     fn op_field(&mut self) -> Result<()> {
         let name = unsafe { self.read_value().as_object().string };
         let value = self.pop();
@@ -634,6 +671,13 @@ impl VM {
         Ok(())
     }
 
+    /// Define a method on the [`ObjectClass`] on the top of the VM's stack
+    ///
+    /// This consumes 1 byte op for method name.
+    ///
+    /// This pop's the [`ObjectClosure`] from the VM's stack for the field value.
+    ///
+    /// The next [`Value`] on the VM's stack is used as the [`ObjectClass`] for the method.
     fn op_method(&mut self) -> Result<()> {
         let name = unsafe { self.read_value().as_object().string };
         let method = unsafe { self.pop().as_object().closure };
@@ -695,6 +739,16 @@ impl VM {
         }
     }
 
+    /// Attempt to call [`Value`] as callable
+    ///
+    /// [`Value`] must be an [`Object`] of one of the following [`ObjectType`]:
+    ///
+    /// - [`ObjectType::BoundMethod`]
+    /// - [`ObjectType::Class`]
+    /// - [`ObjectType::Closure`]
+    /// - [`ObjectType::Native`]
+    ///
+    /// Will return [`Err(TypeError::NotCallable)`] otherwise.
     fn call_value(&mut self, value: Value, arg_count: usize) -> Result<()> {
         if value.is_object() {
             let object = value.as_object();
@@ -712,22 +766,39 @@ impl VM {
         }
     }
 
+    /// Call an [`ObjectInstance`]'s method
+    ///
+    /// This works by setting [`CallFrame`]'s `stack` to the [`ObjectInstance`]
+    /// when calling the method's [`ObjectClosure`].
     fn call_bound_method(
         &mut self,
         method: *mut ObjectBoundMethod,
         arg_count: usize,
     ) -> Result<()> {
+        // Replace the `OP_GET_PROPERTY` op with the method's bound
+        // [`ObjectInstance`] (e.g. `this`). This is used below.
         unsafe { *self.peek(arg_count) = (*method).this.into() };
+
+        // The [`ObjectInstance`] replaced above is set as the closure's
+        // callee. This is done by setting the [`CallFrame`]'s `stack` to
+        // the [`ObjectInstance`].
         self.call_closure(unsafe { (*method).closure }, arg_count)
     }
 
-    /// Initialize a class into an instance
+    /// Create a new [`ObjectInstance`] of an [`ObjectClass`].
     ///
-    /// var instance = Class();
+    /// Calls the `init` method if it exists on the [`ObjectClass`].
+    ///
+    /// ```
+    /// let instance = Class();
+    /// ```
     fn call_class(&mut self, class: *mut ObjectClass, arg_count: usize) -> Result<()> {
         let instance = self.alloc(ObjectInstance::new(class));
+
+        // Replace the [`ObjectClass`] in the VM's stack with the new [`ObjectInstance`]
         unsafe { *self.peek(arg_count) = Value::from(instance) };
 
+        // Call the constructor/init method if it exists on the class
         match unsafe { (*class).methods.get(&self.init_string) } {
             Some(&init) => self.call_closure(init, arg_count),
             None if arg_count != 0 => self.err(TypeError::ArityMismatch {
@@ -739,6 +810,10 @@ impl VM {
         }
     }
 
+    /// Call [`ObjectClosure`] (function or method).
+    ///
+    /// This creates a new [`CallFrame`] while pushing the old one
+    /// on to the [`CallFrame`] stack.
     fn call_closure(&mut self, closure: *mut ObjectClosure, arg_count: usize) -> Result<()> {
         if self.frames.len() >= self.frames.capacity() {
             return self.err(OverflowError::StackOverflow);
@@ -756,7 +831,9 @@ impl VM {
 
         let frame = CallFrame {
             closure,
+            // Points to the closure's function chunk
             ip: unsafe { (*function).chunk.ops.as_ptr() },
+            // Points to the Value of the callee
             stack: self.peek(arg_count),
         };
         unsafe { self.frames.push_unchecked(mem::replace(&mut self.frame, frame)) };
@@ -764,7 +841,9 @@ impl VM {
         Ok(())
     }
 
-    /// Call a native function built in to the language
+    /// Call [`ObjectNative`] function
+    ///
+    /// These are functions provided by the language runtime and not written in the language
     fn call_native(&mut self, native: *mut ObjectNative, arg_count: usize) -> Result<()> {
         self.pop();
         let value = match { unsafe { (*native).native } } {
@@ -808,24 +887,32 @@ impl VM {
         }
     }
 
-    /// Read and return the byte from the current [`Chunk`]
-    /// Increments the current [`Chunk`]'s instruction pointer
+    /// Read (and return) the bytecode op at [`CallFrame`]'s (and underlying [`Chunk`]'s)
+    /// instruction pointer (IP).
+    ///
+    /// Increments current [`CallFrame`]'s IP + 1.
     fn read_u8(&mut self) -> u8 {
         let byte = unsafe { *self.frame.ip };
         self.frame.ip = unsafe { self.frame.ip.add(1) };
         byte
     }
 
-    /// Reads the next two bytes from the current [`Chunk`]
+    /// Read (and return) the next 2 bytecode ops at [`CallFrame`]'s (and underlying [`Chunk`]'s)
+    /// instruction pointer (IP).
+    ///
+    /// Increments current [`CallFrame`]'s IP + 2.
     fn read_u16(&mut self) -> u16 {
         let byte1 = self.read_u8();
         let byte2 = self.read_u8();
         u16::from_le_bytes([byte1, byte2])
     }
 
-    /// Get constant [`Value`] by index from [`Chunk`].
+    /// Return the [`Value`] located at the [`CallFrame`]'s instruction pointer (IP).
     ///
-    /// Consumes the 1 byte op
+    /// The bytecode op at the [`CallFrame`]'s instruction pointer (IP) is the index of
+    /// constant in the [`CallFrame`]'s constant table.
+    ///
+    /// Increments current [`CallFrame`]'s IP + 1.
     fn read_value(&mut self) -> Value {
         let constant_idx = self.read_u8() as usize;
         let function = unsafe { (*self.frame.closure).function };
@@ -834,7 +921,7 @@ impl VM {
 
     /// Pushes a [`Value`] to the stack.
     ///
-    /// Increments stack_top to be just past the last [`Value`] in the stack.
+    /// Increments the VM's `stack_top + 1`
     fn push(&mut self, value: Value) {
         unsafe { *self.stack_top = value };
         self.stack_top = unsafe { self.stack_top.add(1) };
@@ -842,13 +929,15 @@ impl VM {
 
     /// Pops a [`Value`] from the stack.
     ///
-    /// Decrements stack_top to be just past the new last [`Value`] in the stack
+    /// Decrements the VM's `stack_top - 1`
     fn pop(&mut self) -> Value {
         self.stack_top = unsafe { self.stack_top.sub(1) };
         unsafe { *self.stack_top }
     }
 
-    /// Peeks [`Value`] from `n` slots back in the stack.
+    /// Preview what [`Value`] is from `n` slots back in the stack.
+    ///
+    /// This consumes no ops and doesn't affect the VM's stack
     fn peek(&mut self, n: usize) -> *mut Value {
         unsafe { self.stack_top.sub(n + 1) }
     }
