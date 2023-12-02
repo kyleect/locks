@@ -25,12 +25,17 @@ A toy language branched from [Lox](https://www.craftinginterpreters.com/) to lea
 - [VS Code Extension](#vs-code-extension)
 - [Docker](#docker)
 
-## Fork
+## Forked
 
-This project was forked from [loxcraft](https://github.com/ajeetdsouza/loxcraft).
+This project was forked from [loxcraft](https://github.com/ajeetdsouza/loxcraft). The intent of this fork is to learn about bytecode compilers, stack-based virtual machines, programming language design, and the desire to implement new language features.
+
+There were many potential open source projects that could have been the basis for this toy language but loxcraft had a solid base to start from especially when I was focused on implementing language tooling first. It already had a working language server so the Visual Studio Code extension was a natural place to start.
+
+With the syntax and implementation changes so far the Locks language has divered from Lox and will continue to do so.
 
 ### Changes Made
 
+- Comments added to code base as part of the learning process while implementing changes
 - Rewrote & decoupled disassembler to build a string of the disassembled bytecode instead of printing it
 - CLI enhancements
   - Add `dissassemble` command to print disassembled bytecode from a `*.locks` file
