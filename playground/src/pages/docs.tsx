@@ -4,6 +4,7 @@ import React from 'react';
 
 import { Link } from 'react-router-dom';
 import { DocCard } from '../components/doc-card';
+import { ErrorDoc } from '../components/error-doc';
 import { Navbar } from '../components/navbar';
 
 /**
@@ -23,11 +24,15 @@ const Docs: React.FC = () => (
           />{' '}
           Documentation
         </h2>
-
         <ul className="nav">
           <li className="nav-item">
             <Link className="nav-link" to="#syntax">
               Syntax
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#errors">
+              Errors
             </Link>
           </li>
           <li className="nav-item">
@@ -36,9 +41,7 @@ const Docs: React.FC = () => (
             </Link>
           </li>
         </ul>
-
         <p>Welcome to the Locks language documentation.</p>
-
         <h2 id="syntax">
           Syntax{' '}
           <Link to="#syntax">
@@ -49,7 +52,6 @@ const Docs: React.FC = () => (
             />
           </Link>
         </h2>
-
         <ul className="nav">
           <li className="nav-item">
             <Link className="nav-link" to="#example">
@@ -137,7 +139,6 @@ const Docs: React.FC = () => (
             </Link>
           </li>
         </ul>
-
         <DocCard
           title="Example"
           anchor="example"
@@ -441,6 +442,434 @@ const Docs: React.FC = () => (
           height="400px"
         />
 
+        <div className="shadow rounded p-3 vstack gap-3">
+          <h2 id="errors">
+            Errors{' '}
+            <Link to="#errors">
+              <span
+                className="me-1 bi bi-link-45deg link-secondary align-text-bottom"
+                role="img"
+                aria-hidden="true"
+              />
+            </Link>
+          </h2>
+          <ul className="nav">
+            <li className="nav-item">
+              <Link className="nav-link" to="#errors--attribute-error">
+                AttributeError
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="#errors--io-error">
+                IoError
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="#errors--name-error">
+                NameError
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="#errors--overflow-error">
+                OverflowError
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="#errors--syntax-error">
+                SyntaxError
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="#errors--type-error">
+                TypeError
+              </Link>
+            </li>
+          </ul>
+
+          <div className="vstack gap-3">
+            <h3 id="errors--attribute-error">
+              AttributeError{' '}
+              <Link to="#errors--attribute-error">
+                <span
+                  className="me-1 bi bi-link-45deg link-secondary align-text-bottom"
+                  role="img"
+                  aria-hidden="true"
+                />
+              </Link>
+            </h3>
+
+            <ErrorDoc
+              errorName="NoSuchAttribute"
+              signature="(_type: String, name: String)"
+              description={
+                <>
+                  Instance of <code>type_</code> has no such attribute{' '}
+                  <code>name</code>.
+                </>
+              }
+              id="errors--attribute-error--no-such-attribute"
+            />
+
+            <ErrorDoc
+              errorName="NoSuchField"
+              signature="(class_name: String, field_name: String)"
+              description={
+                <>
+                  Class has no such field <code>field_name</code>.
+                </>
+              }
+              id="errors--attribute-error--no-such-field"
+            />
+          </div>
+
+          <div className="vstack gap-3">
+            <h3 id="errors--io-error">
+              IoError{' '}
+              <Link to="#errors--attribute-error">
+                <span
+                  className="me-1 bi bi-link-45deg link-secondary align-text-bottom"
+                  role="img"
+                  aria-hidden="true"
+                />
+              </Link>
+            </h3>
+
+            <ErrorDoc
+              errorName="WriteError"
+              signature="(file: String)"
+              description={
+                <>
+                  Unable to write to file at <code>path</code>.
+                </>
+              }
+              id="errors--io-error--write-error"
+            />
+          </div>
+
+          <div className="vstack gap-3">
+            <h3 id="errors--name-error">
+              NameError{' '}
+              <Link to="#errors--attribute-error">
+                <span
+                  className="me-1 bi bi-link-45deg link-secondary align-text-bottom"
+                  role="img"
+                  aria-hidden="true"
+                />
+              </Link>
+            </h3>
+
+            <ErrorDoc
+              errorName="AccessInsideInitializer"
+              signature="(name: String)"
+              description={
+                <p>
+                  A variable referred to itself by <code>name</code> in it&#39;s
+                  initializer.
+                </p>
+              }
+              id="errors--name-error--access-inside-initializer"
+            />
+
+            <ErrorDoc
+              errorName="AlreadyDefined"
+              signature="(name: String)"
+              description={
+                <p>
+                  An already defined <code>name</code> was used for a
+                  declaration.
+                </p>
+              }
+              id="errors--name-error--already-defined"
+            />
+
+            <ErrorDoc
+              errorName="ClassInheritFromSelf"
+              signature="(name: String)"
+              description={<p>Class tried to extend itself.</p>}
+              id="errors--name-error--class-inherit-from-self"
+            />
+
+            <ErrorDoc
+              errorName="NotDefined"
+              signature="(name: String)"
+              description={
+                <p>
+                  An undefined <code>name</code> was referenced.
+                </p>
+              }
+              id="errors--name-error--not-defined"
+            />
+
+            <ErrorDoc
+              errorName="ReservedName"
+              signature="(name: String)"
+              description={
+                <p>
+                  A reserved <code>name</code> was used in a declaration.
+                </p>
+              }
+              id="errors--name-error--reserved-name"
+            />
+          </div>
+
+          <div className="vstack gap-3">
+            <h3 id="errors--overflow-error">
+              OverflowError{' '}
+              <Link to="#errors--attribute-error">
+                <span
+                  className="me-1 bi bi-link-45deg link-secondary align-text-bottom"
+                  role="img"
+                  aria-hidden="true"
+                />
+              </Link>
+            </h3>
+
+            <ErrorDoc
+              errorName="JumpTooLarge"
+              signature=""
+              description={<p> </p>}
+              id="errors--overflow-error--jump-too-large"
+            />
+
+            <ErrorDoc
+              errorName="StackOverflow"
+              signature=""
+              description={<p> </p>}
+              id="errors--overflow-error--stackoverflow"
+            />
+
+            <ErrorDoc
+              errorName="TooManyArgs"
+              signature=""
+              description={<p> </p>}
+              id="errors--overflow-error--too-many-args"
+            />
+
+            <ErrorDoc
+              errorName="TooManyConstants"
+              signature=""
+              description={<p> </p>}
+              id="errors--overflow-error--too-many-constants"
+            />
+
+            <ErrorDoc
+              errorName="TooManyLocals"
+              signature=""
+              description={<p> </p>}
+              id="errors--overflow-error--too-many-locals"
+            />
+
+            <ErrorDoc
+              errorName="TooManyParams"
+              signature=""
+              description={<p> </p>}
+              id="errors--overflow-error--too-many-params"
+            />
+
+            <ErrorDoc
+              errorName="TooManyUpvalues"
+              signature=""
+              description={<p> </p>}
+              id="errors--overflow-error--too-many-upvalues"
+            />
+          </div>
+
+          <div className="vstack gap-3">
+            <h3 id="errors--syntax-error">
+              SyntaxError{' '}
+              <Link to="#errors--attribute-error">
+                <span
+                  className="me-1 bi bi-link-45deg link-secondary align-text-bottom"
+                  role="img"
+                  aria-hidden="true"
+                />
+              </Link>
+            </h3>
+
+            <ErrorDoc
+              errorName="ExtraToken"
+              signature="(token: String)"
+              description={<p> </p>}
+              id="errors--syntax-error--extra-token"
+            />
+
+            <ErrorDoc
+              errorName="InvalidToken"
+              signature=""
+              description={<p> </p>}
+              id="errors--syntax-error--invalid-token"
+            />
+
+            <ErrorDoc
+              errorName="ReturnInInitializer"
+              signature=""
+              description={<p> </p>}
+              id="errors--syntax-error--return-in-initializer"
+            />
+
+            <ErrorDoc
+              errorName="ReturnOutsideFunction"
+              signature=""
+              description={
+                <p>
+                  <code>this</code> was used outside of a function.
+                </p>
+              }
+              id="errors--syntax-error--return-outside-function"
+            />
+
+            <ErrorDoc
+              errorName="SuperOutsideClass"
+              signature=""
+              description={
+                <p>
+                  <code>this</code> was used outside of a class.
+                </p>
+              }
+              id="errors--syntax-error--super-outside-class"
+            />
+
+            <ErrorDoc
+              errorName="SuperWithoutSuperclass"
+              signature=""
+              description={
+                <p>
+                  Super referenced in a class that doesn&#39;t extend another.
+                  class
+                </p>
+              }
+              id="errors--syntax-error--super-without-super-class"
+            />
+
+            <ErrorDoc
+              errorName="ThisOutsideClass"
+              signature=""
+              description={
+                <p>
+                  <code>this</code> was used outside of a class.
+                </p>
+              }
+              id="errors--syntax-error--this-outside-class"
+            />
+
+            <ErrorDoc
+              errorName="UnexpectedInput"
+              signature="(token: String)"
+              description={<p> </p>}
+              id="errors--syntax-error--unexpected-input"
+            />
+
+            <ErrorDoc
+              errorName="UnrecognizedEOF"
+              signature="(token: String)"
+              description={<p> </p>}
+              id="errors--syntax-error--unrecognized-eof"
+            />
+
+            <ErrorDoc
+              errorName="UnrecognizedToken"
+              signature="(token: String, expected: String[])"
+              description={
+                <p>
+                  An unrecognized <code>token</code> was found during parsing.
+                </p>
+              }
+              id="errors--syntax-error--unrecognized-token"
+            />
+
+            <ErrorDoc
+              errorName="UnterminatedString"
+              signature=""
+              description={
+                <p>
+                  A string is missing an end double quote <code>&ldquo;</code>
+                </p>
+              }
+              id="errors--syntax-error--unterminated-string"
+            />
+          </div>
+
+          <div className="vstack gap-3">
+            <h3 id="errors--type-error">
+              TypeError{' '}
+              <Link to="#errors--type-error">
+                <span
+                  className="me-1 bi bi-link-45deg link-secondary align-text-bottom"
+                  role="img"
+                  aria-hidden="true"
+                />
+              </Link>
+            </h3>
+
+            <ErrorDoc
+              errorName="ArityMismatch"
+              signature="(name: String, exp_args: Number, got_args: Number)"
+              description={
+                <p>
+                  Function or method called with incorrect number of arguments.
+                </p>
+              }
+              id="errors--type-error--arity-mismatch"
+            />
+
+            <ErrorDoc
+              errorName="InitInvalidReturnType"
+              signature="(type_: String)"
+              description={
+                <p>
+                  Invalid return value from classes `init` constructor method.
+                </p>
+              }
+              id="errors--type-error--init-invalid-return-type"
+            />
+
+            <ErrorDoc
+              errorName="NotCallable"
+              signature="(type_: String)"
+              description={<p>A non function or method was called.</p>}
+              id="errors--type-error--not-callable"
+            />
+
+            <ErrorDoc
+              errorName="SuperclassInvalidType"
+              signature="(type_: String)"
+              description={<p>Class extends non class type.</p>}
+              id="errors--type-error--superclass-invalid-type"
+            />
+
+            <ErrorDoc
+              errorName="UnsupportedOperandInfix"
+              signature="(op: String, lt_type: String, rt_type: String)"
+              description={
+                <p>
+                  An infix operator (e.g. <code>+</code>, <code>-</code>) used
+                  on invalid type/s.
+                </p>
+              }
+              id="errors--type-error--unsupported-operand-infix"
+            />
+
+            <ErrorDoc
+              errorName="UnsupportedOperandPrefix"
+              signature="(op: String, rt_type: String)"
+              description={
+                <p>
+                  An prefix operator (e.g. <code>-</code>) used on an invalid
+                  type.
+                </p>
+              }
+              id="errors--type-error--unsupported-operand-prefix"
+            />
+
+            <ErrorDoc
+              errorName="InvalidMethodAssignment"
+              signature="(name: String, type_: String)"
+              description={<p>A method was re/assigned on a class instance.</p>}
+              id="errors--type-error--invalid-method-assignment"
+            />
+          </div>
+        </div>
+
         <h2 id="runtime">
           Runtime{' '}
           <Link to="#runtime">
@@ -451,7 +880,6 @@ const Docs: React.FC = () => (
             />
           </Link>
         </h2>
-
         <div className="vstack gap-4 ">
           <h3>Installing</h3>
 
