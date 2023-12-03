@@ -1,0 +1,11 @@
+class Foo {
+  private let value = 100;
+  
+  fn sumValue(n) {
+    return this.value + n;
+  }
+}
+
+let foo = Foo();
+
+print foo.sumValue(10); // out: 110

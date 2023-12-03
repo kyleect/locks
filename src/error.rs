@@ -220,9 +220,13 @@ impl AsDiagnostic for TypeError {
 #[derive(Debug, Error, Eq, PartialEq)]
 pub enum AccessError {
     #[error("{type_}.{name} is a private field")]
-    AccessingPrivate { name: String, type_: String },
+    AccessingPrivateField { name: String, type_: String },
+    #[error("{type_}.{name} is a private method")]
+    AccessingPrivateMethod { name: String, type_: String },
     #[error("{type_}.{name} can't be private since it's declared as public on the parent class")]
     NoPublicToPrivateInChildClasses { name: String, type_: String },
+    #[error("Class ({type_}) constructors can not be private")]
+    NoPrivateConstructors { type_: String },
 }
 
 impl AsDiagnostic for AccessError {

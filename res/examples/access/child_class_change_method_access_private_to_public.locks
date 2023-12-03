@@ -1,0 +1,16 @@
+class Parent {
+  private fn getValue() {
+    return 123;
+  }
+}
+
+
+class Child extends Parent {
+  public fn getValue() {
+    return 123;
+  }
+}
+
+let child = Child();
+
+print child.getValue(); // out: 123

@@ -1,0 +1,9 @@
+class Foo {
+  private fn printValue(value) {
+    print value;
+  }
+}
+
+let foo = Foo();
+
+print foo.printValue; // out: AccessError: Foo.printValue is a private method

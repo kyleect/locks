@@ -3,8 +3,8 @@ use std::mem;
 
 use arrayvec::ArrayVec;
 
-use crate::error::{ErrorS, NameError, OverflowError, Result, SyntaxError};
-use crate::syntax::ast::AccessModifier::{Private, Public};
+use crate::error::{AccessError, ErrorS, NameError, OverflowError, Result, SyntaxError};
+use crate::syntax::ast::AccessModifier::{self, Private, Public};
 use crate::syntax::ast::{
     Expr, ExprLiteral, ExprS, OpInfix, OpPrefix, Program, Stmt, StmtFn, StmtReturn, StmtS,
 };
@@ -166,8 +166,20 @@ impl Compiler {
                 // Initialize class methods, if they exist
                 if !class.methods.is_empty() {
                     self.get_variable(&class.name, span, gc)?;
-                    for (method, span) in &class.methods {
+                    for (access_modifier, (method, span)) in &class.methods {
                         let type_ = if method.name == "init" {
+                            if let Some(access_modifier) = access_modifier {
+                                if let AccessModifier::Private = access_modifier {
+                                    return Err((
+                                        AccessError::NoPrivateConstructors {
+                                            type_: class.name.clone(),
+                                        }
+                                        .into(),
+                                        span.clone(),
+                                    ));
+                                }
+                            }
+
                             FunctionType::Initializer
                         } else {
                             FunctionType::Method
@@ -177,7 +189,21 @@ impl Compiler {
                         let name = gc.alloc(&method.name).into();
                         self.emit_u8(op::METHOD, span);
                         self.emit_constant(name, span)?;
+
+                        // Emit method's access
+                        self.emit_u8(op::ACCESS, span);
+                        self.emit_u8(
+                            match access_modifier {
+                                Some(access_modifier) => match access_modifier {
+                                    Private => op::PRIVATE,
+                                    Public => op::PUBLIC,
+                                },
+                                None => op::PUBLIC,
+                            },
+                            span,
+                        );
                     }
+
                     self.emit_u8(op::POP, span);
                 }
 

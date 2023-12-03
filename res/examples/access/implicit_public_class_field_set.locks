@@ -1,0 +1,9 @@
+class Foo {
+  let value = 123;
+}
+
+let foo = Foo();
+
+foo.value = 100;
+
+print foo.value; // out: 100

@@ -25,7 +25,7 @@ Decl = {
 DeclClass: ast::Stmt =
     "class" <name:identifier> <super_:("extends" <Spanned<ExprIdentifier>>)?> "{"
         <fields:(<AccessModifier?> "let" <Spanned<StmtAssign>>)*>
-        <methods:("fn" <Spanned<Function>>)*>
+        <methods:(<AccessModifier?> "fn" <Spanned<Function>>)*>
     "}" =>
         ast::Stmt::Class(ast::StmtClass { 
             name,

@@ -395,7 +395,7 @@ const Docs: React.FC = () => (
           code={[
             'class Greeter {',
             '  let greeting;',
-            '  let flair = "!!!";',
+            '  private let flair = "!!!";',
             '',
             '  fn init(greeting) {',
             '    this.greeting = greeting;',

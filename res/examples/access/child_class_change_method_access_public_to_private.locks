@@ -1,0 +1,17 @@
+class Parent {
+  public fn getValue() {
+    return 123;
+  }
+}
+
+
+class Child extends Parent {
+  // out: AccessError: Child.getValue can't be private since it's declared as public on the parent class
+  private fn getValue() {
+    return 100;
+  }
+}
+
+let child = Child();
+
+child.getValue();

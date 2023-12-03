@@ -201,6 +201,7 @@ pub struct ObjectClass {
     pub common: ObjectCommon,
     pub name: *mut ObjectString,
     pub methods: HashMap<*mut ObjectString, *mut ObjectClosure, BuildHasherDefault<FxHasher>>,
+    pub methods_access: HashMap<*mut ObjectString, AccessModifier, BuildHasherDefault<FxHasher>>,
     pub fields: HashMap<*mut ObjectString, Value, BuildHasherDefault<FxHasher>>,
     pub fields_access: HashMap<*mut ObjectString, AccessModifier, BuildHasherDefault<FxHasher>>,
 }
@@ -212,6 +213,7 @@ impl ObjectClass {
             common,
             name,
             methods: HashMap::default(),
+            methods_access: HashMap::default(),
             fields: HashMap::default(),
             fields_access: HashMap::default(),
         }
@@ -238,6 +240,31 @@ impl ObjectClass {
 
         self.fields.insert(field_name, value);
         self.fields_access.insert(field_name, access_modifier);
+
+        Ok(())
+    }
+
+    /// Add a method to the class
+    pub fn add_method(
+        &mut self,
+        method_name: *mut ObjectString,
+        method_closure: *mut ObjectClosure,
+        access_modifier: AccessModifier,
+    ) -> Result<(), Error> {
+        if let Some(existing_access_modifier) = self.methods_access.get(&method_name) {
+            if existing_access_modifier == &AccessModifier::Public
+                && access_modifier == AccessModifier::Private
+            {
+                return Err(AccessError::NoPublicToPrivateInChildClasses {
+                    name: unsafe { (*method_name).value.to_string() },
+                    type_: unsafe { (*self.name).value.to_string() },
+                }
+                .into());
+            }
+        }
+
+        self.methods.insert(method_name, method_closure);
+        self.methods_access.insert(method_name, access_modifier);
 
         Ok(())
     }

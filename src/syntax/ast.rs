@@ -58,7 +58,7 @@ pub struct StmtBlock {
 pub struct StmtClass {
     pub name: String,
     pub super_: Option<ExprS>,
-    pub methods: Vec<Spanned<StmtFn>>,
+    pub methods: Vec<(Option<AccessModifier>, Spanned<StmtFn>)>,
     pub fields: Vec<(Option<AccessModifier>, Spanned<StmtAssign>)>,
 }
 

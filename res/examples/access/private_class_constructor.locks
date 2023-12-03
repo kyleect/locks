@@ -1,0 +1,3 @@
+class Foo {
+  private fn init() {} // out: AccessError: Class (Foo) constructors can not be private
+}

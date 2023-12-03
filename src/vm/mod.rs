@@ -323,6 +323,7 @@ impl VM {
 
     fn op_get_property(&mut self) -> Result<()> {
         let property_name = unsafe { self.read_value().as_object().string };
+
         let instance = {
             let value = unsafe { *self.peek(0) };
             let object = value.as_object();
@@ -362,7 +363,7 @@ impl VM {
                         self.push(instance_field_value);
                     }
                     AccessModifier::Private => {
-                        return self.err(AccessError::AccessingPrivate {
+                        return self.err(AccessError::AccessingPrivateField {
                             type_: unsafe { (*class_name).value.to_string() },
                             name: unsafe { (*property_name).value.to_string() },
                         })
@@ -371,13 +372,37 @@ impl VM {
             }
             None => {
                 let class_methods = unsafe { &(*class).methods };
+                let class_methods_access = unsafe { &(*class).methods_access };
 
                 match class_methods.get(&property_name) {
                     Some(&method) => {
-                        let bound_method = self.alloc(ObjectBoundMethod::new(instance, method));
+                        // Get the method's access modifier from the instance's class
+                        let access_modifier = match class_methods_access.get(&property_name) {
+                            // All class methods should be present in the methods_access map
+                            // Use that value if present
+                            Some(access) => access,
+                            // Default to private if the method by name isn't found in methods_access
+                            // This should not happen though
+                            // TODO: Return an error instead
+                            None => &AccessModifier::Private,
+                        };
 
-                        self.pop();
-                        self.push(bound_method.into());
+                        // Check method's access modifier
+                        match access_modifier {
+                            AccessModifier::Public => {
+                                let bound_method =
+                                    self.alloc(ObjectBoundMethod::new(instance, method));
+
+                                self.pop();
+                                self.push(bound_method.into());
+                            }
+                            AccessModifier::Private => {
+                                return self.err(AccessError::AccessingPrivateMethod {
+                                    type_: unsafe { (*class_name).value.to_string() },
+                                    name: unsafe { (*property_name).value.to_string() },
+                                })
+                            }
+                        };
                     }
                     None => {
                         return self.err(AttributeError::NoSuchAttribute {
@@ -436,7 +461,7 @@ impl VM {
                         return Ok(());
                     }
                     AccessModifier::Private => {
-                        return self.err(AccessError::AccessingPrivate {
+                        return self.err(AccessError::AccessingPrivateField {
                             type_: unsafe { (*class_name).value.to_string() },
                             name: unsafe { (*property_name).value.to_string() },
                         })
@@ -620,18 +645,22 @@ impl VM {
         self.call_value(callee, arg_count)
     }
 
+    /// Call a field or method on an instance
     fn op_invoke(&mut self) -> Result<()> {
-        let name = unsafe { self.read_value().as_object().string };
+        let property_name = unsafe { self.read_value().as_object().string };
         let arg_count = self.read_u8() as usize;
         let instance = unsafe { (*self.peek(arg_count)).as_object().instance };
+        let class = unsafe { (*instance).class };
 
-        match unsafe { (*instance).fields.get(&name) } {
-            Some(&value) => self.call_value(value, arg_count),
-            None => match unsafe { (*(*instance).class).methods.get(&name) } {
+        // First check if it's one of the fields
+        match unsafe { (*instance).fields.get(&property_name) } {
+            Some(&field) => self.call_value(field, arg_count),
+            // Then check if it's one of the methods
+            None => match unsafe { (*class).methods.get(&property_name) } {
                 Some(&method) => self.call_closure(method, arg_count),
                 None => self.err(AttributeError::NoSuchAttribute {
-                    type_: unsafe { (*(*(*instance).class).name).value.to_string() },
-                    name: unsafe { (*name).value.to_string() },
+                    type_: unsafe { (*(*class).name).value.to_string() },
+                    name: unsafe { (*property_name).value.to_string() },
                 }),
             },
         }
@@ -721,6 +750,7 @@ impl VM {
         unsafe { (*class).fields = (*super_).fields.clone() };
         unsafe { (*class).fields_access = (*super_).fields_access.clone() };
         unsafe { (*class).methods = (*super_).methods.clone() };
+        unsafe { (*class).methods_access = (*super_).methods_access.clone() };
         Ok(())
     }
 
@@ -764,9 +794,26 @@ impl VM {
     /// The next [`Value`] on the VM's stack is used as the [`ObjectClass`] for the method.
     fn op_method(&mut self) -> Result<()> {
         let name = unsafe { self.read_value().as_object().string };
+
+        // Read OP_ACCESS
+        let _ = self.read_u8();
+
+        // Read OP_PRIVATE or OP_PUBLIC
+        let access_modifier = match self.read_u8() {
+            op::PRIVATE => AccessModifier::Private,
+            op::PUBLIC => AccessModifier::Public,
+            _ => return self.err(SyntaxError::InvalidToken), // TODO: New error for this
+        };
+
         let method = unsafe { self.pop().as_object().closure };
         let class = unsafe { (*self.peek(0)).as_object().class };
-        unsafe { (*class).methods.insert(name, method) };
+
+        let result = unsafe { (*class).add_method(name, method, access_modifier) };
+
+        if let Err(err) = result {
+            return self.err(err);
+        }
+
         Ok(())
     }
 
