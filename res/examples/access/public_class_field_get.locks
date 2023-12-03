@@ -1,0 +1,7 @@
+class Foo {
+  public let value = 123;
+}
+
+let foo = Foo();
+
+print foo.value; // out: 123

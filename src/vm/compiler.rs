@@ -4,6 +4,7 @@ use std::mem;
 use arrayvec::ArrayVec;
 
 use crate::error::{ErrorS, NameError, OverflowError, Result, SyntaxError};
+use crate::syntax::ast::AccessModifier::{Private, Public};
 use crate::syntax::ast::{
     Expr, ExprLiteral, ExprS, OpInfix, OpPrefix, Program, Stmt, StmtFn, StmtReturn, StmtS,
 };
@@ -120,7 +121,7 @@ impl Compiler {
                     // Get class `Value` by name and push it on to the VM's stack
                     self.get_variable(&class.name, span, gc)?;
 
-                    for (field_assign, span) in &class.fields {
+                    for (access_modifier, (field_assign, span)) in &class.fields {
                         let name = &field_assign.identifier.name;
 
                         if name == "init" {
@@ -140,9 +141,23 @@ impl Compiler {
                         }
 
                         self.emit_u8(op::FIELD, span);
+
                         // Emit field name's constant index
                         let name = gc.alloc(name).into();
                         self.emit_constant(name, span)?;
+
+                        // Emit field's access
+                        self.emit_u8(op::ACCESS, span);
+                        self.emit_u8(
+                            match access_modifier {
+                                Some(access_modifier) => match access_modifier {
+                                    Private => op::PRIVATE,
+                                    Public => op::PUBLIC,
+                                },
+                                None => op::PUBLIC,
+                            },
+                            span,
+                        );
                     }
 
                     self.emit_u8(op::POP, span);

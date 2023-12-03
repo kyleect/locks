@@ -29,7 +29,7 @@
       "patterns": [
         {
           "name": "keyword.control.locks",
-          "match": "\\b(if|else|while|for|return|and|or)\\b"
+          "match": "\\b(if|else|while|for|return|and|or|private|public)\\b"
         },
         {
           "name": "constant.language.null.locks",

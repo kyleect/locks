@@ -21,8 +21,10 @@ use hashbrown::HashMap;
 use rustc_hash::FxHasher;
 
 use crate::error::{
-    AttributeError, Error, ErrorS, IoError, NameError, OverflowError, Result, TypeError,
+    AccessError, AttributeError, Error, ErrorS, IoError, NameError, OverflowError, Result,
+    SyntaxError, TypeError,
 };
+use crate::syntax::ast::AccessModifier;
 use crate::vm::allocator::GLOBAL;
 use crate::vm::gc::GcAlloc;
 use crate::vm::object::{
@@ -320,7 +322,7 @@ impl VM {
     }
 
     fn op_get_property(&mut self) -> Result<()> {
-        let name = unsafe { self.read_value().as_object().string };
+        let property_name = unsafe { self.read_value().as_object().string };
         let instance = {
             let value = unsafe { *self.peek(0) };
             let object = value.as_object();
@@ -330,36 +332,68 @@ impl VM {
             } else {
                 return self.err(AttributeError::NoSuchAttribute {
                     type_: value.type_().to_string(),
-                    name: unsafe { (*name).value.to_string() },
+                    name: unsafe { (*property_name).value.to_string() },
                 });
             }
         };
 
-        match unsafe { (*instance).fields.get(&name) } {
-            Some(&field) => {
-                self.pop();
-                self.push(field);
+        let class = unsafe { (*instance).class };
+        let class_name = unsafe { (*class).name };
+        let class_fields_access = unsafe { &(*class).fields_access };
+
+        // Check instance for field by property name
+        match unsafe { (*instance).fields.get(&property_name) } {
+            Some(&instance_field_value) => {
+                // Get the field's access modifier from the instance's class
+                let access_modifier = match class_fields_access.get(&property_name) {
+                    // All class fields should be present in the fields_access map
+                    // Use that value if present
+                    Some(access) => access,
+                    // Default to private if the field by name isn't found in fields_access
+                    // This should not happen though
+                    // TODO: Return an error instead
+                    None => &AccessModifier::Private,
+                };
+
+                // Check field's access modifier
+                match access_modifier {
+                    AccessModifier::Public => {
+                        self.pop();
+                        self.push(instance_field_value);
+                    }
+                    AccessModifier::Private => {
+                        return self.err(AccessError::AccessingPrivate {
+                            type_: unsafe { (*class_name).value.to_string() },
+                            name: unsafe { (*property_name).value.to_string() },
+                        })
+                    }
+                };
             }
-            None => match unsafe { (*(*instance).class).methods.get(&name) } {
-                Some(&method) => {
-                    let bound_method = self.alloc(ObjectBoundMethod::new(instance, method));
-                    self.pop();
-                    self.push(bound_method.into());
-                }
-                None => {
-                    return self.err(AttributeError::NoSuchAttribute {
-                        type_: unsafe { (*(*(*instance).class).name).value.to_string() },
-                        name: unsafe { (*name).value.to_string() },
-                    });
-                }
-            },
+            None => {
+                let class_methods = unsafe { &(*class).methods };
+
+                match class_methods.get(&property_name) {
+                    Some(&method) => {
+                        let bound_method = self.alloc(ObjectBoundMethod::new(instance, method));
+
+                        self.pop();
+                        self.push(bound_method.into());
+                    }
+                    None => {
+                        return self.err(AttributeError::NoSuchAttribute {
+                            type_: unsafe { (*class_name).value.to_string() },
+                            name: unsafe { (*property_name).value.to_string() },
+                        });
+                    }
+                };
+            }
         }
 
         Ok(())
     }
 
     fn op_set_property(&mut self) -> Result<()> {
-        let name = unsafe { self.read_value().as_object().string };
+        let property_name: *mut ObjectString = unsafe { self.read_value().as_object().string };
         let instance = {
             let value = self.pop();
             let object = value.as_object();
@@ -369,31 +403,62 @@ impl VM {
             } else {
                 return self.err(AttributeError::NoSuchAttribute {
                     type_: value.type_().to_string(),
-                    name: unsafe { (*name).value.to_string() },
+                    name: unsafe { (*property_name).value.to_string() },
                 });
             }
         };
-        let value = unsafe { *self.peek(0) };
-        let has_field = unsafe { (*instance).fields.get(&name) };
 
-        if let Some(_) = has_field {
-            unsafe { (*instance).fields.insert(name, value) };
-            return Ok(());
-        }
+        let class = unsafe { (*instance).class };
+        let class_name = unsafe { (*class).name };
+        let class_fields_access = unsafe { &(*class).fields_access };
+        let instance_fields = unsafe { &mut (*instance).fields };
 
-        let class_has_method = unsafe { (*(*instance).class).methods.get(&name) };
+        match instance_fields.get(&property_name) {
+            Some(_) => {
+                // Get the field's access modifier from the instance's class
+                let access_modifier = match class_fields_access.get(&property_name) {
+                    // All class fields should be present in the fields_access map
+                    // Use that value if present
+                    Some(access) => access,
+                    // Default to private if the field by name isn't found in fields_access
+                    // This should not happen though
+                    // TODO: Return an error instead
+                    None => &AccessModifier::Private,
+                };
 
-        if let Some(_) = class_has_method {
-            return self.err(TypeError::InvalidMethodAssignment {
-                name: unsafe { (*name).value.to_owned() },
-                type_: unsafe { (*(*(*instance).class).name).value.to_owned() },
-            });
-        }
+                // Check field's access modifier
+                match access_modifier {
+                    AccessModifier::Public => {
+                        let value = unsafe { *self.peek(0) };
 
-        self.err(AttributeError::NoSuchAttribute {
-            type_: unsafe { (*(*(*instance).class).name).value.to_string() },
-            name: unsafe { (*name).value.to_string() },
-        })
+                        instance_fields.insert(property_name, value);
+
+                        return Ok(());
+                    }
+                    AccessModifier::Private => {
+                        return self.err(AccessError::AccessingPrivate {
+                            type_: unsafe { (*class_name).value.to_string() },
+                            name: unsafe { (*property_name).value.to_string() },
+                        })
+                    }
+                };
+            }
+            None => {
+                let class_has_method = unsafe { (*(*instance).class).methods.get(&property_name) };
+
+                if let Some(_) = class_has_method {
+                    return self.err(TypeError::InvalidMethodAssignment {
+                        name: unsafe { (*property_name).value.to_owned() },
+                        type_: unsafe { (*(*(*instance).class).name).value.to_owned() },
+                    });
+                }
+
+                return self.err(AttributeError::NoSuchAttribute {
+                    type_: unsafe { (*(*(*instance).class).name).value.to_string() },
+                    name: unsafe { (*property_name).value.to_string() },
+                });
+            }
+        };
     }
 
     fn op_get_super(&mut self) -> Result<()> {
@@ -654,6 +719,7 @@ impl VM {
         };
 
         unsafe { (*class).fields = (*super_).fields.clone() };
+        unsafe { (*class).fields_access = (*super_).fields_access.clone() };
         unsafe { (*class).methods = (*super_).methods.clone() };
         Ok(())
     }
@@ -664,10 +730,28 @@ impl VM {
     ///
     /// This pop's the [`Value`] from the VM's stack for the field value.
     fn op_field(&mut self) -> Result<()> {
-        let name = unsafe { self.read_value().as_object().string };
+        let field_name = unsafe { self.read_value().as_object().string };
+
+        // Read OP_ACCESS
+        let _ = self.read_u8();
+
+        // Read OP_PRIVATE or OP_PUBLIC
+        let access_modifier = match self.read_u8() {
+            op::PRIVATE => AccessModifier::Private,
+            op::PUBLIC => AccessModifier::Public,
+            _ => return self.err(SyntaxError::InvalidToken), // TODO: New error for this
+        };
+
         let value = self.pop();
+
         let class = unsafe { (*self.peek(0)).as_object().class };
-        unsafe { (*class).fields.insert(name, value) };
+
+        let result = unsafe { (*class).add_field(field_name, value, access_modifier) };
+
+        if let Err(err) = result {
+            return self.err(err);
+        }
+
         Ok(())
     }
 
@@ -788,10 +872,6 @@ impl VM {
     /// Create a new [`ObjectInstance`] of an [`ObjectClass`].
     ///
     /// Calls the `init` method if it exists on the [`ObjectClass`].
-    ///
-    /// ```
-    /// let instance = Class();
-    /// ```
     fn call_class(&mut self, class: *mut ObjectClass, arg_count: usize) -> Result<()> {
         let instance = self.alloc(ObjectInstance::new(class));
 

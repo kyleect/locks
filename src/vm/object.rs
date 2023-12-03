@@ -5,6 +5,8 @@ use std::mem;
 use hashbrown::HashMap;
 use rustc_hash::FxHasher;
 
+use crate::error::{AccessError, Error};
+use crate::syntax::ast::AccessModifier;
 use crate::vm::chunk::Chunk;
 use crate::vm::value::Value;
 
@@ -200,12 +202,44 @@ pub struct ObjectClass {
     pub name: *mut ObjectString,
     pub methods: HashMap<*mut ObjectString, *mut ObjectClosure, BuildHasherDefault<FxHasher>>,
     pub fields: HashMap<*mut ObjectString, Value, BuildHasherDefault<FxHasher>>,
+    pub fields_access: HashMap<*mut ObjectString, AccessModifier, BuildHasherDefault<FxHasher>>,
 }
 
 impl ObjectClass {
     pub fn new(name: *mut ObjectString) -> Self {
         let common = ObjectCommon { type_: ObjectType::Class, is_marked: false };
-        Self { common, name, methods: HashMap::default(), fields: HashMap::default() }
+        Self {
+            common,
+            name,
+            methods: HashMap::default(),
+            fields: HashMap::default(),
+            fields_access: HashMap::default(),
+        }
+    }
+
+    /// Add a field to the class
+    pub fn add_field(
+        &mut self,
+        field_name: *mut ObjectString,
+        value: Value,
+        access_modifier: AccessModifier,
+    ) -> Result<(), Error> {
+        if let Some(existing_access_modifier) = self.fields_access.get(&field_name) {
+            if existing_access_modifier == &AccessModifier::Public
+                && access_modifier == AccessModifier::Private
+            {
+                return Err(AccessError::NoPublicToPrivateInChildClasses {
+                    name: unsafe { (*field_name).value.to_string() },
+                    type_: unsafe { (*self.name).value.to_string() },
+                }
+                .into());
+            }
+        }
+
+        self.fields.insert(field_name, value);
+        self.fields_access.insert(field_name, access_modifier);
+
+        Ok(())
     }
 }
 
