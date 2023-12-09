@@ -98,7 +98,7 @@ impl Cmd {
                 }
 
                 Ok(())
-            },
+            }
 
             Cmd::Parse { path } => {
                 let source = fs::read_to_string(path)

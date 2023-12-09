@@ -128,7 +128,7 @@ impl Debug for Expr {
             Self::Infix(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
             Self::Literal(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
             Self::Prefix(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
-            Self::Set(arg0) =>f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::Set(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
             Self::Super(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
             Self::Identifier(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
         }
