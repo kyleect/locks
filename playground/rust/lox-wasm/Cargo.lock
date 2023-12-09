@@ -498,7 +498,7 @@ dependencies = [
 
 [[package]]
 name = "lox-wasm"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "askama_escape",
  "console_error_panic_hook",

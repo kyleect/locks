@@ -1,7 +1,18 @@
 [package]
 name = "lox-wasm"
-version = "0.1.0"
+authors = [
+    "Kylee Tilley <kyleetilley@gmail.com>",
+    "Ajeet D'Souza <98ajeet@gmail.com>",
+    "Kartik Sharma <kartik.sharma522@gmail.com>",
+]
+categories = ["development-tools"]
+description = "Webassembly build of Locks for the playground"
 edition = "2021"
+license = "MIT"
+repository = "https://github.com/kyleect/locks"
+rust-version = "1.73"
+version = "1.0.0"
+publish = false
 
 [lib]
 crate-type = ["cdylib"]
