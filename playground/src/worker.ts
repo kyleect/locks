@@ -1,4 +1,9 @@
-import init, { loxRun, locksDisassemble, loxDiagnose, locksParse } from 'lox-wasm';
+import init, {
+  loxRun,
+  locksDisassemble,
+  loxDiagnose,
+  locksParse,
+} from 'lox-wasm';
 
 onmessage = async (event) => {
   await init();
