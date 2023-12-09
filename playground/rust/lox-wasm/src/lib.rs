@@ -77,6 +77,37 @@ pub fn locksDisassemble(source: &str) {
     }
 }
 
+#[wasm_bindgen]
+#[allow(non_snake_case)]
+pub fn locksParse(source: &str) {
+    console_error_panic_hook::set_once();
+
+    let output = &mut Output::new();
+
+    let program = match parse(source, source.len()) {
+        Ok(program) => program,
+        Err(errors) => {
+            let mut writer = HtmlWriter::new(output);
+            for e in errors.iter() {
+                report_error(&mut writer, source, e);
+            }
+            postMessage(&Message::ExitFailure.to_string());
+
+            return;
+        }
+    };
+
+    let result = format!("{:#?}", program);
+
+    let result = result.replace("    ", "  ");
+
+    let encoded_result = askama_escape::escape(&result, askama_escape::Html).to_string();
+
+    let _ = output.write(encoded_result.as_bytes());
+
+    postMessage(&Message::ExitSuccess.to_string());
+}
+
 #[allow(dead_code)]
 #[derive(Debug, Serialize)]
 #[serde(tag = "type")]

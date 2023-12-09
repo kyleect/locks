@@ -11,6 +11,7 @@ import {
 
 import { Editor } from '../components/editor';
 import { LocksDisassembleButton } from '../components/locks-disassemble-button';
+import { LocksParseButton } from '../components/locks-parse-button';
 import { LocksRunButton } from '../components/locks-run-button';
 import { Navbar } from '../components/navbar';
 import { Output } from '../components/output';
@@ -35,8 +36,14 @@ class LocalStorage {
 const Playground: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { isRunning, runLocks, disassembleLocks, stopLocks, locksResult } =
-    useLocks();
+  const {
+    isRunning,
+    runLocks,
+    disassembleLocks,
+    parseLocks,
+    stopLocks,
+    locksResult,
+  } = useLocks();
 
   /**
    * @remarks
@@ -135,16 +142,23 @@ const Playground: React.FC = () => {
                 aria-hidden="true"
               />
             </button>
-            <LocksDisassembleButton
-              isRunning={isRunning}
-              onClick={
-                isRunning ? stopLocks : () => disassembleLocks(editorText)
-              }
-            />
-            <LocksRunButton
-              isRunning={isRunning}
-              onClick={isRunning ? stopLocks : () => runLocks(editorText)}
-            />
+
+            <div className="btn-group" role="group" aria-label="Basic example">
+              <LocksParseButton
+                isRunning={isRunning}
+                onClick={isRunning ? stopLocks : () => parseLocks(editorText)}
+              />
+              <LocksDisassembleButton
+                isRunning={isRunning}
+                onClick={
+                  isRunning ? stopLocks : () => disassembleLocks(editorText)
+                }
+              />
+              <LocksRunButton
+                isRunning={isRunning}
+                onClick={isRunning ? stopLocks : () => runLocks(editorText)}
+              />
+            </div>
           </>
         }
       />

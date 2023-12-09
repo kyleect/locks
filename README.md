@@ -38,6 +38,7 @@ With the syntax and implementation changes so far the Locks language has divered
 - Comments added to code base as part of the learning process while implementing changes
 - Rewrote & decoupled disassembler to build a string of the disassembled bytecode instead of printing it
 - CLI enhancements
+  - Add `parse` command to print the AST from a `*.locks` file.
   - Add `dissassemble` command to print disassembled bytecode from a `*.locks` file
   - Add `exec` command to execute Locks code from the arg or piped in from `stdin`
 - Syntax changes
@@ -51,7 +52,7 @@ With the syntax and implementation changes so far the Locks language has divered
   - Integrates the existing [language server](src/lsp.rs) to display parsing/compiler errors
   - Syntax Highlighting, Auto Pair Complete
   - Snippets
-  - Commands/tasks to run, and disassemble Locks code
+  - Commands/tasks to run, parse, and disassemble Locks code
   - Debug config for running VS Code Extension in VS Code
 - Add builds (Locks binary executable & VS Code extension) as artifacts to the Github workflow
 - Revamped the [Online Playground](https://kyleect.github.io/locks/)
@@ -114,6 +115,86 @@ Or from stdin
 
 ```shell
 $ cat res/benchmarks/fib.locks | locks exec
+```
+
+Parse and print AST
+
+```
+// example.locks
+
+let value;
+print value; // out: nil
+value = 42;
+print value; // out: 42;
+```
+
+```shell
+$ locks parse example.locks
+```
+
+```
+Program {
+  stmts: [
+    (
+      StmtAssign {
+        identifier: Identifier {
+          name: "value",
+          depth: None,
+        },
+        value: None,
+      },
+      72..82,
+    ),
+    (
+      StmtPrint {
+        value: (
+          ExprIdentifier {
+            identifier: Identifier {
+              name: "value",
+              depth: None,
+            },
+          },
+          89..94,
+        ),
+      },
+      83..95,
+    ),
+    (
+      StmtExpr {
+        value: (
+          ExprAssign {
+            identifier: Identifier {
+              name: "value",
+              depth: None,
+            },
+            value: (
+              Number(
+                42.0,
+              ),
+              116..118,
+            ),
+          },
+          108..118,
+        ),
+      },
+      108..119,
+    ),
+    (
+      StmtPrint {
+        value: (
+          ExprIdentifier {
+            identifier: Identifier {
+              name: "value",
+              depth: None,
+            },
+          },
+          126..131,
+        ),
+      },
+      120..132,
+    ),
+  ],
+}
 ```
 
 Disassemble locks code as visualized byte code
@@ -231,8 +312,9 @@ Download the VS Code extension from the [latest build](https://github.com/kyleec
 
 #### Features
 
-- Language Server support
-- Syntax highlighting
+- Language Server integration
+- Syntax & error highlighting
+- Commands
 - Snippets
 
 ## Development

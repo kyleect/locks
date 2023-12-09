@@ -7,6 +7,7 @@ import {
 import { useLocks } from '../../hooks/useLocks';
 import { Example } from '../example';
 import { LocksDisassembleButton } from '../locks-disassemble-button';
+import { LocksParseButton } from '../locks-parse-button';
 import { LocksRunButton } from '../locks-run-button';
 import { Output } from '../output';
 
@@ -24,8 +25,14 @@ const DocCard: React.FC<DocCardProps> = ({
   anchor,
   children,
 }) => {
-  const { isRunning, runLocks, disassembleLocks, stopLocks, locksResult } =
-    useLocks();
+  const {
+    isRunning,
+    runLocks,
+    disassembleLocks,
+    parseLocks,
+    stopLocks,
+    locksResult,
+  } = useLocks();
   const value = Array.isArray(code) ? code.join('\n') : code;
 
   return (
@@ -50,6 +57,12 @@ const DocCard: React.FC<DocCardProps> = ({
           <LocksRunButton
             isRunning={isRunning}
             onClick={isRunning ? stopLocks : () => runLocks(value)}
+          />
+
+          <LocksParseButton
+            className="ms-2"
+            isRunning={isRunning}
+            onClick={isRunning ? stopLocks : () => parseLocks(value)}
           />
 
           <LocksDisassembleButton

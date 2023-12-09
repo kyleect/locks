@@ -914,6 +914,11 @@ const Docs: React.FC = () => (
             <pre>$ cat res/benchmarks/fib.locks | locks exec</pre>
           </div>
           <div className="shadow rounded p-3">
+            <h4>Parse File</h4>
+            Visualize AST from file
+            <pre>$ locks parse ./res/examples/number/fizzbuzz.locks</pre>
+          </div>
+          <div className="shadow rounded p-3">
             <h4>Disassemble File</h4>
             Visualize compiled byte code from file
             <pre>$ locks disassemble ./res/examples/number/fizzbuzz.locks</pre>
