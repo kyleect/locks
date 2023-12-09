@@ -142,6 +142,41 @@ export function useLocks() {
     setWorker(webWorker);
   };
 
+  const parseLocks = (code: string) => {
+    stopWorker();
+    setLocksResult(null);
+
+    const webWorker = new Worker(new URL('../worker.ts', import.meta.url), {
+      type: 'module',
+    });
+
+    webWorker.onmessage = (event) => {
+      const msg: LoxOutMessage = JSON.parse(
+        event.data as string,
+      ) as LoxOutMessage;
+
+      switch (msg.type) {
+        case 'Output':
+          appendToLocksResult(msg.text);
+          break;
+        case 'Diagnostics':
+          setDiagnostics(msg.diagnostics);
+          break;
+        case 'ExitSuccess':
+          stopWorker();
+          break;
+        case 'ExitFailure':
+          stopWorker();
+          break;
+        default:
+          break;
+      }
+    };
+
+    webWorker.postMessage({ code, action: 'parse' });
+    setWorker(webWorker);
+  };
+
   const diagnoseLocks = (code: string) => {
     stopWorker();
     setLocksResult(null);
@@ -188,6 +223,7 @@ export function useLocks() {
     locksResult,
     runLocks,
     disassembleLocks,
+    parseLocks,
     stopLocks,
     diagnostics,
     diagnoseLocks,

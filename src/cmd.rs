@@ -14,6 +14,7 @@ pub enum Cmd {
     Repl,
     Run { path: String },
     Exec { source: Option<String> },
+    Parse { path: String },
     Disassemble { path: String },
 }
 
@@ -95,6 +96,25 @@ impl Cmd {
                         println!("{}", disassembler.disassemble(None));
                     }
                 }
+
+                Ok(())
+            },
+
+            Cmd::Parse { path } => {
+                let source = fs::read_to_string(path)
+                    .with_context(|| format!("could not read file: {path}"))?;
+
+                let program = match crate::syntax::parse(&source, source.len()) {
+                    Ok(program) => program,
+                    Err(error) => {
+                        panic!("There was a parsing error! {:?}", error);
+                    }
+                };
+
+                let result = format!("{:#?}", program);
+                let result = result.replace("    ", "  ");
+
+                println!("{}", result);
 
                 Ok(())
             }

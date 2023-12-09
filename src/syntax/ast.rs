@@ -1,4 +1,4 @@
-use std::fmt::{self, Display, Formatter};
+use std::fmt::{self, Debug, Display, Formatter};
 
 pub use crate::types::Spanned;
 
@@ -10,7 +10,7 @@ pub struct Program {
     pub stmts: Vec<StmtS>,
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, PartialEq)]
 pub enum Stmt {
     Block(StmtBlock),
     Class(StmtClass),
@@ -23,6 +23,24 @@ pub enum Stmt {
     Assign(StmtAssign),
     While(Box<StmtWhile>),
     Error,
+}
+
+impl Debug for Stmt {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Block(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::Class(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::Expr(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::For(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::Fn(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::If(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::Print(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::Return(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::Assign(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::While(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::Error => write!(f, "Error"),
+        }
+    }
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -88,7 +106,7 @@ pub struct StmtWhile {
     pub body: StmtS,
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, PartialEq)]
 pub enum Expr {
     Assign(Box<ExprAssign>),
     Call(Box<ExprCall>),
@@ -99,6 +117,22 @@ pub enum Expr {
     Set(Box<ExprSet>),
     Super(ExprSuper),
     Identifier(ExprIdentifier),
+}
+
+impl Debug for Expr {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Assign(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::Call(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::Get(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::Infix(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::Literal(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::Prefix(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::Set(arg0) =>f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::Super(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::Identifier(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+        }
+    }
 }
 
 #[derive(Clone, Debug, PartialEq)]

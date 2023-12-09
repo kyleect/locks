@@ -1,20 +1,20 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import React from 'react';
 
-interface LocksDisassembleButtonProp {
+interface LocksParseButtonProps {
   isRunning: boolean;
   onClick: () => void;
   className?: string;
 }
 
-const LocksDisassembleButton: React.FC<LocksDisassembleButtonProp> = ({
+const LocksParseButton: React.FC<LocksParseButtonProps> = ({
   isRunning,
   onClick,
   className,
 }) => {
   let runColor = 'btn-secondary';
-  let runIcon = 'me-1 bi bi-file-earmark-binary-fill';
-  let runText = 'Disassemble';
+  let runIcon = 'me-1 bi bi-file-earmark-code-fill';
+  let runText = 'Parse';
 
   if (isRunning) {
     runColor = 'btn-danger';
@@ -36,8 +36,8 @@ const LocksDisassembleButton: React.FC<LocksDisassembleButtonProp> = ({
   );
 };
 
-LocksDisassembleButton.defaultProps = {
+LocksParseButton.defaultProps = {
   className: '',
 };
 
-export { LocksDisassembleButtonProp, LocksDisassembleButton };
+export { LocksParseButtonProps, LocksParseButton };

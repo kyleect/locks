@@ -77,6 +77,14 @@ export function activate(context: ExtensionContext) {
     terminal.show();
   };
 
+  const parseFileHandler = () => {
+    const terminal = window.createTerminal(`locks parse`);
+    terminal.sendText(
+      `${locksBinPath} parse ${window.activeTextEditor.document.uri.path}`
+    );
+    terminal.show();
+  };
+
   context.subscriptions.push(
     commands.registerCommand(
       "locks.startLanguageServer",
@@ -90,6 +98,10 @@ export function activate(context: ExtensionContext) {
     commands.registerCommand(
       "locks.disassembleCurrentFile",
       disassembleFileHandler
+    ),
+    commands.registerCommand(
+      "locks.parseCurrentFile",
+      parseFileHandler
     ),
     commands.registerCommand("locks.openDocs", () => {
       env.openExternal(Uri.parse("https://kyleect.github.io/locks/#/docs"));
