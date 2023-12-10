@@ -32,6 +32,10 @@
           "match": "\\b(if|else|while|for|return|and|or)\\b"
         },
         {
+          "name": "storage.modifier.locks",
+          "match": "\\b(private|public)\\b"
+        },
+        {
           "name": "constant.language.null.locks",
           "match": "\\b(nil)\\b"
         },

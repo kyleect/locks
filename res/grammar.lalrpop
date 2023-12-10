@@ -24,10 +24,15 @@ Decl = {
 
 DeclClass: ast::Stmt =
     "class" <name:identifier> <super_:("extends" <Spanned<ExprIdentifier>>)?> "{"
-        <fields:("let" <Spanned<StmtAssign>>)*>
-        <methods:("fn" <Spanned<Function>>)*>
+        <fields:(<AccessModifier?> "let" <Spanned<StmtAssign>>)*>
+        <methods:(<AccessModifier?> "fn" <Spanned<Function>>)*>
     "}" =>
-        ast::Stmt::Class(ast::StmtClass { <> });
+        ast::Stmt::Class(ast::StmtClass { 
+            name,
+            super_,
+            fields,
+            methods
+         });
 
 DeclFn: ast::Stmt = "fn" <function:Function> => ast::Stmt::Fn(<>);
 
@@ -217,6 +222,11 @@ ExprThis: ast::Expr = "this" => ast::Expr::Identifier(ast::ExprIdentifier {
 // Utilities
 Spanned<T>: ast::Spanned<T> = <l:@L> <t:T> <r:@R> => (t, l..r);
 
+AccessModifier: ast::AccessModifier = {
+    "public" => ast::AccessModifier::Public,
+    "private" => ast::AccessModifier::Private,
+};
+
 Function: ast::StmtFn =
     <name:identifier> "(" <params:Params> ")" <body:StmtBlockInternal> =>
         ast::StmtFn { <> };
@@ -295,5 +305,7 @@ extern {
         "let" => lexer::Token::Let,
         "while" => lexer::Token::While,
         "extends" => lexer::Token::Extends,
+        "public" => lexer::Token::Public,
+        "private" => lexer::Token::Private,
     }
 }

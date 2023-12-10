@@ -44,6 +44,12 @@ impl Debug for Stmt {
 }
 
 #[derive(Clone, Debug, PartialEq)]
+pub enum AccessModifier {
+    Private,
+    Public,
+}
+
+#[derive(Clone, Debug, PartialEq)]
 pub struct StmtBlock {
     pub stmts: Vec<StmtS>,
 }
@@ -52,8 +58,8 @@ pub struct StmtBlock {
 pub struct StmtClass {
     pub name: String,
     pub super_: Option<ExprS>,
-    pub methods: Vec<Spanned<StmtFn>>,
-    pub fields: Vec<Spanned<StmtAssign>>,
+    pub methods: Vec<(Option<AccessModifier>, Spanned<StmtFn>)>,
+    pub fields: Vec<(Option<AccessModifier>, Spanned<StmtAssign>)>,
 }
 
 /// An expression statement evaluates an expression and discards the result.

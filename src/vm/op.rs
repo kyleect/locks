@@ -84,5 +84,8 @@ iota! {
     CLASS,
     INHERIT,
     METHOD,
-    FIELD
+    FIELD,
+    ACCESS,
+    PRIVATE,
+    PUBLIC
 }

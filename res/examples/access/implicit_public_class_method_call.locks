@@ -1,0 +1,9 @@
+class Foo {
+  fn printValue(value) {
+    print value;
+  }
+}
+
+let foo = Foo();
+
+print foo.printValue; // out: <bound method printValue>

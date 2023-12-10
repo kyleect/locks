@@ -1,0 +1,12 @@
+class Parent {
+  let value = 123;
+}
+
+
+class Child extends Parent {
+  private let value; // out: AccessError: Child.value can't be private since it's declared as public on the parent class
+}
+
+let child = Child();
+
+print child.value;

@@ -1,0 +1,16 @@
+class Parent {
+  private let value = "secret";
+}
+
+
+class Child extends Parent {
+  public let value;
+}
+
+let child = Child();
+
+print child.value; // out: nil
+
+child.value = 100;
+
+print child.value; // out: 100

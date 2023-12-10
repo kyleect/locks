@@ -25,6 +25,8 @@ pub enum Error {
     SyntaxError(SyntaxError),
     #[error("TypeError: {0}")]
     TypeError(TypeError),
+    #[error("AccessError: {0}")]
+    AccessError(AccessError),
 }
 
 impl AsDiagnostic for Error {
@@ -36,6 +38,7 @@ impl AsDiagnostic for Error {
             Error::OverflowError(e) => e.as_diagnostic(span),
             Error::SyntaxError(e) => e.as_diagnostic(span),
             Error::TypeError(e) => e.as_diagnostic(span),
+            Error::AccessError(e) => e.as_diagnostic(span),
         }
     }
 }
@@ -50,7 +53,15 @@ macro_rules! impl_from_error {
     )+};
 }
 
-impl_from_error!(AttributeError, IoError, NameError, OverflowError, SyntaxError, TypeError);
+impl_from_error!(
+    AttributeError,
+    IoError,
+    NameError,
+    OverflowError,
+    SyntaxError,
+    TypeError,
+    AccessError
+);
 
 #[derive(Debug, Error, Eq, PartialEq)]
 pub enum AttributeError {
@@ -201,6 +212,27 @@ impl AsDiagnostic for TypeError {
     fn as_diagnostic(&self, span: &Span) -> Diagnostic<()> {
         Diagnostic::error()
             .with_code("TypeError")
+            .with_message(self.to_string())
+            .with_labels(vec![Label::primary((), span.clone())])
+    }
+}
+
+#[derive(Debug, Error, Eq, PartialEq)]
+pub enum AccessError {
+    #[error("{type_}.{name} is a private field")]
+    AccessingPrivateField { name: String, type_: String },
+    #[error("{type_}.{name} is a private method")]
+    AccessingPrivateMethod { name: String, type_: String },
+    #[error("{type_}.{name} can't be private since it's declared as public on the parent class")]
+    NoPublicToPrivateInChildClasses { name: String, type_: String },
+    #[error("Class ({type_}) constructors can not be private")]
+    NoPrivateConstructors { type_: String },
+}
+
+impl AsDiagnostic for AccessError {
+    fn as_diagnostic(&self, span: &Span) -> Diagnostic<()> {
+        Diagnostic::error()
+            .with_code("AccessError")
             .with_message(self.to_string())
             .with_labels(vec![Label::primary((), span.clone())])
     }

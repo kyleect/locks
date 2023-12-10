@@ -1,0 +1,7 @@
+class Foo {
+  private let value = "secret";
+}
+
+let foo = Foo();
+
+print foo.value; // out: AccessError: Foo.value is a private field

@@ -1,0 +1,16 @@
+class Box {
+  private let value;
+
+  fn init(value) {
+    this.value = value;
+  }
+  
+  
+  fn get(n) {
+    return this.value;
+  }
+}
+
+let box = Box(123);
+
+print box.value; // out: secret
