@@ -449,7 +449,17 @@ impl Compiler {
             Expr::Get(get) => {
                 self.compile_expr(&get.object, gc)?;
 
+                // TODO: Check access modifier logic
+
+                let ops = unsafe { &mut (*self.ctx.function).chunk.ops };
+                match ops.len().checked_sub(2) {
+                    Some(idx) if ops[idx] == op::GET_PROPERTY => ops[idx] = op::INVOKE,
+                    Some(idx) if ops[idx] == op::GET_SUPER => ops[idx] = op::SUPER_INVOKE,
+                    Some(_) | None => self.emit_u8(op::CALL, span),
+                }
+
                 let name = gc.alloc(&get.name).into();
+
                 self.emit_u8(op::GET_PROPERTY, span);
                 self.emit_constant(name, span)?;
             }

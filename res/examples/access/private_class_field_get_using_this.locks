@@ -1,11 +1,16 @@
-class Foo {
-  private let value = 100;
+class Box {
+  private let value;
+
+  fn init(value) {
+    this.value = value;
+  }
   
-  fn sumValue(n) {
-    return this.value + n;
+  
+  fn get(n) {
+    return this.value;
   }
 }
 
-let foo = Foo();
+let box = Box(123);
 
-print foo.sumValue(10); // out: 110
+print box.value; // out: secret

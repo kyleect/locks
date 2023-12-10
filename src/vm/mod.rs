@@ -340,69 +340,22 @@ impl VM {
 
         let class = unsafe { (*instance).class };
         let class_name = unsafe { (*class).name };
-        let class_fields_access = unsafe { &(*class).fields_access };
 
         // Check instance for field by property name
         match unsafe { (*instance).fields.get(&property_name) } {
             Some(&instance_field_value) => {
-                // Get the field's access modifier from the instance's class
-                let access_modifier = match class_fields_access.get(&property_name) {
-                    // All class fields should be present in the fields_access map
-                    // Use that value if present
-                    Some(access) => access,
-                    // Default to private if the field by name isn't found in fields_access
-                    // This should not happen though
-                    // TODO: Return an error instead
-                    None => &AccessModifier::Private,
-                };
-
-                // Check field's access modifier
-                match access_modifier {
-                    AccessModifier::Public => {
-                        self.pop();
-                        self.push(instance_field_value);
-                    }
-                    AccessModifier::Private => {
-                        return self.err(AccessError::AccessingPrivateField {
-                            type_: unsafe { (*class_name).value.to_string() },
-                            name: unsafe { (*property_name).value.to_string() },
-                        })
-                    }
-                };
+                self.pop();
+                self.push(instance_field_value);
             }
             None => {
                 let class_methods = unsafe { &(*class).methods };
-                let class_methods_access = unsafe { &(*class).methods_access };
 
                 match class_methods.get(&property_name) {
                     Some(&method) => {
-                        // Get the method's access modifier from the instance's class
-                        let access_modifier = match class_methods_access.get(&property_name) {
-                            // All class methods should be present in the methods_access map
-                            // Use that value if present
-                            Some(access) => access,
-                            // Default to private if the method by name isn't found in methods_access
-                            // This should not happen though
-                            // TODO: Return an error instead
-                            None => &AccessModifier::Private,
-                        };
+                        let bound_method = self.alloc(ObjectBoundMethod::new(instance, method));
 
-                        // Check method's access modifier
-                        match access_modifier {
-                            AccessModifier::Public => {
-                                let bound_method =
-                                    self.alloc(ObjectBoundMethod::new(instance, method));
-
-                                self.pop();
-                                self.push(bound_method.into());
-                            }
-                            AccessModifier::Private => {
-                                return self.err(AccessError::AccessingPrivateMethod {
-                                    type_: unsafe { (*class_name).value.to_string() },
-                                    name: unsafe { (*property_name).value.to_string() },
-                                })
-                            }
-                        };
+                        self.pop();
+                        self.push(bound_method.into());
                     }
                     None => {
                         return self.err(AttributeError::NoSuchAttribute {
