@@ -134,8 +134,13 @@ const Docs: React.FC = () => (
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="#inheritance ">
-              Inheritance
+            <Link className="nav-link" to="#classes-inheritance">
+              Class Inheritance
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#classes-index-access">
+              Class Field/Method Index Access
             </Link>
           </li>
         </ul>
@@ -413,8 +418,8 @@ const Docs: React.FC = () => (
           height="300px"
         />
         <DocCard
-          title="Inheritance"
-          anchor="inheritance"
+          title="Class Inheritance"
+          anchor="classes-inheritance"
           code={[
             'class Greeter {',
             '  let greeting;',
@@ -440,6 +445,29 @@ const Docs: React.FC = () => (
             'print greeter.greet("World"); // out: Hello World!!!',
           ]}
           height="400px"
+        />
+
+        <DocCard
+          title="Class Field/Method Index Access"
+          anchor="classes-index-access"
+          code={[
+            'class Box {',
+            '  let value;',
+            '',
+            '  fn init(value) {',
+            '    this["value"] = value;',
+            '  }',
+            '',
+            '  fn get() {',
+            '    return this["value"];',
+            '  }',
+            '}',
+            '',
+            'let box = Box(123);',
+            '',
+            'print box.get(); // out: 123',
+          ]}
+          height="275px"
         />
 
         <div className="shadow rounded p-3 vstack gap-3">

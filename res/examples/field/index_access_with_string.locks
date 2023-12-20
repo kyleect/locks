@@ -1,0 +1,11 @@
+class Record {
+  let key = "value";
+}
+
+let record = Record();
+
+print record["key"]; // out: value
+
+record["key"] = "new value";
+
+print record["key"]; // out: new value

@@ -1,0 +1,6 @@
+class Object {
+}
+
+let obj = Object();
+
+print obj["key"]; // out: AttributeError: "Object" object has no attribute "key"

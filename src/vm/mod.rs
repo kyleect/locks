@@ -788,10 +788,6 @@ impl VM {
     /// Create a new [`ObjectInstance`] of an [`ObjectClass`].
     ///
     /// Calls the `init` method if it exists on the [`ObjectClass`].
-    ///
-    /// ```
-    /// let instance = Class();
-    /// ```
     fn call_class(&mut self, class: *mut ObjectClass, arg_count: usize) -> Result<()> {
         let instance = self.alloc(ObjectInstance::new(class));
 

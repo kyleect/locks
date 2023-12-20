@@ -121,6 +121,10 @@ ExprAssign = {
         })),
     <object:Spanned<ExprCall>> "." <name:identifier> "=" <value:ExprS> =>
         ast::Expr::Set(Box::new(ast::ExprSet { <> })),
+    <object:Spanned<ExprCall>> "[" <name:identifier> "]" "=" <value:ExprS> =>
+        ast::Expr::Set(Box::new(ast::ExprSet { <> })),
+    <object:Spanned<ExprCall>> "[" <name:string> "]" "=" <value:ExprS> =>
+        ast::Expr::Set(Box::new(ast::ExprSet { <> })),
     ExprLogicOr,
 }
 
@@ -172,7 +176,27 @@ ExprCall: ast::Expr = {
         ast::Expr::Call(Box::new(ast::ExprCall { callee, args })),
     <object:Spanned<ExprCall>> "." <name:identifier> =>
         ast::Expr::Get(Box::new(ast::ExprGet { <> })),
+    <object:Spanned<ExprCall>> "[" <name:string> "]" =>
+        ast::Expr::Get(Box::new(ast::ExprGet { <> })),
+    <object:Spanned<ExprCall>> "[" <name:identifier> "]" =>
+        ast::Expr::Get(Box::new(ast::ExprGet { <> })),
     "super" "." <name:identifier> =>
+        ast::Expr::Super(ast::ExprSuper {
+            super_: ast::Identifier {
+                name: "super".to_string(),
+                depth: None,
+            },
+            name,
+        }),
+    "super" "[" <name:string> "]" =>
+        ast::Expr::Super(ast::ExprSuper {
+            super_: ast::Identifier {
+                name: "super".to_string(),
+                depth: None,
+            },
+            name,
+        }),
+    "super" "[" <name:identifier> "]" =>
         ast::Expr::Super(ast::ExprSuper {
             super_: ast::Identifier {
                 name: "super".to_string(),
@@ -253,6 +277,8 @@ extern {
         ")" => lexer::Token::RtParen,
         "{" => lexer::Token::LtBrace,
         "}" => lexer::Token::RtBrace,
+        "[" => lexer::Token::LtBracket,
+        "]" => lexer::Token::RtBracket,
         "," => lexer::Token::Comma,
         "." => lexer::Token::Dot,
         "-" => lexer::Token::Minus,

@@ -1,0 +1,23 @@
+class Object {
+  let box;
+
+  fn init(value) {
+    this.box = Box(value);
+  }
+}
+
+class Box {
+  let value;
+
+  fn init(value) {
+    this.value = value;
+  }
+
+  fn get() {
+    return this.value;
+  }
+}
+
+let obj = Object(123);
+
+print obj["box"]["get"](); // out: 123
