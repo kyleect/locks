@@ -1,0 +1,15 @@
+class Box {
+  let value;
+
+  fn init(value) {
+    this["value"] = value;
+  }
+
+  fn get() {
+    return this["value"];
+  }
+}
+
+let box = Box(123);
+
+print box.get(); // out: 123

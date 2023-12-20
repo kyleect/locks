@@ -1,0 +1,15 @@
+class Box {
+  let value;
+
+  fn init(value) {
+    this.value = value;
+  }
+
+  fn get() {
+    return this.value;
+  }
+}
+
+let box = Box(123);
+
+box["get"] = 123; // out: TypeError: methods on instances can not be reassigned (e.g. instance<Box>.get = "...")

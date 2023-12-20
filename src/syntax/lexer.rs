@@ -70,6 +70,10 @@ pub enum Token {
     LtBrace,
     #[token("}")]
     RtBrace,
+    #[token("[")]
+    LtBracket,
+    #[token("]")]
+    RtBracket,
     #[token(",")]
     Comma,
     #[token(".")]

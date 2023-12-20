@@ -1,0 +1,6 @@
+class Object {
+}
+
+let obj = Object();
+
+obj["key"] = "new value"; // out: AttributeError: "Object" object has no attribute "key"

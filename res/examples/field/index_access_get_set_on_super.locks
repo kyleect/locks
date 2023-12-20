@@ -1,0 +1,25 @@
+class Parent {
+  let value;
+
+  fn init(value) {
+    this["value"] = value;
+  }
+
+  fn get() {
+    return this["value"];
+  }
+}
+
+class Child extends Parent {
+  fn init(value) {
+    super["init"](value);
+  }
+
+  fn get() {
+    return this.value;
+  }
+}
+
+let child = Child(123);
+
+print child.get(); // out: 123
