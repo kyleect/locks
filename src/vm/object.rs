@@ -21,6 +21,7 @@ pub union Object {
     pub instance: *mut ObjectInstance,
     pub native: *mut ObjectNative,
     pub string: *mut ObjectString,
+    pub list: *mut ObjectList,
     pub upvalue: *mut ObjectUpvalue,
 }
 
@@ -69,6 +70,11 @@ impl Object {
                     let _ = Box::from_raw(self.string);
                 };
             }
+            ObjectType::List => {
+                unsafe {
+                    let _ = Box::from_raw(self.list);
+                };
+            }
             ObjectType::Upvalue => {
                 unsafe {
                     let _ = Box::from_raw(self.upvalue);
@@ -89,7 +95,8 @@ impl Display for Object {
         match self.type_() {
             ObjectType::BoundMethod => {
                 write!(f, "<bound method {}>", unsafe {
-                    (*(*(*(*self.bound_method).closure).function).name).value
+                    let value = (*(*(*(*self.bound_method).closure).function).name).value;
+                    value
                 })
             }
             ObjectType::Class => {
@@ -112,6 +119,11 @@ impl Display for Object {
             }
             ObjectType::Native => write!(f, "<native {}>", unsafe { (*self.native).native }),
             ObjectType::String => write!(f, "{}", unsafe { (*self.string).value }),
+            ObjectType::List => {
+                let length = unsafe { (*self.list).values.len() };
+                let v = format!("<list length={}>", length);
+                write!(f, "{}", v)
+            }
             ObjectType::Upvalue => write!(f, "<upvalue>"),
         }
     }
@@ -135,6 +147,7 @@ impl_from_object!(function, ObjectFunction);
 impl_from_object!(instance, ObjectInstance);
 impl_from_object!(native, ObjectNative);
 impl_from_object!(string, ObjectString);
+impl_from_object!(list, ObjectList);
 impl_from_object!(upvalue, ObjectUpvalue);
 
 impl PartialEq for Object {
@@ -160,6 +173,7 @@ pub enum ObjectType {
     Native,
     Instance,
     String,
+    List,
     Upvalue,
 }
 
@@ -173,6 +187,7 @@ impl Display for ObjectType {
             ObjectType::Instance => write!(f, "instance"),
             ObjectType::Native => write!(f, "native"),
             ObjectType::String => write!(f, "string"),
+            ObjectType::List => write!(f, "list"),
             ObjectType::Upvalue => write!(f, "upvalue"),
         }
     }
@@ -296,6 +311,20 @@ impl ObjectString {
     pub fn new(value: &'static str) -> Self {
         let common = ObjectCommon { type_: ObjectType::String, is_marked: false };
         Self { common, value }
+    }
+}
+
+#[derive(Debug)]
+#[repr(C)]
+pub struct ObjectList {
+    pub common: ObjectCommon,
+    pub values: Vec<Value>,
+}
+
+impl ObjectList {
+    pub fn new(values: Vec<Value>) -> Self {
+        let common = ObjectCommon { type_: ObjectType::List, is_marked: false };
+        Self { common, values }
     }
 }
 

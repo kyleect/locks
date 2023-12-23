@@ -1,0 +1,5 @@
+class Class {
+  
+}
+
+print Class[0]; // out: TypeError: "class" is not indexable

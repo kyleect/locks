@@ -126,6 +126,9 @@ impl<'a> Disassembler<'a> {
             op::RETURN => self.disassemble_op_simple("OP_RETURN"),
             op::CLASS => self.disassemble_op_constant("OP_CLASS", op_idx),
             op::INHERIT => self.disassemble_op_simple("OP_INHERIT"),
+            op::CREATE_LIST => self.disassemble_op_byte("OP_CREATE_LIST", op_idx),
+            op::GET_INDEX => self.disassemble_op_simple("OP_GET_INDEX"),
+            op::SET_INDEX => self.disassemble_op_simple("OP_SET_INDEX"),
             op::METHOD => self.disassemble_op_constant("OP_METHOD", op_idx),
             op::FIELD => self.disassemble_op_constant("OP_FIELD", op_idx),
             byte => self.disassemble_op_simple(&format!("OP_UNKNOWN({byte:#X})")),
@@ -206,6 +209,42 @@ mod tests {
     }}
 
     assert_disassembly! {
+        list_get_index: (
+            "[1, 2][0];",
+            "\
+            0000 OP_CONSTANT         0 == '1'\n\
+            0002 OP_CONSTANT         1 == '2'\n\
+            0004 OP_CREATE_LIST      2\n\
+            0006 OP_CONSTANT         2 == '0'\n\
+            0008 OP_GET_INDEX\n\
+            0009 OP_POP\n\
+            0010 OP_NIL\n\
+            0011 OP_RETURN\n"
+        ),
+        list_set_index: (
+            "[1, 2][0] = 2;",
+            "\
+            0000 OP_CONSTANT         0 == '1'\n\
+            0002 OP_CONSTANT         1 == '2'\n\
+            0004 OP_CREATE_LIST      2\n\
+            0006 OP_CONSTANT         2 == '0'\n\
+            0008 OP_CONSTANT         1 == '2'\n\
+            0010 OP_SET_INDEX\n\
+            0011 OP_POP\n\
+            0012 OP_NIL\n\
+            0013 OP_RETURN\n"
+        ),
+        list: (
+            "[1, 2, 5];",
+            "\
+            0000 OP_CONSTANT         0 == '1'\n\
+            0002 OP_CONSTANT         1 == '2'\n\
+            0004 OP_CONSTANT         2 == '5'\n\
+            0006 OP_CREATE_LIST      3\n\
+            0008 OP_POP\n\
+            0009 OP_NIL\n\
+            0010 OP_RETURN\n"
+        ),
         assignment_string: (
             "let a = \"Hello\";",
             "\

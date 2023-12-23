@@ -1,0 +1,1 @@
+print nil[0]; // out: TypeError: "nil" is not indexable

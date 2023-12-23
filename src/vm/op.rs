@@ -84,5 +84,8 @@ iota! {
     CLASS,
     INHERIT,
     METHOD,
-    FIELD
+    FIELD,
+    CREATE_LIST,
+    GET_INDEX,
+    SET_INDEX
 }

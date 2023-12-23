@@ -1,0 +1,10 @@
+let a = ["a", "b"];
+
+print a[1]; // out: b
+
+let list = [100, 200, 300];
+
+print list[0]; // out: 100
+print list[1]; // out: 200
+print list[2]; // out: 300
+print list[3]; // out: IndexError: the length is 3 but the index is 3 (out of bounds)

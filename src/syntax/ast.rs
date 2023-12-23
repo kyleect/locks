@@ -94,6 +94,7 @@ pub struct StmtReturn {
     pub value: Option<ExprS>,
 }
 
+/// Statement that sets `var.name` to `value`
 #[derive(Clone, Debug, PartialEq)]
 pub struct StmtAssign {
     pub identifier: Identifier,
@@ -111,6 +112,8 @@ pub enum Expr {
     Assign(Box<ExprAssign>),
     Call(Box<ExprCall>),
     Get(Box<ExprGet>),
+    GetIndex(Box<ExprGetIndex>),
+    SetIndex(Box<ExprSetIndex>),
     Infix(Box<ExprInfix>),
     Literal(ExprLiteral),
     Prefix(Box<ExprPrefix>),
@@ -131,6 +134,8 @@ impl Debug for Expr {
             Self::Set(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
             Self::Super(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
             Self::Identifier(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::GetIndex(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::SetIndex(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
         }
     }
 }
@@ -138,6 +143,19 @@ impl Debug for Expr {
 #[derive(Clone, Debug, PartialEq)]
 pub struct ExprAssign {
     pub identifier: Identifier,
+    pub value: ExprS,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct ExprGetIndex {
+    pub target: ExprS,
+    pub index: f64,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct ExprSetIndex {
+    pub target: ExprS,
+    pub index: f64,
     pub value: ExprS,
 }
 
@@ -159,6 +177,7 @@ pub enum ExprLiteral {
     Nil,
     Number(f64),
     String(String),
+    List(Vec<ExprS>),
 }
 
 #[derive(Clone, Debug, PartialEq)]

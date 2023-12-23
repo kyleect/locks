@@ -143,6 +143,11 @@ const Docs: React.FC = () => (
               Class Field/Method Index Access
             </Link>
           </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#lists ">
+              Lists
+            </Link>
+          </li>
         </ul>
         <DocCard
           title="Example"
@@ -469,6 +474,21 @@ const Docs: React.FC = () => (
           ]}
           height="275px"
         />
+
+        <DocCard
+          title="Lists"
+          anchor="lists"
+          code={[
+            'let list = [10, 20, 30];',
+            'let last = list[2];',
+            'print last; // out: 30',
+            'list[1] = list[1] * 2;',
+            'print list[1]; // out: 40',
+          ]}
+          height="100px"
+        >
+          Lists can store a dynamic number of mixed types in a collection.
+        </DocCard>
 
         <div className="shadow rounded p-3 vstack gap-3">
           <h2 id="errors">

@@ -1,0 +1,3 @@
+let list = [10, 20, [30]];
+let last = list[2][0];
+print last; // out: 30
