@@ -325,6 +325,7 @@ With the syntax and implementation changes so far the Locks language has divered
   - Class method declarations require `fn` like functions
   - Setting undeclared fields on classes will generate an error
   - Class inheritence: `class Child : Parent {}` -> `class Child extends Parent {}`
+  - Lists: `[1, 2, 3]`, `arr[0]`, `arr[0] = 123`
 - [Dockerize](Dockerfile) the Locks binary executable
 - Implemented a [VS Code Extension](vsc)
   - Integrates the existing [language server](src/lsp.rs) to display parsing/compiler errors
