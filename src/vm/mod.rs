@@ -933,34 +933,7 @@ impl VM {
                     });
                 }
                 util::now().into()
-            } // Native::Length => {
-              //     if arg_count != 1 {
-              //         return self.err(TypeError::ArityMismatch {
-              //             name: "len".to_string(),
-              //             exp_args: 1,
-              //             got_args: arg_count,
-              //         });
-              //     }
-
-              //     let arg = self.pop();
-
-              //     // let obj = arg.as_object();
-
-              //     // let length = match obj.type_() {
-              //     //     ObjectType::BoundMethod => Value::NIL,
-              //     //     ObjectType::Class => Value::NIL,
-              //     //     ObjectType::Closure => Value::NIL,
-              //     //     ObjectType::Function => Value::NIL,
-              //     //     ObjectType::Native => Value::NIL,
-              //     //     ObjectType::Instance => Value::NIL,
-              //     //     ObjectType::String => Value::NIL,
-              //     //     ObjectType::List => Value::from(0.0),
-              //     //     ObjectType::Upvalue => Value::from(0.0),
-              //     // };
-
-              //     // length
-              //     arg
-              // }
+            }
         };
 
         self.push(value);
