@@ -120,8 +120,30 @@ impl Display for Object {
             ObjectType::Native => write!(f, "<native {}>", unsafe { (*self.native).native }),
             ObjectType::String => write!(f, "{}", unsafe { (*self.string).value }),
             ObjectType::List => {
-                let length = unsafe { (*self.list).values.len() };
-                let v = format!("<list length={}>", length);
+                let v = format!(
+                    "[{}]",
+                    unsafe { (*self.list).values.clone() }
+                        .into_iter()
+                        .map(|x| {
+                            if x.is_object() {
+                                let f = match x.as_object().type_() {
+                                    ObjectType::String => {
+                                        format!("{:?}", unsafe { (*x.as_object().string).value })
+                                    }
+                                    _ => format!("{:?}", x),
+                                };
+
+                                f.trim().to_string()
+                            } else {
+                                let f = format!("{:?}", x);
+
+                                f.trim().to_string()
+                            }
+                        })
+                        .map(|x| x)
+                        .collect::<Vec<_>>()
+                        .join(", ")
+                );
                 write!(f, "{}", v)
             }
             ObjectType::Upvalue => write!(f, "<upvalue>"),
