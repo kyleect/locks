@@ -208,6 +208,8 @@ pub enum TypeError {
         "methods on instances can not be reassigned (e.g. instance<{type_}>.{name} = \"...\")"
     )]
     InvalidMethodAssignment { name: String, type_: String },
+    #[error("{type_:?} object has no length")]
+    NoLength { type_: String },
 }
 
 impl AsDiagnostic for TypeError {

@@ -934,6 +934,32 @@ impl VM {
                 }
                 util::now().into()
             }
+            Native::Length => {
+                if arg_count != 1 {
+                    return self.err(TypeError::ArityMismatch {
+                        name: "len".to_string(),
+                        exp_args: 1,
+                        got_args: arg_count,
+                    });
+                }
+
+                let value = self.pop();
+
+                if !value.is_object() {
+                    return self.err(TypeError::NoLength { type_: value.to_string() });
+                }
+
+                let obj = value.as_object();
+
+                if obj.type_() != ObjectType::List {
+                    return self.err(TypeError::NoLength { type_: obj.type_().to_string() });
+                }
+
+                let list = unsafe { (obj).list };
+                // let length = unsafe { (*list).values.len() };
+
+                Value::from(0f64)
+            }
         };
 
         self.push(value);
@@ -1064,9 +1090,9 @@ impl Default for VM {
         let clock_native = Value::from(gc.alloc(ObjectNative::new(Native::Clock)));
         globals.insert(clock_string, clock_native);
 
-        // let len_string = gc.alloc("len");
-        // let len_native = Value::from(gc.alloc(ObjectNative::new(Native::Length)));
-        // globals.insert(len_string, len_native);
+        let len_string = gc.alloc("len");
+        let len_native = Value::from(gc.alloc(ObjectNative::new(Native::Length)));
+        globals.insert(len_string, len_native);
 
         let init_string = gc.alloc("init");
 
