@@ -10,8 +10,9 @@ mod value;
 
 use std::hash::BuildHasherDefault;
 use std::io::Write;
-use std::{mem, ptr};
+use std::{fs, mem, ptr};
 
+use anyhow::Context;
 use arrayvec::ArrayVec;
 pub use compiler::Compiler;
 pub use disassembler::Disassembler;
@@ -35,6 +36,8 @@ const GC_HEAP_GROW_FACTOR: usize = 2;
 const FRAMES_MAX: usize = 64;
 const STACK_MAX: usize = FRAMES_MAX * STACK_MAX_PER_FRAME;
 const STACK_MAX_PER_FRAME: usize = u8::MAX as usize + 1;
+
+const PRELOADED_LOCKS_LIBS: &'static [&'static str] = &["res/lib/locks.locks"];
 
 #[derive(Debug)]
 pub struct VM {
@@ -69,12 +72,43 @@ pub struct VM {
 }
 
 impl VM {
+    pub fn new() -> VM {
+        let vm = VM::default();
+
+        vm
+    }
+
     pub fn run(&mut self, source: &str, stdout: &mut impl Write) -> Result<(), Vec<ErrorS>> {
+        let mut errors: Vec<ErrorS> = vec![];
+
+        for &path in PRELOADED_LOCKS_LIBS.into_iter() {
+            let source =
+                fs::read_to_string(&path).with_context(|| format!("could not read file: {path}"));
+
+            if let Ok(source) = source {
+                if let Err(mut errs) = self.load(&source, stdout) {
+                    errors.append(&mut errs);
+                }
+            }
+        }
+
+        if let Err(mut errs) = self.load(&source, stdout) {
+            errors.append(&mut errs);
+        }
+
+        if errors.len() > 0 {
+            return Err(errors);
+        }
+
+        Ok(())
+    }
+
+    fn load(&mut self, source: &str, stdout: &mut impl Write) -> Result<(), Vec<ErrorS>> {
         // This will change with each call to `run`
         let offset = self.source.len();
 
         // Add current source to self.source
-        // This helps us keep track of what the offset should be on future calls to `run`
+        // This helps us keep track of what the offset should be on future calls to `load`
         self.source.reserve(source.len() + 1);
         self.source.push_str(source);
         self.source.push('\n');
