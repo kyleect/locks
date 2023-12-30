@@ -35,8 +35,8 @@ impl Cmd {
             Cmd::Run { path } => {
                 let source = fs::read_to_string(path)
                     .with_context(|| format!("could not read file: {path}"))?;
-                let mut vm = VM::default();
                 let stdout = &mut io::stdout().lock();
+                let mut vm = VM::new();
                 if let Err(e) = vm.run(&source, stdout) {
                     report_err(&source, e);
                     bail!("program exited with errors");
@@ -46,8 +46,8 @@ impl Cmd {
 
             Cmd::Exec { source } => match source {
                 Some(source) => {
-                    let mut vm = VM::default();
                     let stdout = &mut io::stdout().lock();
+                    let mut vm = VM::new();
 
                     if let Err(e) = vm.run(source, stdout) {
                         report_err(source, e);
@@ -61,8 +61,8 @@ impl Cmd {
                         .lines()
                         .fold("".to_string(), |acc, line| acc + &line.unwrap() + "\n");
 
-                    let mut vm = VM::default();
                     let stdout = &mut io::stdout().lock();
+                    let mut vm = VM::new();
 
                     if let Err(e) = vm.run(&source, stdout) {
                         report_err(&source, e);
