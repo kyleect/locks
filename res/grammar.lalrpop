@@ -10,11 +10,9 @@ grammar<'err>(
     errors: &'err mut Vec<ParseError<usize, lexer::Token, ErrorS>>
 );
 
-pub Program: ast::Program = <stmts:DeclS*> => ast::Program { <> };
+pub Program: ast::Program = <stmts:Spanned<Decl>*> => ast::Program { <> };
 
 // Declarations
-DeclS = Spanned<Decl>;
-
 Decl = {
     DeclClass,
     DeclFn,
@@ -22,12 +20,14 @@ Decl = {
     Stmt,
 }
 
-DeclClass: ast::Stmt =
+DeclClass: ast::Stmt = <class:StmtClass> => ast::Stmt::Class(<>);
+
+StmtClass: ast::StmtClass =
     "class" <name:identifier> <super_:("extends" <Spanned<ExprIdentifier>>)?> "{"
-        <fields:("let" <Spanned<StmtAssign>>)*>
+        <fields:(<Spanned<StmtAssign>>)*>
         <methods:(<Spanned<StmtFn>>)*>
     "}" =>
-        ast::Stmt::Class(ast::StmtClass { <> });
+        ast::StmtClass { <> };
 
 DeclFn: ast::Stmt = <function:StmtFn> => ast::Stmt::Fn(<>);
 
@@ -67,10 +67,10 @@ StmtFn: ast::StmtFn = {
     }
 }
 
-DeclLetVar: ast::Stmt = "let" <assign:StmtAssign> =>
+DeclLetVar: ast::Stmt = <assign:StmtAssign> =>
     ast::Stmt::Assign(<>);
 
-StmtAssign: ast::StmtAssign = <name:identifier> <value:("=" <ExprS>)?> ";" => ast::StmtAssign {
+StmtAssign: ast::StmtAssign = "let" <name:identifier> <value:("=" <ExprS>)?> ";" => ast::StmtAssign {
     identifier: ast::Identifier {
         name,
         depth: None
@@ -129,7 +129,7 @@ StmtSimple = {
 
 StmtBlock: ast::Stmt = StmtBlockInternal => ast::Stmt::Block(<>);
 
-StmtBlockInternal: ast::StmtBlock = "{" <stmts:DeclS*> "}" =>
+StmtBlockInternal: ast::StmtBlock = "{" <stmts:Spanned<Decl>*> "}" =>
     ast::StmtBlock { <> };
 
 StmtExpr: ast::Stmt = <value:ExprS> ";" =>
