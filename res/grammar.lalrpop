@@ -252,9 +252,41 @@ ExprThis: ast::Expr = "this" => ast::Expr::Identifier(ast::ExprIdentifier {
 // Expr + Span (start..end)
 Spanned<T>: ast::Spanned<T> = <l:@L> <t:T> <r:@R> => (t, l..r);
 
-Function: ast::StmtFn =
+Function: ast::StmtFn = {
+    // Function with a block statement as the body
     <name:identifier> "(" <params:Params> ")" <body:StmtBlockInternal> =>
-        ast::StmtFn { <> };
+        ast::StmtFn { <> },
+    // function with an expression statement as the body
+    <name:identifier> "(" <params:Params> ")" "=" <body:Spanned<StmtExpr>> => {
+        let (body_stmt, body_span) = body;
+
+        // Get the value from the expression statement body
+        let body_stmt_value = match body_stmt {
+            ast::Stmt::Expr(expr) => Some(expr.value),
+            // This shouldn't happen. A parsing error should occur first
+            _ => None
+        };
+
+        // Transform the function's body from an expression statement to
+        // a block statement that return's the expression's value
+        let body = ast::StmtBlock {
+            stmts: vec![
+                (
+                    ast::Stmt::Return(ast::StmtReturn { 
+                        value: body_stmt_value
+                    }),
+                    body_span
+                )
+            ]
+        };
+
+        ast::StmtFn {
+            name,
+            params,
+            body
+        }
+    }
+}
 
 // Comma separated list of string parameters a function/method takes
 Params: Vec<String> = {

@@ -1,0 +1,13 @@
+fn sum(a, b) = a + b;
+
+fn divide(a, b) = a / b;
+
+fn both(a, b) = identity(divide(sum(a, b), b));
+
+fn identity(value) = value;
+
+
+print sum(10, 10); // out: 20
+print sum(10, -3); // out: 7
+
+print both(10, 5); // out: 3
