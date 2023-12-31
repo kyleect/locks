@@ -3,6 +3,7 @@ use std::io::{self, BufRead, Write};
 
 use anyhow::{bail, Context, Result};
 use clap::Parser;
+use serde::{Deserialize, Serialize};
 
 use crate::error::ErrorS;
 use crate::vm::{Compiler, Disassembler, Gc, VM};
@@ -16,6 +17,7 @@ pub enum Cmd {
     Exec { source: Option<String> },
     Parse { path: String },
     Disassemble { path: String },
+    Bin { name: Option<String> },
 }
 
 impl Cmd {
@@ -31,6 +33,34 @@ impl Cmd {
             Cmd::Repl => crate::repl::run(),
             #[cfg(not(feature = "repl"))]
             Cmd::Repl => bail!("locks was not compiled with the repl feature"),
+
+            Cmd::Bin { name } => {
+                let package_file_string = fs::read_to_string("locks.json")
+                    .with_context(|| format!("could not read file: locks.json"))?;
+
+                let package_file: LocksPackageFile = serde_json::from_str(&package_file_string)?;
+
+                let bin_name = match name {
+                    Some(x) => x,
+                    None => "bin",
+                };
+
+                let bin_path = format!("bins/{}.locks", bin_name);
+
+                let source = fs::read_to_string(&bin_path)
+                    .with_context(|| format!("could not read file: {bin_path}"))?;
+
+                let mut vm = VM::default();
+
+                let stdout = &mut io::stdout().lock();
+
+                if let Err(e) = vm.run(&source, stdout) {
+                    report_err(&source, e);
+                    bail!("program exited with errors");
+                }
+
+                Ok(())
+            }
 
             Cmd::Run { path } => {
                 let source = fs::read_to_string(path)
@@ -128,4 +158,9 @@ fn report_err(source: &str, errors: Vec<ErrorS>) {
         crate::error::report_error(&mut buffer, source, &err);
     }
     io::stderr().write_all(buffer.as_slice()).expect("failed to write to stderr");
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct LocksPackageFile {
+    name: String,
 }
