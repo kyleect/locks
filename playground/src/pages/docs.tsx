@@ -338,7 +338,7 @@ const Docs: React.FC = () => (
           title="Single Expression Function Bodies"
           anchor="functions-single-expression-bodies"
           code={[
-            'fn sum (a, b) = a + b;',
+            'fn sum (a, b) => a + b;',
             '',
             'print sum(60, 40); // out: 100',
           ]}
@@ -509,7 +509,7 @@ const Docs: React.FC = () => (
             '    this.value = value;',
             '  }',
             '',
-            '  fn get() = this.value;',
+            '  fn get() => this.value;',
             '}',
             '',
             'let box = Box("Hello");',

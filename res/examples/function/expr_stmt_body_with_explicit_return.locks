@@ -1,1 +1,1 @@
-fn test() = return 123; // out: SyntaxError: unexpected "return"
+fn test() => return 123; // out: SyntaxError: unexpected "return"

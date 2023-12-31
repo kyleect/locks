@@ -1,10 +1,11 @@
-fn sum(a, b) = a + b;
+fn sum(a, b) => a + b;
 
-fn divide(a, b) = a / b;
+fn divide(a, b) => a / b;
 
-fn both(a, b) = identity(divide(sum(a, b), b));
+fn both(a, b) =>
+  identity(divide(sum(a, b), b));
 
-fn identity(value) = value;
+fn identity(value) => value;
 
 
 print sum(10, 10); // out: 20
