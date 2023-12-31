@@ -276,7 +276,7 @@ impl Compiler {
                 }
                 self.emit_u8(op::RETURN, span);
             }
-            Stmt::Assign(assign) => {
+            Stmt::Let(assign) => {
                 let name = &assign.identifier.name;
                 if self.is_global() {
                     let name = gc.alloc(name);
