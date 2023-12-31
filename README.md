@@ -320,7 +320,7 @@ With the syntax and implementation changes so far the Locks language has divered
   - Add `exec` command to execute Locks code from the arg or piped in from `stdin`
 - Language changes
   - Function/method declarations: `fun` -> `fn`
-  - Using expression statements as function bodies with implicit return: `fn sum(a, b) = a + b;`
+  - Using single expressions as function/method bodies with implicit return: `fn sum(a, b) = a + b;`
   - Variable declarations: `var` -> `let`
   - Class fields must now be declared using `let field;` or `let field = "defaultValue";`
   - Setting undeclared fields on classes will generate an error
