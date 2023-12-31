@@ -199,6 +199,12 @@ OpFactor: ast::OpInfix = {
     "%" => ast::OpInfix::Modulus,
 }
 
+ExprInfix<Lt, Op, Rt>: ast::Expr = {
+    <lt:Spanned<Lt>> <op:Op> <rt:Spanned<Rt>> =>
+        ast::Expr::Infix(Box::new(ast::ExprInfix { <> })),
+    Rt,
+}
+
 ExprPrefix: ast::Expr = {
     <op:OpPrefix> <rt:Spanned<ExprPrefix>> =>
         ast::Expr::Prefix(Box::new(ast::ExprPrefix { <> })),
@@ -305,12 +311,6 @@ Args: Vec<ast::ExprS> = {
         args
     },
     () => Vec::new(),
-}
-
-ExprInfix<Lt, Op, Rt>: ast::Expr = {
-    <lt:Spanned<Lt>> <op:Op> <rt:Spanned<Rt>> =>
-        ast::Expr::Infix(Box::new(ast::ExprInfix { <> })),
-    Rt,
 }
 
 extern {
