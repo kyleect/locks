@@ -16,7 +16,8 @@ pub Program: ast::Program = <stmts:Spanned<Decl>*> => ast::Program { <> };
 Decl = {
     DeclClass,
     DeclFn,
-    DeclLetVar,
+    DeclLet,
+    DeclConst,
     Stmt,
 }
 
@@ -24,7 +25,7 @@ DeclClass: ast::Stmt = <class:StmtClass> => ast::Stmt::Class(<>);
 
 StmtClass: ast::StmtClass =
     "class" <name:identifier> <super_:("extends" <Spanned<ExprIdentifier>>)?> "{"
-        <fields:(<Spanned<StmtAssign>>)*>
+        <fields:(<Spanned<StmtLet>>)*>
         <methods:(<Spanned<StmtFn>>)*>
     "}" =>
         ast::StmtClass { <> };
@@ -67,10 +68,21 @@ StmtFn: ast::StmtFn = {
     }
 }
 
-DeclLetVar: ast::Stmt = <assign:StmtAssign> =>
-    ast::Stmt::Assign(<>);
+DeclConst: ast::Stmt = <assign:StmtConst> =>
+    ast::Stmt::Const(<>);
 
-StmtAssign: ast::StmtAssign = "let" <name:identifier> <value:("=" <ExprS>)?> ";" => ast::StmtAssign {
+StmtConst: ast::StmtConst = "const" <name:identifier> <value:("=" <ExprS>)?> ";" => ast::StmtConst {
+    identifier: ast::Identifier {
+        name,
+        depth: None
+    },
+    value,
+};
+
+DeclLet: ast::Stmt = <assign:StmtLet> =>
+    ast::Stmt::Let(<>);
+
+StmtLet: ast::StmtLet = "let" <name:identifier> <value:("=" <ExprS>)?> ";" => ast::StmtLet {
     identifier: ast::Identifier {
         name,
         depth: None
@@ -111,7 +123,7 @@ StmtClosed: ast::Stmt = {
 }
 
 ForInit: Option<ast::StmtS> = {
-    <Spanned<DeclLetVar>> => Some(<>),
+    <Spanned<DeclLet>> => Some(<>),
     <Spanned<StmtExpr>> => Some(<>),
     ";" => None,
 }
@@ -365,6 +377,7 @@ extern {
         "this" => lexer::Token::This,
         "true" => lexer::Token::True,
         "let" => lexer::Token::Let,
+        "const" => lexer::Token::Const,
         "while" => lexer::Token::While,
         "extends" => lexer::Token::Extends,
     }

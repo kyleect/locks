@@ -20,7 +20,8 @@ pub enum Stmt {
     If(Box<StmtIf>),
     Print(StmtPrint),
     Return(StmtReturn),
-    Assign(StmtAssign),
+    Let(StmtLet),
+    Const(StmtConst),
     While(Box<StmtWhile>),
     Error,
 }
@@ -36,7 +37,8 @@ impl Debug for Stmt {
             Self::If(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
             Self::Print(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
             Self::Return(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
-            Self::Assign(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::Let(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::Const(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
             Self::While(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
             Self::Error => write!(f, "Error"),
         }
@@ -53,7 +55,7 @@ pub struct StmtClass {
     pub name: String,
     pub super_: Option<ExprS>,
     pub methods: Vec<Spanned<StmtFn>>,
-    pub fields: Vec<Spanned<StmtAssign>>,
+    pub fields: Vec<Spanned<StmtLet>>,
 }
 
 /// An expression statement evaluates an expression and discards the result.
@@ -94,9 +96,14 @@ pub struct StmtReturn {
     pub value: Option<ExprS>,
 }
 
-/// Statement that sets `var.name` to `value`
 #[derive(Clone, Debug, PartialEq)]
-pub struct StmtAssign {
+pub struct StmtLet {
+    pub identifier: Identifier,
+    pub value: Option<ExprS>,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct StmtConst {
     pub identifier: Identifier,
     pub value: Option<ExprS>,
 }

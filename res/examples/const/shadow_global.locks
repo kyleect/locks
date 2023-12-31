@@ -1,0 +1,6 @@
+const a = "global";
+{
+  let a = "shadow"; // out: NameError: name "a" is already defined
+  print a;
+}
+print a;

@@ -1,0 +1,2 @@
+const a = "1";
+const a = "2";  // out: NameError: name "a" is already defined

@@ -1,0 +1,7 @@
+{
+  const a = "outer";
+  {
+    print a; // out: outer
+    let a = "inner"; // out: NameError: name "a" is already defined
+  }
+}

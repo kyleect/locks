@@ -1,0 +1,4 @@
+{
+  // out: NameError: cannot access variable "a" in its own initializer
+  const a = a;
+}
