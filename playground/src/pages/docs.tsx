@@ -109,6 +109,11 @@ const Docs: React.FC = () => (
             </Link>
           </li>
           <li className="nav-item">
+            <Link className="nav-link" to="#functions-single-expression-bodies">
+              Single Expression Function Bodies
+            </Link>
+          </li>
+          <li className="nav-item">
             <Link className="nav-link" to="#functions-as-values">
               Functions As Values
             </Link>
@@ -141,6 +146,14 @@ const Docs: React.FC = () => (
           <li className="nav-item">
             <Link className="nav-link" to="#classes-index-access">
               Class Field/Method Index Access
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link
+              className="nav-link"
+              to="#classes-single-expression-method-bodies"
+            >
+              Single Expression Method Bodies
             </Link>
           </li>
           <li className="nav-item">
@@ -322,6 +335,16 @@ const Docs: React.FC = () => (
           height="100px"
         />
         <DocCard
+          title="Single Expression Function Bodies"
+          anchor="functions-single-expression-bodies"
+          code={[
+            'fn sum (a, b) = a + b;',
+            '',
+            'print sum(60, 40); // out: 100',
+          ]}
+          height="100px"
+        />
+        <DocCard
           title="Functions As Values"
           anchor="functions-as-values"
           code={[
@@ -420,7 +443,7 @@ const Docs: React.FC = () => (
             '',
             'print greeter.greet("World"); // out: Hello World!!!',
           ]}
-          height="300px"
+          height="325px"
         />
         <DocCard
           title="Class Inheritance"
@@ -449,7 +472,7 @@ const Docs: React.FC = () => (
             '',
             'print greeter.greet("World"); // out: Hello World!!!',
           ]}
-          height="400px"
+          height="425px"
         />
 
         <DocCard
@@ -472,7 +495,32 @@ const Docs: React.FC = () => (
             '',
             'print box.get(); // out: 123',
           ]}
-          height="275px"
+          height="300px"
+        />
+
+        <DocCard
+          title="Single Expression Method Bodies"
+          anchor="classes-single-expression-method-bodies"
+          code={[
+            'class Box {',
+            '  let value;',
+            '',
+            '  fn init(value) {',
+            '    this.value = value;',
+            '  }',
+            '',
+            '  fn get() = this.value;',
+            '}',
+            '',
+            'let box = Box("Hello");',
+            '',
+            'print box.get(); // out: Hello',
+            '',
+            'box.value = "World";',
+            '',
+            'print box.get(); // out: World',
+          ]}
+          height="350px"
         />
 
         <DocCard

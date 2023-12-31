@@ -319,10 +319,10 @@ With the syntax and implementation changes so far the Locks language has divered
   - Add `dissassemble` command to print disassembled bytecode from a `*.locks` file
   - Add `exec` command to execute Locks code from the arg or piped in from `stdin`
 - Language changes
-  - Functions declarations: `fun` -> `fn`
+  - Function/method declarations: `fun` -> `fn`
+  - Using expression statements as function bodies with implicit return: `fn sum(a, b) = a + b;`
   - Variable declarations: `var` -> `let`
   - Class fields must now be declared using `let field;` or `let field = "defaultValue";`
-  - Class method declarations require `fn` like functions
   - Setting undeclared fields on classes will generate an error
   - Class inheritence: `class Child : Parent {}` -> `class Child extends Parent {}`
   - Lists: `[1, 2, 3]`, `arr[0]`, `arr[0] = 123`
