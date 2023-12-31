@@ -1,0 +1,10 @@
+{
+  const a = "a";
+  print a; // out: a
+  const b = a + " b";
+  print b; // out: a b
+  const c = a + " c";
+  print c; // out: a c
+  const d = b + " d";
+  print d; // out: a b d
+}

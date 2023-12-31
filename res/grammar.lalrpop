@@ -17,6 +17,7 @@ Decl = {
     DeclClass,
     DeclFn,
     DeclLet,
+    DeclConst,
     Stmt,
 }
 
@@ -66,6 +67,17 @@ StmtFn: ast::StmtFn = {
         }
     }
 }
+
+DeclConst: ast::Stmt = <assign:StmtConst> =>
+    ast::Stmt::Const(<>);
+
+StmtConst: ast::StmtConst = "const" <name:identifier> <value:("=" <ExprS>)?> ";" => ast::StmtConst {
+    identifier: ast::Identifier {
+        name,
+        depth: None
+    },
+    value,
+};
 
 DeclLet: ast::Stmt = <assign:StmtLet> =>
     ast::Stmt::Let(<>);
@@ -365,6 +377,7 @@ extern {
         "this" => lexer::Token::This,
         "true" => lexer::Token::True,
         "let" => lexer::Token::Let,
+        "const" => lexer::Token::Const,
         "while" => lexer::Token::While,
         "extends" => lexer::Token::Extends,
     }

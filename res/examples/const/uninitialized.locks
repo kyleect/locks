@@ -1,0 +1,2 @@
+const a; // out: Error: const must be initialized with a value
+print a;

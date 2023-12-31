@@ -21,6 +21,7 @@ pub enum Stmt {
     Print(StmtPrint),
     Return(StmtReturn),
     Let(StmtLet),
+    Const(StmtConst),
     While(Box<StmtWhile>),
     Error,
 }
@@ -37,6 +38,7 @@ impl Debug for Stmt {
             Self::Print(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
             Self::Return(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
             Self::Let(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
+            Self::Const(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
             Self::While(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
             Self::Error => write!(f, "Error"),
         }
@@ -96,6 +98,12 @@ pub struct StmtReturn {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct StmtLet {
+    pub identifier: Identifier,
+    pub value: Option<ExprS>,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct StmtConst {
     pub identifier: Identifier,
     pub value: Option<ExprS>,
 }

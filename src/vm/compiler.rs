@@ -295,6 +295,25 @@ impl Compiler {
                     self.define_local();
                 }
             }
+            Stmt::Const(assign) => {
+                let name = &assign.identifier.name;
+                if self.is_global() {
+                    let name = gc.alloc(name);
+                    match &assign.value {
+                        Some(value) => self.compile_expr(value, gc)?,
+                        None => self.emit_u8(op::NIL, span),
+                    }
+                    self.emit_u8(op::DEFINE_GLOBAL, span);
+                    self.emit_constant(name.into(), span)?;
+                } else {
+                    self.declare_local(name, span)?;
+                    match &assign.value {
+                        Some(value) => self.compile_expr(value, gc)?,
+                        None => self.emit_u8(op::NIL, span),
+                    }
+                    self.define_local();
+                }
+            }
             Stmt::While(while_) => {
                 // START:
                 let loop_start = self.start_loop();
