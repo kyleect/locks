@@ -285,7 +285,8 @@ ExprThis: ast::Expr = "this" => ast::Expr::Identifier(ast::ExprIdentifier {
 
 /// Utilities
 
-// Expr + Span (start..end)
+// A statement or expression and it's location/range in the source code
+// Used for error reporting and diagnostic messages
 Spanned<T>: ast::Spanned<T> = <l:@L> <t:T> <r:@R> => (t, l..r);
 
 // Comma separated list of string parameters a function/method takes
@@ -297,7 +298,7 @@ Params: Vec<String> = {
     () => Vec::new(),
 };
 
-// Comma separated list of expression arugments passed to a function/method call
+// Comma separated list of expression arugments passed to function/method calls
 Args: Vec<ast::ExprS> = {
     <first:ExprS> <mut args:("," <ExprS>)*> => {
         args.insert(0, first);
