@@ -20,12 +20,14 @@ Decl = {
     Stmt,
 }
 
-DeclClass: ast::Stmt =
+DeclClass: ast::Stmt = <class:StmtClass> => ast::Stmt::Class(<>);
+
+StmtClass: ast::StmtClass =
     "class" <name:identifier> <super_:("extends" <Spanned<ExprIdentifier>>)?> "{"
         <fields:(<Spanned<StmtAssign>>)*>
         <methods:(<Spanned<StmtFn>>)*>
     "}" =>
-        ast::Stmt::Class(ast::StmtClass { <> });
+        ast::StmtClass { <> };
 
 DeclFn: ast::Stmt = <function:StmtFn> => ast::Stmt::Fn(<>);
 
