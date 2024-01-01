@@ -1,7 +1,7 @@
 {
   "Function": {
     "prefix": "fn",
-    "body": ["fn ${1:name} ($2) {", "  $3", "}", "$0"],
+    "body": ["fn ${1:name} ($2) {", "  $3", "}$0"],
     "description": "Create a function"
   },
   "FunctionExpressionBody": {
@@ -16,42 +16,47 @@
   },
   "Class": {
     "prefix": "class",
-    "body": ["class $1 {", "  $2", "}", "$0"],
+    "body": ["class ${1:Class} {", "  $2", "}$0"],
     "description": "Define a class"
   },
   "ClassExtend": {
     "prefix": "classext",
-    "body": ["class $1 extends $2 {", "  $3", "}", "$0"],
-    "description": "Extend a class"
+    "body": ["class ${1:Class} extends ${2:SuperClass} {", "  $3", "}$0"],
+    "description": "Extend another (super) class"
   },
-  "Variable": {
+  "DeclareLet": {
     "prefix": "let",
-    "body": ["let $1 = $2;", "$0"],
-    "description": "Define a variable"
+    "body": ["let $1;$0"],
+    "description": "Declare a variable"
+  },
+  "DefineLet": {
+    "prefix": "let=",
+    "body": ["let $1 = $2;$0"],
+    "description": "Define a variable with a value"
   },
   "For": {
     "prefix": "for",
-    "body": ["for (let $1 = 0; $1 < $2; $1 = $1 + 1) {", "  $3", "}", "$0"],
+    "body": ["for (let $1 = 0; $1 < $2; $1 = $1 + 1) {", "  $3", "}$0"],
     "description": "Create a basic for loop"
   },
   "If": {
     "prefix": "if",
-    "body": ["if ($1) {", "  $2", "}", "$0"],
+    "body": ["if ($1) {", "  $2", "}$0"],
     "description": "Create a basic if statement"
   },
   "IfElse": {
     "prefix": "ifelse",
-    "body": ["if ($1) {", "  $2", "} else {", "  $3", "}", "$0"],
+    "body": ["if ($1) {", "  $2", "} else {", "  $3", "}$0"],
     "description": "Create an if/else statement"
   },
   "Print": {
     "prefix": "print",
-    "body": ["print $1;", "$0"],
+    "body": ["print $1;$0"],
     "description": "Print value"
   },
   "While": {
     "prefix": "while",
-    "body": ["while ($1) {", "  $2", "}", "$0"],
+    "body": ["while ($1) {", "  $2", "}$0"],
     "description": "Create a while loop"
   }
 }
