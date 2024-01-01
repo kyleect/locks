@@ -93,6 +93,10 @@
         "title": "Locks: Open Playground"
       },
       {
+        "command": "locks.openSelectedCodeInPlayground",
+        "title": "Locks: Open Selected Code In Playground"
+      },
+      {
         "command": "locks.openGithub",
         "title": "Locks: Open On Github"
       }
@@ -115,6 +119,7 @@
     "vsce": "^2.15.0"
   },
   "dependencies": {
+    "lz-string": "^1.5.0",
     "vscode-languageclient": "9.0.1"
   },
   "scripts": {
