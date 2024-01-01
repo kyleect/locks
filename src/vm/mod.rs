@@ -956,9 +956,10 @@ impl VM {
                 }
 
                 let list = unsafe { (obj).list };
-                // let length = unsafe { (*list).values.len() };
+                let length =
+                    unsafe { (*list).values.clone().into_iter().fold(0f64, |acc, _x| acc + 1f64) };
 
-                Value::from(0f64)
+                length.into()
             }
         };
 
