@@ -16,6 +16,7 @@ import {
   ServerOptions,
 } from "vscode-languageclient/node";
 import { LocksTaskProvider } from "./locksTaskProvider";
+import { compressToEncodedURIComponent } from "lz-string";
 
 let lc: LanguageClient;
 
@@ -120,6 +121,15 @@ export function activate(context: ExtensionContext) {
     }),
     commands.registerCommand("locks.openGithub", () => {
       env.openExternal(Uri.parse("https://github.com/kyleect/locks"));
+    }),
+    commands.registerCommand("locks.openSelectedCodeInPlayground", () => {
+      const selection = window.activeTextEditor.selection;
+      const selectedText = window.activeTextEditor.document.getText(selection);
+      const code = compressToEncodedURIComponent(selectedText);
+
+      env.openExternal(
+        Uri.parse(`https://kyleect.github.io/locks/#/?code=${code}`)
+      );
     })
   );
 
