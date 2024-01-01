@@ -62,11 +62,15 @@
     "commands": [
       {
         "command": "locks.startLanguageServer",
-        "title": "Start Locks Language Server"
+        "title": "Locks: Start Language Server"
       },
       {
         "command": "locks.stopLanguageServer",
-        "title": "Stop Locks Language Server"
+        "title": "Locks: Stop Language Server"
+      },
+      {
+        "command": "locks.restartLanguageServer",
+        "title": "Locks: Restart Language Server"
       },
       {
         "command": "locks.runCurrentFile",
@@ -82,7 +86,15 @@
       },
       {
         "command": "locks.openDocs",
-        "title": "Locks: Open Docs"
+        "title": "Locks: Open Documentation"
+      },
+      {
+        "command": "locks.openPlayground",
+        "title": "Locks: Open Playground"
+      },
+      {
+        "command": "locks.openGithub",
+        "title": "Locks: Open On Github"
       }
     ],
     "taskDefinitions": [
