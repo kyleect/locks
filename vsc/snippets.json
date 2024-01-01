@@ -1,8 +1,13 @@
 {
   "Function": {
     "prefix": "fn",
-    "body": ["fn ${1:name}($2) {", "  $3", "}", "$0"],
+    "body": ["fn ${1:name} ($2) {", "  $3", "}", "$0"],
     "description": "Create a function"
+  },
+  "FunctionExpressionBody": {
+    "prefix": "fnx",
+    "body": ["fn ${1:name} ($2) => $3;$0"],
+    "description": "Create a function with an expression body"
   },
   "Class": {
     "prefix": "class",
