@@ -48,7 +48,7 @@ export function activate(context: ExtensionContext) {
 
   const startLanguageServerHandler = () => {
     console.log("Starting locks language server...");
-    lc.start();
+    return lc.start();
   };
 
   const stopLanguageServerHandler = () => {
@@ -59,6 +59,14 @@ export function activate(context: ExtensionContext) {
     }
 
     return lc.stop();
+  };
+
+  const restartLanguageServerHandler = async () => {
+    console.log("Restarting locks language server...");
+
+    await stopLanguageServerHandler();
+
+    await startLanguageServerHandler();
   };
 
   const runFileHandler = () => {
@@ -94,17 +102,24 @@ export function activate(context: ExtensionContext) {
       "locks.stopLanguageServer",
       stopLanguageServerHandler
     ),
+    commands.registerCommand(
+      "locks.restartLanguageServer",
+      restartLanguageServerHandler
+    ),
     commands.registerCommand("locks.runCurrentFile", runFileHandler),
     commands.registerCommand(
       "locks.disassembleCurrentFile",
       disassembleFileHandler
     ),
-    commands.registerCommand(
-      "locks.parseCurrentFile",
-      parseFileHandler
-    ),
+    commands.registerCommand("locks.parseCurrentFile", parseFileHandler),
     commands.registerCommand("locks.openDocs", () => {
       env.openExternal(Uri.parse("https://kyleect.github.io/locks/#/docs"));
+    }),
+    commands.registerCommand("locks.openPlayground", () => {
+      env.openExternal(Uri.parse("https://kyleect.github.io/locks/#/"));
+    }),
+    commands.registerCommand("locks.openGithub", () => {
+      env.openExternal(Uri.parse("https://github.com/kyleect/locks"));
     })
   );
 
