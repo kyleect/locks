@@ -84,7 +84,7 @@ $ locks exec 'print "Hello";' # Hello
 $ cat res/benchmarks/fib.locks | locks exec
 ```
 
-#### Print the Absract Syntax Tree (AST) from Locks code
+#### Print the Abstract Syntax Tree (AST) from Locks code
 
 ```
 // example.locks
@@ -322,7 +322,7 @@ With the syntax and implementation changes so far the Locks language has divered
   - Function/method declarations: `fun` -> `fn`
   - Using single expressions as function/method bodies with implicit return: `fn sum (a, b) => a + b;`
   - Variable declarations: `var` -> `let`
-  - Class fields must now be declared using `let field;` or `let field = "defaultValue";`
+  - Class fields declared using `let field;` or `let field = "defaultValue";`
   - Setting undeclared fields on classes will generate an error
   - Class inheritence: `class Child : Parent {}` -> `class Child extends Parent {}`
   - Lists: `[1, 2, 3]`, `arr[0]`, `arr[0] = 123`
