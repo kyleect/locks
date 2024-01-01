@@ -97,6 +97,10 @@
         "title": "Locks: Open Selected Code In Playground"
       },
       {
+        "command": "locks.openCurrentFileInPlayground",
+        "title": "Locks: Open Current File In Playground"
+      },
+      {
         "command": "locks.openGithub",
         "title": "Locks: Open On Github"
       }

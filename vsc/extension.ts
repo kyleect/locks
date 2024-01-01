@@ -130,6 +130,14 @@ export function activate(context: ExtensionContext) {
       env.openExternal(
         Uri.parse(`https://kyleect.github.io/locks/#/?code=${code}`)
       );
+    }),
+    commands.registerCommand("locks.openCurrentFileInPlayground", () => {
+      const currentFileText = window.activeTextEditor.document.getText();
+      const code = compressToEncodedURIComponent(currentFileText);
+
+      env.openExternal(
+        Uri.parse(`https://kyleect.github.io/locks/#/?code=${code}`)
+      );
     })
   );
 
