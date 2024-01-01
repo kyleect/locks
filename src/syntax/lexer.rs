@@ -108,6 +108,8 @@ pub enum Token {
     Less,
     #[token("<=")]
     LessEqual,
+    #[token("=>")]
+    FatArrow,
 
     // Literals.
     #[regex("[a-zA-Z_][a-zA-Z0-9_]*", lex_identifier)]

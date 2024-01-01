@@ -6,7 +6,7 @@ class Box {
   }
   
 
-  fn get() = this.value;
+  fn get() => this.value;
 }
 
 let box = Box("Hello");

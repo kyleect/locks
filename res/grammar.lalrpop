@@ -36,7 +36,7 @@ StmtFn: ast::StmtFn = {
     "fn" <name:identifier> "(" <params:Params> ")" <body:StmtBlockInternal> =>
         ast::StmtFn { <> },
     // Function statement with an expression statement as the body
-    "fn" <name:identifier> "(" <params:Params> ")" "=" <body:Spanned<StmtExpr>> => {
+    "fn" <name:identifier> "(" <params:Params> ")" "=>" <body:Spanned<StmtExpr>> => {
         let (body_stmt, body_span) = body;
 
         // Get the value from the expression statement body
@@ -343,6 +343,7 @@ extern {
         ">=" => lexer::Token::GreaterEqual,
         "<" => lexer::Token::Less,
         "<=" => lexer::Token::LessEqual,
+        "=>" => lexer::Token::FatArrow,
 
         // Literals.
         identifier => lexer::Token::Identifier(<String>),

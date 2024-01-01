@@ -6,5 +6,5 @@ class Box {
   }
   
 
-  fn get() = return this.value; // out: SyntaxError: unexpected "return"
+  fn get() => return this.value; // out: SyntaxError: unexpected "return"
 }
