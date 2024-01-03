@@ -1,0 +1,3 @@
+fn sum (a, b) => a + b;
+
+print len(sum); // out: TypeError: "function" object has no length

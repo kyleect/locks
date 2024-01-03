@@ -297,6 +297,8 @@ impl ObjectInstance {
     }
 }
 
+#[derive(Debug)]
+#[repr(C)]
 pub struct ObjectNative {
     pub common: ObjectCommon,
     pub native: Native,
@@ -312,12 +314,14 @@ impl ObjectNative {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Native {
     Clock,
+    Length,
 }
 
 impl Display for Native {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
             Native::Clock => write!(f, "clock"),
+            Native::Length => write!(f, "len"),
         }
     }
 }
