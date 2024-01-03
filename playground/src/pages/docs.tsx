@@ -308,8 +308,11 @@ const Docs: React.FC = () => (
         <DocCard
           title="Strings"
           anchor="strings"
-          code={['print "Hello World"; // out: Hello World']}
-          height="30px"
+          code={[
+            'print "Hello World"; // out: Hello World',
+            'print len("Hello World"); // out: 11',
+          ]}
+          height="50px"
         >
           Strings are created using double quotes.
         </DocCard>
@@ -528,12 +531,13 @@ const Docs: React.FC = () => (
           anchor="lists"
           code={[
             'let list = [10, 20, 30];',
+            'print len(list); // out: 3',
             'let last = list[2];',
             'print last; // out: 30',
             'list[1] = list[1] * 2;',
             'print list[1]; // out: 40',
           ]}
-          height="100px"
+          height="125px"
         >
           Lists can store a dynamic number of mixed types in a collection.
         </DocCard>
