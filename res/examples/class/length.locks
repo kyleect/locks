@@ -1,0 +1,5 @@
+class Class {
+  
+}
+
+print len(Class); // out: TypeError: "class" object has no length

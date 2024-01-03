@@ -1,0 +1,2 @@
+print len(""); // out: 0
+print len("Hello"); // out: 5

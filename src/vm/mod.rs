@@ -922,9 +922,10 @@ impl VM {
     ///
     /// These are functions provided by the language runtime and not written in the language
     fn call_native(&mut self, native: *mut ObjectNative, arg_count: usize) -> Result<()> {
-        self.pop();
         let value = match { unsafe { (*native).native } } {
             Native::Clock => {
+                self.pop();
+
                 if arg_count != 0 {
                     return self.err(TypeError::ArityMismatch {
                         name: "clock".to_string(),
@@ -944,6 +945,7 @@ impl VM {
                 }
 
                 let value = self.pop();
+                self.pop();
 
                 if !value.is_object() {
                     return self.err(TypeError::NoLength { type_: value.to_string() });
@@ -951,15 +953,23 @@ impl VM {
 
                 let obj = value.as_object();
 
-                if obj.type_() != ObjectType::List {
-                    return self.err(TypeError::NoLength { type_: obj.type_().to_string() });
+                match obj.type_() {
+                    ObjectType::List => {
+                        let list = unsafe { (obj).list };
+                        let length = unsafe { (*list).values.len() };
+
+                        (length as f64).into()
+                    }
+                    ObjectType::String => {
+                        let string = unsafe { (obj).string };
+                        let length = unsafe { (*string).value.len() };
+
+                        (length as f64).into()
+                    }
+                    _ => {
+                        return self.err(TypeError::NoLength { type_: obj.type_().to_string() });
+                    }
                 }
-
-                let list = unsafe { (obj).list };
-                let length =
-                    unsafe { (*list).values.clone().into_iter().fold(0f64, |acc, _x| acc + 1f64) };
-
-                length.into()
             }
         };
 
