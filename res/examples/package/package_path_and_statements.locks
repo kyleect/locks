@@ -1,0 +1,5 @@
+package test;
+
+fn sum (a, b) => a + b;
+
+println(sum(1, 10)); // out: 11
