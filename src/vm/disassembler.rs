@@ -78,7 +78,6 @@ impl<'a> Disassembler<'a> {
             op::MODULUS => self.disassemble_op_simple("OP_MODULUS"),
             op::NOT => self.disassemble_op_simple("OP_NOT"),
             op::NEGATE => self.disassemble_op_simple("OP_NEGATE"),
-            op::PRINT => self.disassemble_op_simple("OP_PRINT"),
             op::JUMP => self.disassemble_op_jump("OP_JUMP", op_idx, true),
             op::JUMP_IF_FALSE => self.disassemble_op_jump("OP_JUMP_IF_FALSE", op_idx, true),
             op::LOOP => self.disassemble_op_jump("OP_LOOP", op_idx, false),
@@ -292,22 +291,20 @@ mod tests {
             "\
             let a = 123;\n\
             let b = -a;\n\
-            let c = a + b;\n\
-            print c;",
-            "\
-            0000 OP_CONSTANT         0 == '123'\n\
-            0002 OP_DEFINE_GLOBAL    1 == 'a'\n\
-            0004 OP_GET_GLOBAL       1 == 'a'\n\
-            0006 OP_NEGATE\n\
-            0007 OP_DEFINE_GLOBAL    2 == 'b'\n\
-            0009 OP_GET_GLOBAL       1 == 'a'\n\
-            0011 OP_GET_GLOBAL       2 == 'b'\n\
-            0013 OP_ADD\n\
-            0014 OP_DEFINE_GLOBAL    3 == 'c'\n\
-            0016 OP_GET_GLOBAL       3 == 'c'\n\
-            0018 OP_PRINT\n\
-            0019 OP_NIL\n\
-            0020 OP_RETURN\n"
+            let c = a + b;",
+            concat!(
+                "0000 OP_CONSTANT         0 == '123'\n",
+                "0002 OP_DEFINE_GLOBAL    1 == 'a'\n",
+                "0004 OP_GET_GLOBAL       1 == 'a'\n",
+                "0006 OP_NEGATE\n",
+                "0007 OP_DEFINE_GLOBAL    2 == 'b'\n",
+                "0009 OP_GET_GLOBAL       1 == 'a'\n",
+                "0011 OP_GET_GLOBAL       2 == 'b'\n",
+                "0013 OP_ADD\n",
+                "0014 OP_DEFINE_GLOBAL    3 == 'c'\n",
+                "0016 OP_NIL\n",
+                "0017 OP_RETURN\n"
+            )
         ),
         fn_define_empty: (
             "fn sum (a, b) { }",
@@ -367,22 +364,27 @@ mod tests {
         jump_to_false: (
             "\
             if (false) {
-                print 1;
+                println(1);
             } else {
-                print 2;
+                println(2);
             }",
-            "\
-            0000 OP_FALSE\n\
-            0001 OP_JUMP_IF_FALSE    1 -> 11\n\
-            0004 OP_POP\n\
-            0005 OP_CONSTANT         0 == '1'\n\
-            0007 OP_PRINT\n\
-            0008 OP_JUMP             8 -> 15\n\
-            0011 OP_POP\n\
-            0012 OP_CONSTANT         1 == '2'\n\
-            0014 OP_PRINT\n\
-            0015 OP_NIL\n\
-            0016 OP_RETURN\n"
+            concat!(
+                "0000 OP_FALSE\n",
+                "0001 OP_JUMP_IF_FALSE    1 -> 15\n",
+                "0004 OP_POP\n",
+                "0005 OP_GET_GLOBAL       0 == 'println'\n",
+                "0007 OP_CONSTANT         1 == '1'\n",
+                "0009 OP_CALL             1\n",
+                "0011 OP_POP\n",
+                "0012 OP_JUMP            12 -> 23\n",
+                "0015 OP_POP\n",
+                "0016 OP_GET_GLOBAL       0 == 'println'\n",
+                "0018 OP_CONSTANT         2 == '2'\n",
+                "0020 OP_CALL             1\n",
+                "0022 OP_POP\n",
+                "0023 OP_NIL\n",
+                "0024 OP_RETURN\n"
+            )
         ),
         closure: (
             r#"
@@ -390,7 +392,7 @@ mod tests {
 
             fn foo(param) {
                 fn f_() {
-                    print param;
+                    return param;
                 }
                 
                 f = f_;
@@ -407,9 +409,7 @@ mod tests {
                 "| 0000 OP_CLOSURE          0 == '<fn f_ arity=0>'\n",
                 "| 0001 CAPTURE [local -> 1]\n",
                 "  | 0000 OP_GET_UPVALUE      0\n",
-                "  | 0002 OP_PRINT\n",
-                "  | 0003 OP_NIL\n",
-                "  | 0004 OP_RETURN\n",
+                "  | 0002 OP_RETURN\n",
                 "| 0004 OP_GET_LOCAL        2\n",
                 "| 0006 OP_SET_GLOBAL       1 == 'f'\n",
                 "| 0008 OP_POP\n",
@@ -443,7 +443,7 @@ mod tests {
               
             let greeter = Greeter(\"Hello\");
               
-            print greeter.greet(\"World\"); // out: Hello World",
+            println(greeter.greet(\"World\")); // out: Hello World",
             concat!(
                 "0000 OP_CLASS            0 == 'Greeter'\n",
                 "0002 OP_DEFINE_GLOBAL    0 == 'Greeter'\n",
@@ -456,7 +456,8 @@ mod tests {
                 "| 0000 OP_GET_LOCAL        1\n",
                 "| 0002 OP_GET_LOCAL        0\n",
                 "| 0004 OP_SET_PROPERTY     0 == 'greeting'\n",
-                "| 0006 OP_POP\n| 0007 OP_GET_LOCAL        0\n",
+                "| 0006 OP_POP\n",
+                "| 0007 OP_GET_LOCAL        0\n",
                 "| 0009 OP_RETURN\n",
                 "0014 OP_METHOD           3 == 'init'\n",
                 "0016 OP_CLOSURE          4 == '<fn greet arity=1>'\n",
@@ -473,13 +474,15 @@ mod tests {
                 "0023 OP_CONSTANT         6 == 'Hello'\n",
                 "0025 OP_CALL             1\n",
                 "0027 OP_DEFINE_GLOBAL    7 == 'greeter'\n",
-                "0029 OP_GET_GLOBAL       7 == 'greeter'\n",
-                "0031 OP_GET_PROPERTY     5 == 'greet'\n",
-                "0033 OP_CONSTANT         8 == 'World'\n",
-                "0035 OP_CALL             1\n",
-                "0037 OP_PRINT\n",
-                "0038 OP_NIL\n",
-                "0039 OP_RETURN\n"
+                "0029 OP_GET_GLOBAL       8 == 'println'\n",
+                "0031 OP_GET_GLOBAL       7 == 'greeter'\n",
+                "0033 OP_GET_PROPERTY     5 == 'greet'\n",
+                "0035 OP_CONSTANT         9 == 'World'\n",
+                "0037 OP_CALL             1\n",
+                "0039 OP_CALL             1\n",
+                "0041 OP_POP\n",
+                "0042 OP_NIL\n",
+                "0043 OP_RETURN\n",
             )
         ),
     }

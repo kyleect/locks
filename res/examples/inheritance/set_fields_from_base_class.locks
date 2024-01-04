@@ -7,9 +7,9 @@ class Foo {
     this.field2 = b;
   }
 
-  fn fooPrint() {
-    print this.field1;
-    print this.field2;
+  fn fooprintln() {
+    println(this.field1);
+    println(this.field2);
   }
 }
 
@@ -19,23 +19,23 @@ class Bar extends Foo {
     this.field2 = b;
   }
 
-  fn barPrint() {
-    print this.field1;
-    print this.field2;
+  fn barprintln() {
+    println(this.field1);
+    println(this.field2);
   }
 }
 
 let bar = Bar();
 bar.foo("foo 1", "foo 2");
-bar.fooPrint();
+bar.fooprintln();
 // out: foo 1
 // out: foo 2
 
 bar.bar("bar 1", "bar 2");
-bar.barPrint();
+bar.barprintln();
 // out: bar 1
 // out: bar 2
 
-bar.fooPrint();
+bar.fooprintln();
 // out: bar 1
 // out: bar 2

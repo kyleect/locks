@@ -123,7 +123,6 @@ ForIncr = <ExprS?>;
 StmtSimple = {
     StmtBlock,
     StmtExpr,
-    StmtPrint,
     StmtReturn,
 }
 
@@ -134,9 +133,6 @@ StmtBlockInternal: ast::StmtBlock = "{" <stmts:Spanned<Decl>*> "}" =>
 
 StmtExpr: ast::Stmt = <value:ExprS> ";" =>
     ast::Stmt::Expr(ast::StmtExpr { <> });
-
-StmtPrint: ast::Stmt = "print" <value:ExprS> ";" =>
-    ast::Stmt::Print(ast::StmtPrint { <> });
 
 StmtReturn: ast::Stmt = "return" <value:ExprS?> ";" =>
     ast::Stmt::Return(ast::StmtReturn { <> });
@@ -360,7 +356,6 @@ extern {
         "if" => lexer::Token::If,
         "nil" => lexer::Token::Nil,
         "or" => lexer::Token::Or,
-        "print" => lexer::Token::Print,
         "return" => lexer::Token::Return,
         "super" => lexer::Token::Super,
         "this" => lexer::Token::This,

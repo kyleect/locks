@@ -2,4 +2,4 @@ let list = [1, 2, 3];
 
 let length = len(list);
 
-print length; // out: 3
+println(length); // out: 3

@@ -2,4 +2,4 @@ class Class {
   
 }
 
-print len(Class); // out: TypeError: "class" object has no length
+println(len(Class)); // out: TypeError: "class" object has no length

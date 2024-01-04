@@ -6,4 +6,4 @@ class Class {
   }
 }
 
-print Class().values[0]; // out: 10
+println(Class().values[0]); // out: 10

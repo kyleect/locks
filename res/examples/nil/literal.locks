@@ -1,1 +1,1 @@
-print nil; // out: nil
+println(nil); // out: nil

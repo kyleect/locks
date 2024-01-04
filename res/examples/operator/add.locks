@@ -1,2 +1,2 @@
-print 123 + 456; // out: 579
-print "str" + "ing"; // out: string
+println(123 + 456); // out: 579
+println("str" + "ing"); // out: string

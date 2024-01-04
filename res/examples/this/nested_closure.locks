@@ -16,4 +16,4 @@ class Foo {
 }
 
 let closure = Foo().getClosure();
-print closure()()(); // out: Foo
+println(closure()()()); // out: Foo

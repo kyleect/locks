@@ -1,6 +1,6 @@
 fn f(a, b) {
-  print a;
-  print b;
+  println(a);
+  println(b);
 }
 
 // out: TypeError: f() takes 2 arguments but 4 were given

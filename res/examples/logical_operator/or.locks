@@ -1,13 +1,13 @@
 // Note: These tests implicitly depend on ints being truthy.
 
 // Return the first true argument.
-print 1 or true; // out: 1
-print false or 1; // out: 1
-print false or false or true; // out: true
+println(1 or true); // out: 1
+println(false or 1); // out: 1
+println(false or false or true); // out: true
 
 // Return the last argument if all are false.
-print false or false; // out: false
-print false or false or false; // out: false
+println(false or false); // out: false
+println(false or false or false); // out: false
 
 // Short-circuit at the first true argument.
 let a = "before";
@@ -15,5 +15,5 @@ let b = "before";
 (a = false) or
     (b = true) or
     (a = "bad");
-print a; // out: false
-print b; // out: true
+println(a); // out: false
+println(b); // out: true

@@ -1,3 +1,3 @@
 let string = "foo";
 
-print string[0]; // out: TypeError: "string" is not indexable
+println(string[0]); // out: TypeError: "string" is not indexable

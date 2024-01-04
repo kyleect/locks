@@ -51,8 +51,13 @@
   },
   "Print": {
     "prefix": "print",
-    "body": ["print $1;$0"],
+    "body": ["print($1);$0"],
     "description": "Print value"
+  },
+  "PrintLn": {
+    "prefix": "println",
+    "body": ["println($1);$0"],
+    "description": "Print value with a newline"
   },
   "While": {
     "prefix": "while",

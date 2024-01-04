@@ -49,7 +49,7 @@ pub fn parse(source: &str, offset: usize) -> Result<Program, Vec<ErrorS>> {
         }
         ParseError::UnrecognizedToken { token: (start, _, end), expected } => (
             Error::SyntaxError(SyntaxError::UnrecognizedToken {
-                token: source[start..end].to_string(),
+                token: source[start - offset..end - offset].to_string(),
                 expected,
             }),
             start..end,

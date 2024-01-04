@@ -5,4 +5,4 @@ fn f() {
   }
 }
 
-print f(); // out: i
+println(f()); // out: i

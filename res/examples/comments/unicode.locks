@@ -6,4 +6,4 @@
 // Other stuff: ឃᢆ᯽₪ℜ↩⊗┺░
 // Emoji: ☃☺♣
 
-print "ok"; // out: ok
+println("ok"); // out: ok

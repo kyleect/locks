@@ -1,8 +1,8 @@
 {
   let a = "outer";
   {
-    print a; // out: outer
+    println(a); // out: outer
     let a = "inner";
-    print a; // out: inner
+    println(a); // out: inner
   }
 }

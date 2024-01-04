@@ -2,7 +2,7 @@ let a = "outer";
 
 {
   let a = "inner";
-  print a; // out: inner
+  println(a); // out: inner
 }
 
-print a; // out: outer
+println(a); // out: outer

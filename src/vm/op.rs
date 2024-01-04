@@ -64,8 +64,6 @@ iota! {
     // Pops a number from the stack, negates it, and pushes the result onto the
     // stack.
     NEGATE,
-    // Pops a value from the stack and prints it.
-    PRINT,
     // Reads a 2-byte offset, and increments the instruction pointer by that
     // offset.
     JUMP,

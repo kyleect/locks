@@ -1,23 +1,23 @@
-print true == true;    // out: true
-print true == false;   // out: false
-print false == true;   // out: false
-print false == false;  // out: true
+println(true == true);    // out: true
+println(true == false);   // out: false
+println(false == true);   // out: false
+println(false == false);  // out: true
 
 // Not equal to other types.
-print true == 1;        // out: false
-print false == 0;       // out: false
-print true == "true";   // out: false
-print false == "false"; // out: false
-print false == "";      // out: false
+println(true == 1);        // out: false
+println(false == 0);       // out: false
+println(true == "true");   // out: false
+println(false == "false"); // out: false
+println(false == "");      // out: false
 
-print true != true;    // out: false
-print true != false;   // out: true
-print false != true;   // out: true
-print false != false;  // out: false
+println(true != true);    // out: false
+println(true != false);   // out: true
+println(false != true);   // out: true
+println(false != false);  // out: false
 
 // Not equal to other types.
-print true != 1;        // out: true
-print false != 0;       // out: true
-print true != "true";   // out: true
-print false != "false"; // out: true
-print false != "";      // out: true
+println(true != 1);        // out: true
+println(false != 0);       // out: true
+println(true != "true");   // out: true
+println(false != "false"); // out: true
+println(false != "");      // out: true

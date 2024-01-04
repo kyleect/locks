@@ -1,14 +1,10 @@
 class Foo {
   let a;
-  let b;
   
-  fn init(a, b) {
-    print "init"; // out: init
+  fn init(a) {
     this.a = a;
-    this.b = b;
   }
 }
 
-let foo = Foo(1, 2);
-print foo.a; // out: 1
-print foo.b; // out: 2
+let foo = Foo(1);
+println(foo.a); // out: 1

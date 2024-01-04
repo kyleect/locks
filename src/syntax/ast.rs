@@ -18,7 +18,6 @@ pub enum Stmt {
     For(Box<StmtFor>),
     Fn(StmtFn),
     If(Box<StmtIf>),
-    Print(StmtPrint),
     Return(StmtReturn),
     Assign(StmtAssign),
     While(Box<StmtWhile>),
@@ -34,7 +33,6 @@ impl Debug for Stmt {
             Self::For(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
             Self::Fn(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
             Self::If(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
-            Self::Print(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
             Self::Return(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
             Self::Assign(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
             Self::While(arg0) => f.write_fmt(format_args!("{:#?}", arg0)),
@@ -82,11 +80,6 @@ pub struct StmtIf {
     pub cond: ExprS,
     pub then: StmtS,
     pub else_: Option<StmtS>,
-}
-
-#[derive(Clone, Debug, PartialEq)]
-pub struct StmtPrint {
-    pub value: ExprS,
 }
 
 #[derive(Clone, Debug, PartialEq)]

@@ -1,8 +1,8 @@
 class Foo {
   fn method() {
     return "ok";
-    print "bad";
+    println("bad");
   }
 }
 
-print Foo().method(); // out: ok
+println(Foo().method()); // out: ok

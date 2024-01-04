@@ -1,4 +1,4 @@
 class Foo {}
 
 let foo = Foo();
-print foo; // out: <object Foo>
+println(foo); // out: <object Foo>

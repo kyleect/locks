@@ -1,6 +1,6 @@
 class A {
   fn say() {
-    print "A";
+    println("A");
   }
 }
 
@@ -10,13 +10,13 @@ class B extends A {
   }
 
   fn say() {
-    print "B";
+    println("B");
   }
 }
 
 class C extends B {
   fn say() {
-    print "C";
+    println("C");
   }
 }
 

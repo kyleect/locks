@@ -1,9 +1,9 @@
 class Foo {
   fn bar(arg) {
-    print arg;
+    println(arg);
   }
 }
 
 let bar = Foo().bar;
-print "got method"; // out: got method
+println("got method"); // out: got method
 bar("arg");          // out: arg

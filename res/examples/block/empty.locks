@@ -4,4 +4,4 @@
 if (true) {}
 if (false) {} else {}
 
-print "ok"; // out: ok
+println("ok"); // out: ok

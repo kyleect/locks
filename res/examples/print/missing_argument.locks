@@ -1,2 +1,1 @@
-// out: SyntaxError: unexpected ";"
-print;
+println(); // out: TypeError: println() takes 1 arguments but 0 were given

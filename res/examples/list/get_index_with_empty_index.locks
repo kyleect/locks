@@ -1,1 +1,1 @@
-print [10, 20, 30][]; // out: SyntaxError: unexpected "]"
+println([10, 20, 30][]); // out: SyntaxError: unexpected "]"
