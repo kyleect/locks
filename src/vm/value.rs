@@ -248,9 +248,11 @@ mod tests {
         assert_eq!(Value::from(0.0).type_(), ValueType::Number);
         assert_eq!(Value::from(f64::NAN).type_(), ValueType::Number);
         assert_eq!(
-            Value::from(
-                &mut ObjectCommon { type_: ObjectType::String, is_marked: false } as *mut _
-            )
+            Value::from(&mut ObjectCommon {
+                type_: ObjectType::String,
+                is_marked: false,
+                package: None
+            } as *mut _)
             .type_(),
             ValueType::Object(ObjectType::String)
         );

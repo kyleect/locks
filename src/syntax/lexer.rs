@@ -110,6 +110,8 @@ pub enum Token {
     LessEqual,
     #[token("=>")]
     FatArrow,
+    #[token("::")]
+    DoubleColon,
 
     // Literals.
     #[regex("[a-zA-Z_][a-zA-Z0-9_]*", lex_identifier)]
@@ -152,6 +154,8 @@ pub enum Token {
     While,
     #[token("extends")]
     Extends,
+    #[token("package")]
+    Package,
 
     #[regex(r"//.*", logos::skip)]
     #[regex(r"[ \r\n\t\f]+", logos::skip)]

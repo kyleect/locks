@@ -7,6 +7,7 @@ pub type ExprS = Spanned<Expr>;
 
 #[derive(Debug, Default)]
 pub struct Program {
+    pub package: Option<String>,
     pub stmts: Vec<StmtS>,
 }
 

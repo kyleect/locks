@@ -10,7 +10,7 @@ grammar<'err>(
     errors: &'err mut Vec<ParseError<usize, lexer::Token, ErrorS>>
 );
 
-pub Program: ast::Program = <stmts:Spanned<Decl>*> => ast::Program { <> };
+pub Program: ast::Program = <package:("package" <PackageName> ";")?> <stmts:Spanned<Decl>*> => ast::Program { <> };
 
 // Declarations
 Decl = {
@@ -300,6 +300,14 @@ Params: Vec<String> = {
     () => Vec::new(),
 };
 
+// Comma separated list of string parameters a function/method takes
+PackageName: String = {
+    <first:identifier> <mut paths:("::"<identifier>)*> => {
+        paths.insert(0, first);
+        paths.join("::")
+    }
+};
+
 // Comma separated list of expression arugments passed to function/method calls
 Args: Vec<ast::ExprS> = {
     <first:ExprS> <mut args:("," <ExprS>)*> => {
@@ -340,6 +348,7 @@ extern {
         "<" => lexer::Token::Less,
         "<=" => lexer::Token::LessEqual,
         "=>" => lexer::Token::FatArrow,
+        "::" => lexer::Token::DoubleColon,
 
         // Literals.
         identifier => lexer::Token::Identifier(<String>),
@@ -363,5 +372,6 @@ extern {
         "let" => lexer::Token::Let,
         "while" => lexer::Token::While,
         "extends" => lexer::Token::Extends,
+        "package" => lexer::Token::Package,
     }
 }

@@ -183,6 +183,7 @@ impl PartialEq for Object {
 pub struct ObjectCommon {
     pub type_: ObjectType,
     pub is_marked: bool,
+    pub package: Option<String>,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -225,7 +226,8 @@ pub struct ObjectBoundMethod {
 
 impl ObjectBoundMethod {
     pub fn new(this: *mut ObjectInstance, method: *mut ObjectClosure) -> Self {
-        let common = ObjectCommon { type_: ObjectType::BoundMethod, is_marked: false };
+        let common =
+            ObjectCommon { type_: ObjectType::BoundMethod, is_marked: false, package: None };
         Self { common, this, closure: method }
     }
 }
@@ -241,7 +243,7 @@ pub struct ObjectClass {
 
 impl ObjectClass {
     pub fn new(name: *mut ObjectString) -> Self {
-        let common = ObjectCommon { type_: ObjectType::Class, is_marked: false };
+        let common = ObjectCommon { type_: ObjectType::Class, is_marked: false, package: None };
         Self { common, name, methods: HashMap::default(), fields: HashMap::default() }
     }
 }
@@ -256,7 +258,7 @@ pub struct ObjectClosure {
 
 impl ObjectClosure {
     pub fn new(function: *mut ObjectFunction, upvalues: Vec<*mut ObjectUpvalue>) -> Self {
-        let common = ObjectCommon { type_: ObjectType::Closure, is_marked: false };
+        let common = ObjectCommon { type_: ObjectType::Closure, is_marked: false, package: None };
         Self { common, function, upvalues }
     }
 }
@@ -274,7 +276,7 @@ pub struct ObjectFunction {
 
 impl ObjectFunction {
     pub fn new(name: *mut ObjectString, arity: u8) -> Self {
-        let common = ObjectCommon { type_: ObjectType::Function, is_marked: false };
+        let common = ObjectCommon { type_: ObjectType::Function, is_marked: false, package: None };
         Self { common, name, arity, upvalue_count: 0, chunk: Chunk::default() }
     }
 }
@@ -289,7 +291,7 @@ pub struct ObjectInstance {
 
 impl ObjectInstance {
     pub fn new(class: *mut ObjectClass) -> Self {
-        let common = ObjectCommon { type_: ObjectType::Instance, is_marked: false };
+        let common = ObjectCommon { type_: ObjectType::Instance, is_marked: false, package: None };
 
         let fields = unsafe { (*class).fields.clone() };
 
@@ -305,8 +307,8 @@ pub struct ObjectNative {
 }
 
 impl ObjectNative {
-    pub fn new(native: Native) -> Self {
-        let common = ObjectCommon { type_: ObjectType::Native, is_marked: false };
+    pub fn new(native: Native, package: Option<String>) -> Self {
+        let common = ObjectCommon { type_: ObjectType::Native, is_marked: false, package };
         Self { common, native }
     }
 }
@@ -339,7 +341,7 @@ pub struct ObjectString {
 
 impl ObjectString {
     pub fn new(value: &'static str) -> Self {
-        let common = ObjectCommon { type_: ObjectType::String, is_marked: false };
+        let common = ObjectCommon { type_: ObjectType::String, is_marked: false, package: None };
         Self { common, value }
     }
 }
@@ -353,7 +355,7 @@ pub struct ObjectList {
 
 impl ObjectList {
     pub fn new(values: Vec<Value>) -> Self {
-        let common = ObjectCommon { type_: ObjectType::List, is_marked: false };
+        let common = ObjectCommon { type_: ObjectType::List, is_marked: false, package: None };
         Self { common, values }
     }
 }
@@ -368,7 +370,7 @@ pub struct ObjectUpvalue {
 
 impl ObjectUpvalue {
     pub fn new(location: *mut Value) -> Self {
-        let common = ObjectCommon { type_: ObjectType::Upvalue, is_marked: false };
+        let common = ObjectCommon { type_: ObjectType::Upvalue, is_marked: false, package: None };
         Self { common, location, closed: Value::default() }
     }
 }
