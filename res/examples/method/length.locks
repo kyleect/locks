@@ -1,0 +1,7 @@
+class Class {
+  fn method () {
+    
+  }
+}
+
+println(Class().method); // out: <bound method method>
