@@ -5,8 +5,8 @@ class Foo {
 
 let foo = Foo();
 
-print(foo.bar = "bar value"); // out: bar value
-print(foo.baz = "baz value"); // out: baz value
+println(foo.bar = "bar value"); // out: bar value
+println(foo.baz = "baz value"); // out: baz value
 
-print(foo.bar); // out: bar value
-print(foo.baz); // out: baz value
+println(foo.bar); // out: bar value
+println(foo.baz); // out: baz value

@@ -22,4 +22,4 @@ class Child extends Parent {
 
 let child = Child(123);
 
-print(child.get()); // out: 123
+println(child.get()); // out: 123

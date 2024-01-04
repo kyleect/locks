@@ -1,6 +1,6 @@
 fn f() {
   return;
-  print("bad");
+  println("bad");
 }
 
-print(f()); // out: nil
+println(f()); // out: nil

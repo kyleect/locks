@@ -1,5 +1,5 @@
 {
   class A {}
   class B extends A {}
-  print(B); // out: <class B>
+  println(B); // out: <class B>
 }

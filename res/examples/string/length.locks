@@ -1,2 +1,2 @@
-print(len("")); // out: 0
-print(len("Hello")); // out: 5
+println(len("")); // out: 0
+println(len("Hello")); // out: 5

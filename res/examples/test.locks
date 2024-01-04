@@ -8,4 +8,4 @@ fn test(value) {
 
 let instance = Class();
 
-print(test(instance.method)); // out: <bound method method>
+println(test(instance.method)); // out: <bound method method>

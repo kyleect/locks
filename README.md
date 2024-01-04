@@ -37,16 +37,16 @@ Check out the [documentation](https://kyleect.github.io/locks/#/docs) the start 
 fn fizzBuzz(n) {
   for (let i = 1; i <= n; i = i + 1) {
       if (i % 15 == 0) {
-        print("FizzBuzz");
+        println("FizzBuzz");
       }
       else if (i % 3 == 0) {
-        print("Fizz");
+        println("Fizz");
       }
       else if (i % 5 == 0) {
-        print("Buzz");
+        println("Buzz");
       }
       else {
-        print(i);
+        println(i);
       }
   }
 }
@@ -75,7 +75,7 @@ $ locks run file.locks
 #### Execute locks code as an argument
 
 ```shell
-$ locks exec 'print("Hello");' # Hello
+$ locks exec 'println("Hello");' # Hello
 ```
 
 #### Execute locks code from stdin
@@ -90,9 +90,9 @@ $ cat res/benchmarks/fib.locks | locks exec
 // example.locks
 
 let value;
-print(value); // out: nil
+println(value); // out: nil
 value = 42;
-print(value); // out: 42
+println(value); // out: 42
 ```
 
 ```shell
@@ -172,16 +172,16 @@ Program {
 fn fizzBuzz(n) {
   for (let i = 1; i <= n; i = i + 1) {
       if (i % 15 == 0) {
-        print("FizzBuzz");
+        println("FizzBuzz");
       }
       else if (i % 3 == 0) {
-        print("Fizz");
+        println("Fizz");
       }
       else if (i % 5 == 0) {
-        print("Buzz");
+        println("Buzz");
       }
       else {
-        print(i);
+        println(i);
       }
   }
 }

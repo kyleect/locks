@@ -4,5 +4,5 @@ fn fib(n) {
 }
 
 let start = clock();
-print(fib(39) == 63245986);
-print(clock() - start);
+println(fib(39) == 63245986);
+println(clock() - start);

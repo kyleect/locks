@@ -1,7 +1,7 @@
 let a = "outer";
 {
   fn foo() {
-    print(a);
+    println(a);
   }
 
   foo(); // out: outer

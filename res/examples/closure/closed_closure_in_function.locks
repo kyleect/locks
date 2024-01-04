@@ -3,7 +3,7 @@ let f;
 {
   let local = "local";
   fn f_() {
-    print(local);
+    println(local);
   }
   f = f_;
 }

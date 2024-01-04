@@ -1,1 +1,1 @@
-print(); // out: TypeError: print() takes 1 arguments but 0 were given
+println(); // out: TypeError: println() takes 1 arguments but 0 were given

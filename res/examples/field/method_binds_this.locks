@@ -3,8 +3,8 @@ class Foo {
   let fun;
 
   fn sayName(a) {
-    print(this.name);
-    print(a);
+    println(this.name);
+    println(a);
   }
 }
 

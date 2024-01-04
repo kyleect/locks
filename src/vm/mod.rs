@@ -986,6 +986,27 @@ impl VM {
                 let arg = self.pop();
                 self.pop();
 
+                match write!(stdout, "{arg}")
+                    .or_else(|_| self.err(IoError::WriteError { file: "stdout".to_string() }))
+                {
+                    Ok(_) => Value::NIL,
+                    Err(x) => {
+                        return Err(x);
+                    }
+                }
+            }
+            Native::PrintLn => {
+                if arg_count != 1 {
+                    return self.err(TypeError::ArityMismatch {
+                        name: "println".to_string(),
+                        exp_args: 1,
+                        got_args: arg_count,
+                    });
+                }
+
+                let arg = self.pop();
+                self.pop();
+
                 match writeln!(stdout, "{arg}")
                     .or_else(|_| self.err(IoError::WriteError { file: "stdout".to_string() }))
                 {
@@ -1125,6 +1146,16 @@ impl Default for VM {
         globals.insert(gc.alloc("clock"), Value::from(gc.alloc(ObjectNative::new(Native::Clock))));
         globals.insert(gc.alloc("len"), Value::from(gc.alloc(ObjectNative::new(Native::Length))));
         globals.insert(gc.alloc("print"), Value::from(gc.alloc(ObjectNative::new(Native::Print))));
+        globals
+            .insert(gc.alloc("println"), Value::from(gc.alloc(ObjectNative::new(Native::PrintLn))));
+
+        let print_string = gc.alloc("print");
+        let print_native = Value::from(gc.alloc(ObjectNative::new(Native::Print)));
+        globals.insert(print_string, print_native);
+
+        let println_string = gc.alloc("println");
+        let println_native = Value::from(gc.alloc(ObjectNative::new(Native::PrintLn)));
+        globals.insert(println_string, println_native);
 
         let init_string = gc.alloc("init");
 

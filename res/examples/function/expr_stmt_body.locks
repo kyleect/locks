@@ -8,7 +8,7 @@ fn both(a, b) =>
 fn identity(value) => value;
 
 
-print(sum(10, 10)); // out: 20
-print(sum(10, -3)); // out: 7
+println(sum(10, 10)); // out: 20
+println(sum(10, -3)); // out: 7
 
-print(both(10, 5)); // out: 3
+println(both(10, 5)); // out: 3

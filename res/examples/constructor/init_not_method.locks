@@ -1,12 +1,12 @@
 class Foo {
   fn init(arg) {
-    print("Foo.init(" + arg + ")");
+    println("Foo.init(" + arg + ")");
     this.field = "init";
   }
 }
 
 fn init() {
-  print("not initializer");
+  println("not initializer");
 }
 
 init(); // out: not initializer

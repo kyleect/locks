@@ -1,6 +1,6 @@
 fn f() {
   return "ok";
-  print("bad");
+  println("bad");
 }
 
-print(f()); // out: ok
+println(f()); // out: ok

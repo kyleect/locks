@@ -1,8 +1,6 @@
 let a = "before";
-print(a); // out: before
+println(a); // out: before
 
 a = "after";
-print(a); // out: after
+println(a); // out: after
 
-print(a = "arg"); // out: arg
-print(a); // out: arg

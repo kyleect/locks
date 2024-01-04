@@ -1,12 +1,12 @@
 class Base {
   fn foo() {
-    print("Base.foo()");
+    println("Base.foo()");
   }
 }
 
 class Derived extends Base {
   fn bar() {
-    print("Derived.bar()");
+    println("Derived.bar()");
     super.foo();
   }
 }

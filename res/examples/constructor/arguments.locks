@@ -7,4 +7,4 @@ class Foo {
 }
 
 let foo = Foo(1);
-print(foo.a); // out: 1
+println(foo.a); // out: 1

@@ -1,6 +1,6 @@
 class A {
   fn foo() {
-    print("A.foo()");
+    println("A.foo()");
   }
 }
 
@@ -8,7 +8,7 @@ class B extends A {}
 
 class C extends B {
   fn foo() {
-    print("C.foo()");
+    println("C.foo()");
     super.foo();
   }
 }

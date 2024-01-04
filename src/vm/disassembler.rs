@@ -364,21 +364,21 @@ mod tests {
         jump_to_false: (
             "\
             if (false) {
-                print(1);
+                println(1);
             } else {
-                print(2);
+                println(2);
             }",
             concat!(
                 "0000 OP_FALSE\n",
                 "0001 OP_JUMP_IF_FALSE    1 -> 15\n",
                 "0004 OP_POP\n",
-                "0005 OP_GET_GLOBAL       0 == 'print'\n",
+                "0005 OP_GET_GLOBAL       0 == 'println'\n",
                 "0007 OP_CONSTANT         1 == '1'\n",
                 "0009 OP_CALL             1\n",
                 "0011 OP_POP\n",
                 "0012 OP_JUMP            12 -> 23\n",
                 "0015 OP_POP\n",
-                "0016 OP_GET_GLOBAL       0 == 'print'\n",
+                "0016 OP_GET_GLOBAL       0 == 'println'\n",
                 "0018 OP_CONSTANT         2 == '2'\n",
                 "0020 OP_CALL             1\n",
                 "0022 OP_POP\n",
@@ -443,7 +443,7 @@ mod tests {
               
             let greeter = Greeter(\"Hello\");
               
-            print(greeter.greet(\"World\")); // out: Hello World",
+            println(greeter.greet(\"World\")); // out: Hello World",
             concat!(
                 "0000 OP_CLASS            0 == 'Greeter'\n",
                 "0002 OP_DEFINE_GLOBAL    0 == 'Greeter'\n",
@@ -474,7 +474,7 @@ mod tests {
                 "0023 OP_CONSTANT         6 == 'Hello'\n",
                 "0025 OP_CALL             1\n",
                 "0027 OP_DEFINE_GLOBAL    7 == 'greeter'\n",
-                "0029 OP_GET_GLOBAL       8 == 'print'\n",
+                "0029 OP_GET_GLOBAL       8 == 'println'\n",
                 "0031 OP_GET_GLOBAL       7 == 'greeter'\n",
                 "0033 OP_GET_PROPERTY     5 == 'greet'\n",
                 "0035 OP_CONSTANT         9 == 'World'\n",

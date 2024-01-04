@@ -1,14 +1,14 @@
-print(nil == nil); // out: true
+println(nil == nil); // out: true
 
-print(true == true); // out: true
-print(true == false); // out: false
+println(true == true); // out: true
+println(true == false); // out: false
 
-print(1 == 1); // out: true
-print(1 == 2); // out: false
+println(1 == 1); // out: true
+println(1 == 2); // out: false
 
-print("str" == "str"); // out: true
-print("str" == "ing"); // out: false
+println("str" == "str"); // out: true
+println("str" == "ing"); // out: false
 
-print(nil == false); // out: false
-print(false == 0); // out: false
-print(0 == "0"); // out: false
+println(nil == false); // out: false
+println(false == 0); // out: false
+println(0 == "0"); // out: false

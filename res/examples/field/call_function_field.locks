@@ -3,9 +3,9 @@ class Foo {
 }
 
 fn bar(a, b) {
-  print("bar");
-  print(a);
-  print(b);
+  println("bar");
+  println(a);
+  println(b);
 }
 
 let foo = Foo();

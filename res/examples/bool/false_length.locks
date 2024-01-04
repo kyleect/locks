@@ -1,1 +1,1 @@
-print(len(false)); // out: TypeError: "false" object has no length
+println(len(false)); // out: TypeError: "false" object has no length

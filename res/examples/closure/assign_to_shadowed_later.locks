@@ -7,7 +7,7 @@ let a = "global";
 
   let a = "inner";
   assign();
-  print(a); // out: inner
+  println(a); // out: inner
 }
 
-print(a); // out: assigned
+println(a); // out: assigned

@@ -14,5 +14,5 @@ class Derived extends Base {
 }
 
 let derived = Derived("a", "b");
-print(derived.a); // out: a
-print(derived.b); // out: b
+println(derived.a); // out: a
+println(derived.b); // out: b

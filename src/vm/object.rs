@@ -316,6 +316,7 @@ pub enum Native {
     Clock,
     Length,
     Print,
+    PrintLn,
 }
 
 impl Display for Native {
@@ -324,6 +325,7 @@ impl Display for Native {
             Native::Clock => write!(f, "clock"),
             Native::Length => write!(f, "len"),
             Native::Print => write!(f, "print"),
+            Native::PrintLn => write!(f, "println"),
         }
     }
 }

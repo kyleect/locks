@@ -7,7 +7,7 @@ let foo = Foo();
 let fooMethod = foo.method;
 
 // Same bound method.
-print(fooMethod == fooMethod); // out: true
+println(fooMethod == fooMethod); // out: true
 
 // Different closurizations.
-print(foo.method == foo.method); // out: false
+println(foo.method == foo.method); // out: false

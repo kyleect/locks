@@ -7,7 +7,7 @@ fn returnFunCallWithArg(func, arg) {
 }
 
 fn printArg(arg) {
-  print(arg);
+  println(arg);
 }
 
 returnFunCallWithArg(printArg, "hello world"); // out: hello world

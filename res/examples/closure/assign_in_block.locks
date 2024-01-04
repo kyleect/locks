@@ -10,4 +10,4 @@ let function;
   function = sum;
 }
 
-print(function(5, 8)); // out: 23
+println(function(5, 8)); // out: 23

@@ -1,9 +1,9 @@
 {
   let a = "first";
-  print(a); // out: first
+  println(a); // out: first
 }
 
 {
   let a = "second";
-  print(a); // out: second
+  println(a); // out: second
 }

@@ -4,4 +4,4 @@ class Test {
 
 let test = Test();
 
-print(test.value); // out: 123
+println(test.value); // out: 123

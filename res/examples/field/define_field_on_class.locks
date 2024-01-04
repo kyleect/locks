@@ -12,4 +12,4 @@ class Greeter {
 
 let greeter = Greeter("Hello");
 
-print(greeter.greet("World")); // out: Hello World
+println(greeter.greet("World")); // out: Hello World

@@ -1,2 +1,2 @@
 let a;
-print(a); // out: nil
+println(a); // out: nil

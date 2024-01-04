@@ -1,5 +1,5 @@
 fn f() {
-  print("Test");
+  println("Test");
 }
 
 let fun = f;

@@ -1,8 +1,8 @@
 {
   let a = "before";
-  print(a); // out: before
+  println(a); // out: before
 
   a = "after";
-  print(a); // out: after
+  println(a); // out: after
 
 }

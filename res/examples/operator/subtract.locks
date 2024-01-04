@@ -1,2 +1,2 @@
-print(4 - 3); // out: 1
-print(1.2 - 1.2); // out: 0
+println(4 - 3); // out: 1
+println(1.2 - 1.2); // out: 0

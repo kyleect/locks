@@ -24,6 +24,6 @@ class Tree {
 let tree = Tree(8);
 let start = clock();
 for (let i = 0; i < 300; i = i + 1) {
-  if (tree.walk() != 122068) print("Error");
+  if (tree.walk() != 122068) println("Error");
 }
-print(clock() - start);
+println(clock() - start);

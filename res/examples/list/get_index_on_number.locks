@@ -1,1 +1,1 @@
-print(0[0]); // out: TypeError: "number" is not indexable
+println(0[0]); // out: TypeError: "number" is not indexable

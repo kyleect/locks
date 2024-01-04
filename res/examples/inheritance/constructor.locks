@@ -6,7 +6,7 @@ class A {
   }
 
   fn test() {
-    print(this.field);
+    println(this.field);
   }
 }
 

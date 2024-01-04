@@ -2,4 +2,4 @@ class Class {}
 
 let test = Class();
 
-print(len(test)); // out: TypeError: "instance" object has no length
+println(len(test)); // out: TypeError: "instance" object has no length

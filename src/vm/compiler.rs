@@ -395,17 +395,7 @@ impl Compiler {
 
                 let ops = unsafe { &mut (*self.ctx.function).chunk.ops };
 
-                let last_op = ops.last().expect("...");
-
-                if last_op == &op::TRUE {
-                    println!("OP IS TRUE? {:?}", ops);
-                }
-
                 match ops.len().checked_sub(2) {
-                    // Some(idx) if ops[idx] == op::GET_PROPERTY => {
-                    //     println!("PROP -> INVOKE {} : {}", ops[idx], last_op);
-                    //     ops[idx] = op::INVOKE;
-                    // }
                     Some(idx) if ops[idx] == op::GET_SUPER => ops[idx] = op::SUPER_INVOKE,
                     Some(_) | None => self.emit_u8(op::CALL, span),
                 }

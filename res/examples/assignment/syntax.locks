@@ -1,5 +1,5 @@
 // Assignment on RHS of variable.
 let a = "before";
 let c = a = "var";
-print(a); // out: var
-print(c); // out: var
+println(a); // out: var
+println(c); // out: var
