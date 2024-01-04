@@ -327,6 +327,7 @@ With the syntax and implementation changes so far the Locks language has divered
   - Class inheritence: `class Child : Parent {}` -> `class Child extends Parent {}`
   - Lists: `[1, 2, 3]`, `arr[0]`, `arr[0] = 123`
   - Add the `len` native function for lists and strings
+  - Change `print` from a statement to a function: `print`, `println`
 - Bug Fixes
   - Add `#[repr(C)]` to `ObjectNative`. This fixes a segfault that occurred when there were multiple entries in the `Native` enum.
 - [Dockerize](Dockerfile) the Locks binary executable
