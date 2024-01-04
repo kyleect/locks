@@ -57,9 +57,5 @@ pub fn parse(source: &str, offset: usize) -> Result<Program, Vec<ErrorS>> {
         ParseError::User { error } => error,
     }));
 
-    if errors.is_empty() {
-        Ok(program)
-    } else {
-        Err(errors)
-    }
+    if errors.is_empty() { Ok(program) } else { Err(errors) }
 }
