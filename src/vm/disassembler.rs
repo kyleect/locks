@@ -129,6 +129,7 @@ impl<'a> Disassembler<'a> {
             op::GET_INDEX => self.disassemble_op_simple("OP_GET_INDEX"),
             op::SET_INDEX => self.disassemble_op_simple("OP_SET_INDEX"),
             op::METHOD => self.disassemble_op_constant("OP_METHOD", op_idx),
+            op::PACKAGE => self.disassemble_op_constant("OP_PACKAGE", op_idx),
             op::FIELD => self.disassemble_op_constant("OP_FIELD", op_idx),
             byte => self.disassemble_op_simple(&format!("OP_UNKNOWN({byte:#X})")),
         };

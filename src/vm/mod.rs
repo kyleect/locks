@@ -193,6 +193,7 @@ impl VM {
                 op::CREATE_LIST => self.op_create_list(),
                 op::GET_INDEX => self.op_get_index(),
                 op::SET_INDEX => self.op_set_index(),
+                op::PACKAGE => self.op_package(),
                 _ => util::unreachable(),
             }?;
 
@@ -261,6 +262,12 @@ impl VM {
         } else {
             return self.err(TypeError::NotIndexable { type_: target.type_().to_string() });
         }
+
+        Ok(())
+    }
+
+    fn op_package(&mut self) -> Result<()> {
+        self.read_value();
 
         Ok(())
     }

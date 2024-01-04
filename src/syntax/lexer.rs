@@ -90,6 +90,8 @@ pub enum Token {
     Asterisk,
     #[token("%")]
     Modulus,
+    #[token(":")]
+    Colon,
 
     // One or two character tokens.
     #[token("!")]
