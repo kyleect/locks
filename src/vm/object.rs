@@ -22,6 +22,7 @@ pub union Object {
     pub native: *mut ObjectNative,
     pub string: *mut ObjectString,
     pub list: *mut ObjectList,
+    pub package: *mut ObjectPackage,
     pub upvalue: *mut ObjectUpvalue,
 }
 
@@ -73,6 +74,11 @@ impl Object {
             ObjectType::List => {
                 unsafe {
                     let _ = Box::from_raw(self.list);
+                };
+            }
+            ObjectType::Package => {
+                unsafe {
+                    let _ = Box::from_raw(self.package);
                 };
             }
             ObjectType::Upvalue => {
@@ -146,6 +152,9 @@ impl Display for Object {
                 );
                 write!(f, "{}", v)
             }
+            ObjectType::Package => {
+                write!(f, "<package {}>", unsafe { (*(*self.package).name).value })
+            }
             ObjectType::Upvalue => write!(f, "<upvalue>"),
         }
     }
@@ -170,6 +179,7 @@ impl_from_object!(instance, ObjectInstance);
 impl_from_object!(native, ObjectNative);
 impl_from_object!(string, ObjectString);
 impl_from_object!(list, ObjectList);
+impl_from_object!(package, ObjectPackage);
 impl_from_object!(upvalue, ObjectUpvalue);
 
 impl PartialEq for Object {
@@ -196,6 +206,7 @@ pub enum ObjectType {
     Instance,
     String,
     List,
+    Package,
     Upvalue,
 }
 
@@ -210,6 +221,7 @@ impl Display for ObjectType {
             ObjectType::Native => write!(f, "native"),
             ObjectType::String => write!(f, "string"),
             ObjectType::List => write!(f, "list"),
+            ObjectType::Package => write!(f, "package"),
             ObjectType::Upvalue => write!(f, "upvalue"),
         }
     }
@@ -355,6 +367,20 @@ impl ObjectList {
     pub fn new(values: Vec<Value>) -> Self {
         let common = ObjectCommon { type_: ObjectType::List, is_marked: false };
         Self { common, values }
+    }
+}
+
+#[derive(Debug)]
+#[repr(C)]
+pub struct ObjectPackage {
+    pub common: ObjectCommon,
+    pub name: *mut ObjectString,
+}
+
+impl ObjectPackage {
+    pub fn new(name: *mut ObjectString) -> Self {
+        let common = ObjectCommon { type_: ObjectType::Package, is_marked: false };
+        Self { common, name }
     }
 }
 

@@ -85,5 +85,7 @@ iota! {
     FIELD,
     CREATE_LIST,
     GET_INDEX,
-    SET_INDEX
+    SET_INDEX,
+    // Reads a 1 byte offset for the package name
+    PACKAGE
 }

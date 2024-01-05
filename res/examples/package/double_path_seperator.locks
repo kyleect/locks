@@ -1,0 +1,1 @@
+package path::::to; // out: SyntaxError: unexpected "::"

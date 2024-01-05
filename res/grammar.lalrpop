@@ -10,7 +10,7 @@ grammar<'err>(
     errors: &'err mut Vec<ParseError<usize, lexer::Token, ErrorS>>
 );
 
-pub Program: ast::Program = <stmts:Spanned<Decl>*> => ast::Program { <> };
+pub Program: ast::Program = <package:("package" <PackageName> ";")?> <stmts:Spanned<Decl>*> => ast::Program { <> };
 
 // Declarations
 Decl = {
@@ -143,7 +143,7 @@ ExprS = Spanned<Expr>;
 Expr = ExprAssign;
 
 ExprAssign = {
-    <name:identifier> "=" <value:ExprS> =>
+    <name:QualifiedIdentifier> "=" <value:ExprS> =>
         ast::Expr::Assign(Box::new(ast::ExprAssign {
             identifier: ast::Identifier {
                 name,
@@ -155,7 +155,7 @@ ExprAssign = {
         ast::Expr::SetIndex(Box::new(ast::ExprSetIndex {<>})),
     <object:Spanned<ExprCall>> "." <name:identifier> "=" <value:ExprS> =>
         ast::Expr::Set(Box::new(ast::ExprSet { <> })),
-    <object:Spanned<ExprCall>> "[" <name:identifier> "]" "=" <value:ExprS> =>
+    <object:Spanned<ExprCall>> "[" <name:QualifiedIdentifier> "]" "=" <value:ExprS> =>
         ast::Expr::Set(Box::new(ast::ExprSet { <> })),
     <object:Spanned<ExprCall>> "[" <name:string> "]" "=" <value:ExprS> =>
         ast::Expr::Set(Box::new(ast::ExprSet { <> })),
@@ -218,7 +218,7 @@ ExprCall: ast::Expr = {
         ast::Expr::Get(Box::new(ast::ExprGet { <> })),
     <object:Spanned<ExprCall>> "[" <name:string> "]" =>
         ast::Expr::Get(Box::new(ast::ExprGet { <> })),
-    <object:Spanned<ExprCall>> "[" <name:identifier> "]" =>
+    <object:Spanned<ExprCall>> "[" <name:QualifiedIdentifier> "]" =>
         ast::Expr::Get(Box::new(ast::ExprGet { <> })),
     <target:Spanned<ExprCall>> "[" <index:number> "]" =>
         ast::Expr::GetIndex(Box::new(ast::ExprGetIndex {<>})),
@@ -238,7 +238,7 @@ ExprCall: ast::Expr = {
             },
             name,
         }),
-    "super" "[" <name:identifier> "]" =>
+    "super" "[" <name:QualifiedIdentifier> "]" =>
         ast::Expr::Super(ast::ExprSuper {
             super_: ast::Identifier {
                 name: "super".to_string(),
@@ -270,7 +270,7 @@ ExprPrimary: ast::Expr = {
     "(" <Expr> ")",
 }
 
-ExprIdentifier: ast::Expr = <name:identifier> =>
+ExprIdentifier: ast::Expr = <name:QualifiedIdentifier> =>
     ast::Expr::Identifier(ast::ExprIdentifier {
         identifier: ast::Identifier {
             name,
@@ -293,11 +293,24 @@ Spanned<T>: ast::Spanned<T> = <l:@L> <t:T> <r:@R> => (t, l..r);
 
 // Comma separated list of string parameters a function/method takes
 Params: Vec<String> = {
-    <first:identifier> <mut params:("," <identifier>)*> => {
+    <first:QualifiedIdentifier> <mut params:("," <QualifiedIdentifier>)*> => {
         params.insert(0, first);
         params
     },
     () => Vec::new(),
+};
+
+QualifiedIdentifier: String = {
+    <package:PackageName> ":" <id:identifier> => format!("{package}:{id}"),
+    <identifier> => <>
+}
+
+// Comma separated list of string parameters a function/method takes
+PackageName: String = {
+    <first:identifier> <mut paths:("::"<identifier>)*> => {
+        paths.insert(0, first);
+        paths.join("::")
+    }
 };
 
 // Comma separated list of expression arugments passed to function/method calls
@@ -329,6 +342,7 @@ extern {
         "/" => lexer::Token::Slash,
         "%" => lexer::Token::Modulus,
         "*" => lexer::Token::Asterisk,
+        ":" => lexer::Token::Colon,
 
         // One or two character tokens.
         "!" => lexer::Token::Bang,
@@ -340,6 +354,7 @@ extern {
         "<" => lexer::Token::Less,
         "<=" => lexer::Token::LessEqual,
         "=>" => lexer::Token::FatArrow,
+        "::" => lexer::Token::DoubleColon,
 
         // Literals.
         identifier => lexer::Token::Identifier(<String>),
@@ -363,5 +378,6 @@ extern {
         "let" => lexer::Token::Let,
         "while" => lexer::Token::While,
         "extends" => lexer::Token::Extends,
+        "package" => lexer::Token::Package,
     }
 }

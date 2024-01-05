@@ -63,5 +63,10 @@
     "prefix": "while",
     "body": ["while ($1) {", "  $2", "}$0"],
     "description": "Create a while loop"
+  },
+  "Package": {
+    "prefix": "package",
+    "body": ["package $1;$0"],
+    "description": "Declare package name in file"
   }
 }

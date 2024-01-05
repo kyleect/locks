@@ -27,7 +27,7 @@ use crate::vm::allocator::GLOBAL;
 use crate::vm::gc::GcAlloc;
 use crate::vm::object::{
     Native, ObjectBoundMethod, ObjectClass, ObjectClosure, ObjectFunction, ObjectInstance,
-    ObjectList, ObjectNative, ObjectString, ObjectType, ObjectUpvalue,
+    ObjectList, ObjectNative, ObjectPackage, ObjectString, ObjectType, ObjectUpvalue,
 };
 use crate::vm::value::Value;
 
@@ -193,6 +193,7 @@ impl VM {
                 op::CREATE_LIST => self.op_create_list(),
                 op::GET_INDEX => self.op_get_index(),
                 op::SET_INDEX => self.op_set_index(),
+                op::PACKAGE => self.op_package(),
                 _ => util::unreachable(),
             }?;
 
@@ -261,6 +262,24 @@ impl VM {
         } else {
             return self.err(TypeError::NotIndexable { type_: target.type_().to_string() });
         }
+
+        Ok(())
+    }
+
+    fn op_package(&mut self) -> Result<()> {
+        let name = unsafe { self.read_value().as_object().string };
+
+        if cfg!(feature = "vm-trace") {
+            eprintln!("Pushing package on to stack");
+        }
+
+        let package = self.alloc(ObjectPackage::new(name)).into();
+
+        if cfg!(feature = "vm-trace") {
+            eprintln!("Pushed package on to stack");
+        }
+
+        self.push(package);
 
         Ok(())
     }
@@ -1143,23 +1162,14 @@ impl Default for VM {
 
         let mut globals = HashMap::with_capacity_and_hasher(256, BuildHasherDefault::default());
 
-        globals.insert(gc.alloc("clock"), Value::from(gc.alloc(ObjectNative::new(Native::Clock))));
-        globals.insert(gc.alloc("len"), Value::from(gc.alloc(ObjectNative::new(Native::Length))));
-        globals.insert(gc.alloc("print"), Value::from(gc.alloc(ObjectNative::new(Native::Print))));
-        globals
-            .insert(gc.alloc("println"), Value::from(gc.alloc(ObjectNative::new(Native::PrintLn))));
-
-        let print_string = gc.alloc("print");
-        let print_native = Value::from(gc.alloc(ObjectNative::new(Native::Print)));
-        globals.insert(print_string, print_native);
-
-        let println_string = gc.alloc("println");
-        let println_native = Value::from(gc.alloc(ObjectNative::new(Native::PrintLn)));
-        globals.insert(println_string, println_native);
-
         let init_string = gc.alloc("init");
 
-        Self {
+        globals.insert(gc.alloc("clock"), gc.alloc(ObjectNative::new(Native::Clock)).into());
+        globals.insert(gc.alloc("len"), gc.alloc(ObjectNative::new(Native::Length)).into());
+        globals.insert(gc.alloc("print"), gc.alloc(ObjectNative::new(Native::Print)).into());
+        globals.insert(gc.alloc("println"), gc.alloc(ObjectNative::new(Native::PrintLn)).into());
+
+        let vm = Self {
             globals,
             open_upvalues: Vec::with_capacity(256),
             gc,
@@ -1174,7 +1184,9 @@ impl Default for VM {
             stack_top: ptr::null_mut(),
             init_string,
             source: String::new(),
-        }
+        };
+
+        vm
     }
 }
 

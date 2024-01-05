@@ -77,6 +77,10 @@ impl Gc {
                         self.mark(value);
                     }
                 }
+                ObjectType::Package => {
+                    let package = unsafe { object.package };
+                    self.mark(unsafe { (*package).name });
+                }
                 ObjectType::Upvalue => {
                     let upvalue = unsafe { object.upvalue };
                     self.mark(unsafe { (*upvalue).closed });

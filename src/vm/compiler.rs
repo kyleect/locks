@@ -40,8 +40,19 @@ impl Compiler {
     pub fn compile(program: &Program, gc: &mut Gc) -> Result<*mut ObjectFunction, Vec<ErrorS>> {
         let mut compiler = Self::new(gc);
 
+        if let Some(package_name) = &program.package {
+            let package_name = gc.alloc(package_name.to_owned()).into();
+
+            compiler.emit_u8(op::PACKAGE, &NO_SPAN);
+            let _ = compiler.emit_constant(package_name, &NO_SPAN);
+        }
+
         for stmt in &program.stmts {
             compiler.compile_stmt(stmt, gc).map_err(|e| vec![e])?;
+        }
+
+        if let Some(_) = &program.package {
+            compiler.emit_u8(op::POP, &NO_SPAN);
         }
 
         compiler.emit_u8(op::NIL, &NO_SPAN);
@@ -514,11 +525,7 @@ impl Compiler {
                 };
             }
             Expr::Literal(literal) => match literal {
-                ExprLiteral::Bool(true) => {
-                    println!("emitting true bool");
-
-                    self.emit_u8(op::TRUE, span)
-                }
+                ExprLiteral::Bool(true) => self.emit_u8(op::TRUE, span),
                 ExprLiteral::Bool(false) => self.emit_u8(op::FALSE, span),
                 ExprLiteral::Nil => self.emit_u8(op::NIL, span),
                 ExprLiteral::Number(number) => {
