@@ -250,8 +250,7 @@ mod tests {
         assert_eq!(
             Value::from(&mut ObjectCommon {
                 type_: ObjectType::String,
-                is_marked: false,
-                package: None
+                is_marked: false
             } as *mut _)
             .type_(),
             ValueType::Object(ObjectType::String)

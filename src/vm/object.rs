@@ -22,6 +22,7 @@ pub union Object {
     pub native: *mut ObjectNative,
     pub string: *mut ObjectString,
     pub list: *mut ObjectList,
+    pub package: *mut ObjectPackage,
     pub upvalue: *mut ObjectUpvalue,
 }
 
@@ -73,6 +74,11 @@ impl Object {
             ObjectType::List => {
                 unsafe {
                     let _ = Box::from_raw(self.list);
+                };
+            }
+            ObjectType::Package => {
+                unsafe {
+                    let _ = Box::from_raw(self.package);
                 };
             }
             ObjectType::Upvalue => {
@@ -146,6 +152,9 @@ impl Display for Object {
                 );
                 write!(f, "{}", v)
             }
+            ObjectType::Package => {
+                write!(f, "<package {}>", unsafe { (*(*self.package).name).value })
+            }
             ObjectType::Upvalue => write!(f, "<upvalue>"),
         }
     }
@@ -170,6 +179,7 @@ impl_from_object!(instance, ObjectInstance);
 impl_from_object!(native, ObjectNative);
 impl_from_object!(string, ObjectString);
 impl_from_object!(list, ObjectList);
+impl_from_object!(package, ObjectPackage);
 impl_from_object!(upvalue, ObjectUpvalue);
 
 impl PartialEq for Object {
@@ -183,7 +193,6 @@ impl PartialEq for Object {
 pub struct ObjectCommon {
     pub type_: ObjectType,
     pub is_marked: bool,
-    pub package: Option<String>,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -197,6 +206,7 @@ pub enum ObjectType {
     Instance,
     String,
     List,
+    Package,
     Upvalue,
 }
 
@@ -211,6 +221,7 @@ impl Display for ObjectType {
             ObjectType::Native => write!(f, "native"),
             ObjectType::String => write!(f, "string"),
             ObjectType::List => write!(f, "list"),
+            ObjectType::Package => write!(f, "package"),
             ObjectType::Upvalue => write!(f, "upvalue"),
         }
     }
@@ -226,8 +237,7 @@ pub struct ObjectBoundMethod {
 
 impl ObjectBoundMethod {
     pub fn new(this: *mut ObjectInstance, method: *mut ObjectClosure) -> Self {
-        let common =
-            ObjectCommon { type_: ObjectType::BoundMethod, is_marked: false, package: None };
+        let common = ObjectCommon { type_: ObjectType::BoundMethod, is_marked: false };
         Self { common, this, closure: method }
     }
 }
@@ -243,7 +253,7 @@ pub struct ObjectClass {
 
 impl ObjectClass {
     pub fn new(name: *mut ObjectString) -> Self {
-        let common = ObjectCommon { type_: ObjectType::Class, is_marked: false, package: None };
+        let common = ObjectCommon { type_: ObjectType::Class, is_marked: false };
         Self { common, name, methods: HashMap::default(), fields: HashMap::default() }
     }
 }
@@ -258,7 +268,7 @@ pub struct ObjectClosure {
 
 impl ObjectClosure {
     pub fn new(function: *mut ObjectFunction, upvalues: Vec<*mut ObjectUpvalue>) -> Self {
-        let common = ObjectCommon { type_: ObjectType::Closure, is_marked: false, package: None };
+        let common = ObjectCommon { type_: ObjectType::Closure, is_marked: false };
         Self { common, function, upvalues }
     }
 }
@@ -276,7 +286,7 @@ pub struct ObjectFunction {
 
 impl ObjectFunction {
     pub fn new(name: *mut ObjectString, arity: u8) -> Self {
-        let common = ObjectCommon { type_: ObjectType::Function, is_marked: false, package: None };
+        let common = ObjectCommon { type_: ObjectType::Function, is_marked: false };
         Self { common, name, arity, upvalue_count: 0, chunk: Chunk::default() }
     }
 }
@@ -291,7 +301,7 @@ pub struct ObjectInstance {
 
 impl ObjectInstance {
     pub fn new(class: *mut ObjectClass) -> Self {
-        let common = ObjectCommon { type_: ObjectType::Instance, is_marked: false, package: None };
+        let common = ObjectCommon { type_: ObjectType::Instance, is_marked: false };
 
         let fields = unsafe { (*class).fields.clone() };
 
@@ -307,8 +317,8 @@ pub struct ObjectNative {
 }
 
 impl ObjectNative {
-    pub fn new(native: Native, package: Option<String>) -> Self {
-        let common = ObjectCommon { type_: ObjectType::Native, is_marked: false, package };
+    pub fn new(native: Native) -> Self {
+        let common = ObjectCommon { type_: ObjectType::Native, is_marked: false };
         Self { common, native }
     }
 }
@@ -341,7 +351,7 @@ pub struct ObjectString {
 
 impl ObjectString {
     pub fn new(value: &'static str) -> Self {
-        let common = ObjectCommon { type_: ObjectType::String, is_marked: false, package: None };
+        let common = ObjectCommon { type_: ObjectType::String, is_marked: false };
         Self { common, value }
     }
 }
@@ -355,8 +365,22 @@ pub struct ObjectList {
 
 impl ObjectList {
     pub fn new(values: Vec<Value>) -> Self {
-        let common = ObjectCommon { type_: ObjectType::List, is_marked: false, package: None };
+        let common = ObjectCommon { type_: ObjectType::List, is_marked: false };
         Self { common, values }
+    }
+}
+
+#[derive(Debug)]
+#[repr(C)]
+pub struct ObjectPackage {
+    pub common: ObjectCommon,
+    pub name: *mut ObjectString,
+}
+
+impl ObjectPackage {
+    pub fn new(name: *mut ObjectString) -> Self {
+        let common = ObjectCommon { type_: ObjectType::Package, is_marked: false };
+        Self { common, name }
     }
 }
 
@@ -370,7 +394,7 @@ pub struct ObjectUpvalue {
 
 impl ObjectUpvalue {
     pub fn new(location: *mut Value) -> Self {
-        let common = ObjectCommon { type_: ObjectType::Upvalue, is_marked: false, package: None };
+        let common = ObjectCommon { type_: ObjectType::Upvalue, is_marked: false };
         Self { common, location, closed: Value::default() }
     }
 }
