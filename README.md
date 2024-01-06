@@ -328,6 +328,7 @@ With the syntax and implementation changes so far the Locks language has divered
   - Lists: `[1, 2, 3]`, `arr[0]`, `arr[0] = 123`
   - Add the `len` native function for lists and strings
   - Change `print` from a statement to a function: `print`, `println`
+  - Add `typeof` native function to return a value's type as string
 - Bug Fixes
   - Add `#[repr(C)]` to `ObjectNative`. This fixes a segfault that occurred when there were multiple entries in the `Native` enum.
   - [Remove an OP transformation the compiler](https://github.com/kyleect/locks/pull/135/files#diff-23c5734d7de815d5e64ad2291873d96e9f686a8b11d76481f3d02c905c53341dL403) was doing that would cause a segfault when bound methods were passed to functions e.g. `function(instance.method)`
