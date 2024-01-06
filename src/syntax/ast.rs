@@ -244,7 +244,7 @@ impl Display for OpPrefix {
 #[derive(Clone, Debug, PartialEq)]
 pub struct ExprSet {
     pub object: ExprS,
-    pub name: String,
+    pub name: ExprS,
     pub value: ExprS,
 }
 

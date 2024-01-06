@@ -157,8 +157,14 @@ ExprAssign = {
         ast::Expr::SetIndex(Box::new(ast::ExprSetIndex {<>})),
     <object:Spanned<ExprCall>> "." <name:identifier> "=" <value:ExprS> =>
         ast::Expr::Set(Box::new(ast::ExprSet { <> })),
-    <object:Spanned<ExprCall>> "[" <name:QualifiedIdentifier> "]" "=" <value:ExprS> =>
-        ast::Expr::Set(Box::new(ast::ExprSet { <> })),
+    <object:Spanned<ExprCall>> "[" <name:QualifiedIdentifier> "]" "=" <value:ExprS> => {
+        let result = name.parse();
+
+        match result {
+            Ok(index) => ast::Expr::SetIndex(Box::new(ast::ExprSetIndex { target: object, index, value })),
+            Err(_) => ast::Expr::Set(Box::new(ast::ExprSet { object, name, value }))
+        }
+    },
     <object:Spanned<ExprCall>> "[" <name:string> "]" "=" <value:ExprS> =>
         ast::Expr::Set(Box::new(ast::ExprSet { <> })),
     ExprLogicOr,

@@ -593,10 +593,8 @@ impl Compiler {
             Expr::Set(set) => {
                 self.compile_expr(&set.value, gc)?;
                 self.compile_expr(&set.object, gc)?;
-
-                let name = gc.alloc(&set.name).into();
+                self.compile_expr(&set.name, gc)?;
                 self.emit_u8(op::SET_PROPERTY, span);
-                self.emit_constant(name, span)?;
             }
             Expr::Super(super_) => {
                 match self.class_ctx.last() {

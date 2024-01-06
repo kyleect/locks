@@ -1,0 +1,11 @@
+fn map (list, f) {
+  for (let i = 0; i < len(list); i = i + 1) {
+    let item = list[i];
+    let mapped = f(item);
+    item[i] = mapped;
+  }
+}
+
+fn increment (i) => i + 1;
+
+println(map([1, 2, 3], increment)); // out [2, 3, 4]
