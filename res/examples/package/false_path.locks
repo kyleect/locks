@@ -1,0 +1,1 @@
+package false; // out: SyntaxError: unexpected "false"

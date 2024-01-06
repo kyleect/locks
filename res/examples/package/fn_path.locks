@@ -1,0 +1,1 @@
+package fn; // out: SyntaxError: unexpected "fn"

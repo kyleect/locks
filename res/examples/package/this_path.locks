@@ -1,0 +1,1 @@
+package this; // out: SyntaxError: unexpected "this"

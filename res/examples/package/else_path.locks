@@ -1,0 +1,1 @@
+package else; // out: SyntaxError: unexpected "else"

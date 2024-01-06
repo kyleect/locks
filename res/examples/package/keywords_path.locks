@@ -1,0 +1,1 @@
+package thirdparylib::path::to::class::utils::fn; // out: SyntaxError: unexpected "class"

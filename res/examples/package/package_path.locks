@@ -1,0 +1,1 @@
+package package; // out: SyntaxError: unexpected "package"
