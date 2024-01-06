@@ -1,0 +1,6 @@
+
+println(typeof(typeof)); // out: function
+println(typeof(println)); // out: function
+println(typeof(print)); // out: function
+println(typeof(len)); // out: function
+println(typeof(clock)); // out: function

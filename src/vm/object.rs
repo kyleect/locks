@@ -329,6 +329,7 @@ pub enum Native {
     Length,
     Print,
     PrintLn,
+    TypeOf,
 }
 
 impl Display for Native {
@@ -338,6 +339,7 @@ impl Display for Native {
             Native::Length => write!(f, "len"),
             Native::Print => write!(f, "print"),
             Native::PrintLn => write!(f, "println"),
+            Native::TypeOf => write!(f, "typeof"),
         }
     }
 }

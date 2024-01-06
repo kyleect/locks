@@ -1035,6 +1035,40 @@ impl VM {
                     }
                 }
             }
+            Native::TypeOf => {
+                if arg_count != 1 {
+                    return self.err(TypeError::ArityMismatch {
+                        name: "typeof".to_string(),
+                        exp_args: 1,
+                        got_args: arg_count,
+                    });
+                }
+
+                let value = self.pop();
+                self.pop();
+
+                let obj_type = match value.type_() {
+                    value::ValueType::Nil => "nil",
+                    value::ValueType::Bool => "boolean",
+                    value::ValueType::Number => "number",
+                    value::ValueType::Object(type_) => match type_ {
+                        ObjectType::BoundMethod => "boundmethod",
+                        ObjectType::Class => "class",
+                        ObjectType::Closure => "function",
+                        ObjectType::Function => "function",
+                        ObjectType::Native => "function",
+                        ObjectType::Instance => "instance",
+                        ObjectType::String => "string",
+                        ObjectType::List => "list",
+                        ObjectType::Package => "package",
+                        ObjectType::Upvalue => "upvalue",
+                    },
+                };
+
+                let type_str = self.alloc(ObjectString::new(&obj_type)).into();
+
+                type_str
+            }
         };
 
         self.push(value);
@@ -1168,6 +1202,7 @@ impl Default for VM {
         globals.insert(gc.alloc("len"), gc.alloc(ObjectNative::new(Native::Length)).into());
         globals.insert(gc.alloc("print"), gc.alloc(ObjectNative::new(Native::Print)).into());
         globals.insert(gc.alloc("println"), gc.alloc(ObjectNative::new(Native::PrintLn)).into());
+        globals.insert(gc.alloc("typeof"), gc.alloc(ObjectNative::new(Native::TypeOf)).into());
 
         let vm = Self {
             globals,

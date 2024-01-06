@@ -1,0 +1,3 @@
+let test = [];
+
+println(typeof(test)); // out: list

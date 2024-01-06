@@ -1,0 +1,7 @@
+class Class {
+  
+}
+
+let instance = Class();
+
+println(typeof(instance)); // out: instance
