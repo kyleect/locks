@@ -5,11 +5,12 @@ use arrayvec::ArrayVec;
 
 use crate::error::{ErrorS, NameError, OverflowError, Result, SyntaxError};
 use crate::syntax::ast::{
-    Expr, ExprLiteral, ExprS, OpInfix, OpPrefix, Program, Stmt, StmtFn, StmtReturn, StmtS,
+    Expr, ExprLiteral, ExprS, Identifier, OpInfix, OpPrefix, Program, Stmt, StmtFn, StmtReturn,
+    StmtS,
 };
 use crate::types::Span;
 use crate::vm::gc::Gc;
-use crate::vm::object::ObjectFunction;
+use crate::vm::object::{ObjectFunction, ObjectString};
 use crate::vm::op;
 use crate::vm::value::Value;
 
@@ -17,6 +18,7 @@ use crate::vm::value::Value;
 pub struct Compiler {
     ctx: CompilerCtx,
     class_ctx: Vec<ClassCtx>,
+    package_ctx: PackageCtx,
 }
 
 impl Compiler {
@@ -33,6 +35,7 @@ impl Compiler {
                 scope_depth: 0,
             },
             class_ctx: Vec::new(),
+            package_ctx: PackageCtx { name: None },
         }
     }
 
@@ -41,10 +44,22 @@ impl Compiler {
         let mut compiler = Self::new(gc);
 
         if let Some(package_name) = &program.package {
-            let package_name = gc.alloc(package_name.to_owned()).into();
+            let package = gc.alloc(package_name.to_owned());
 
             compiler.emit_u8(op::PACKAGE, &NO_SPAN);
-            let _ = compiler.emit_constant(package_name, &NO_SPAN);
+            let _ = compiler.emit_constant(package.into(), &NO_SPAN);
+
+            compiler.package_ctx.name = Some(package);
+
+            let _ = compiler.compile_expr(
+                &(Expr::Literal(ExprLiteral::String(package_name.to_string())), NO_SPAN),
+                gc,
+            );
+
+            let _ = compiler.declare_local("package", &NO_SPAN);
+            compiler.define_local();
+
+            let _ = compiler.set_variable("package", &NO_SPAN, gc);
         }
 
         for stmt in &program.stmts {
@@ -53,6 +68,7 @@ impl Compiler {
 
         if let Some(_) = &program.package {
             compiler.emit_u8(op::POP, &NO_SPAN);
+            compiler.package_ctx.name = None;
         }
 
         compiler.emit_u8(op::NIL, &NO_SPAN);
@@ -121,7 +137,11 @@ impl Compiler {
                     // Get parent class `Value` and push it on the VM's stack
                     self.compile_expr(super_, gc)?;
                     // Get new class `Value` and push it on the VM's stack
-                    self.get_variable(&class.name, span, gc)?;
+                    self.get_variable(
+                        &Identifier { name: class.name.clone(), package: None, depth: None },
+                        span,
+                        gc,
+                    )?;
                     // This will consume both values just pushed on VM's stack
                     self.emit_u8(op::INHERIT, span);
                 }
@@ -129,7 +149,11 @@ impl Compiler {
                 // Initialize class fields, if they exist
                 if !class.fields.is_empty() {
                     // Get class `Value` by name and push it on to the VM's stack
-                    self.get_variable(&class.name, span, gc)?;
+                    self.get_variable(
+                        &Identifier { name: class.name.clone(), package: None, depth: None },
+                        span,
+                        gc,
+                    )?;
 
                     for (field_assign, span) in &class.fields {
                         let name = &field_assign.identifier.name;
@@ -161,7 +185,11 @@ impl Compiler {
 
                 // Initialize class methods, if they exist
                 if !class.methods.is_empty() {
-                    self.get_variable(&class.name, span, gc)?;
+                    self.get_variable(
+                        &Identifier { name: class.name.clone(), package: None, depth: None },
+                        span,
+                        gc,
+                    )?;
                     for (method, span) in &class.methods {
                         let type_ = if method.name == "init" {
                             FunctionType::Initializer
@@ -580,15 +608,22 @@ impl Compiler {
                     None => return Err((SyntaxError::SuperOutsideClass.into(), span.clone())),
                 }
 
-                let name = gc.alloc(&super_.name).into();
-                self.get_variable("this", span, gc)?;
-                self.get_variable("super", span, gc)?;
+                self.get_variable(
+                    &Identifier { name: "this".to_owned(), package: None, depth: None },
+                    span,
+                    gc,
+                )?;
+                self.get_variable(
+                    &Identifier { name: "super".to_owned(), package: None, depth: None },
+                    span,
+                    gc,
+                )?;
+
                 self.emit_u8(op::GET_SUPER, span);
+                let name = gc.alloc(&super_.name).into();
                 self.emit_constant(name, span)?;
             }
-            Expr::Identifier(identifier) => {
-                self.get_variable(&identifier.identifier.name, span, gc)?
-            }
+            Expr::Identifier(identifier) => self.get_variable(&identifier.identifier, span, gc)?,
         }
         Ok(())
     }
@@ -625,7 +660,9 @@ impl Compiler {
     /// - globals
     ///   - `0000 OP_GET_GLOBAL`
     ///   - `0001 chunk_constant_idx`
-    fn get_variable(&mut self, name: &str, span: &Span, gc: &mut Gc) -> Result<()> {
+    fn get_variable(&mut self, idenifier: &Identifier, span: &Span, gc: &mut Gc) -> Result<()> {
+        let name = idenifier.name.as_str();
+
         if name == "this" && self.class_ctx.is_empty() {
             return Err((SyntaxError::ThisOutsideClass.into(), span.clone()));
         }
@@ -893,6 +930,11 @@ impl CompilerCtx {
 #[derive(Debug)]
 struct ClassCtx {
     has_super: bool,
+}
+
+#[derive(Debug)]
+struct PackageCtx {
+    name: Option<*mut ObjectString>,
 }
 
 /// Local Variable

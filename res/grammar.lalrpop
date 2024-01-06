@@ -73,6 +73,7 @@ DeclLetVar: ast::Stmt = <assign:StmtAssign> =>
 StmtAssign: ast::StmtAssign = "let" <name:identifier> <value:("=" <ExprS>)?> ";" => ast::StmtAssign {
     identifier: ast::Identifier {
         name,
+        package: None,
         depth: None
     },
     value,
@@ -147,6 +148,7 @@ ExprAssign = {
         ast::Expr::Assign(Box::new(ast::ExprAssign {
             identifier: ast::Identifier {
                 name,
+                package: None,
                 depth: None
             },
             value,
@@ -226,6 +228,7 @@ ExprCall: ast::Expr = {
         ast::Expr::Super(ast::ExprSuper {
             super_: ast::Identifier {
                 name: "super".to_string(),
+                package: None,
                 depth: None,
             },
             name,
@@ -234,6 +237,7 @@ ExprCall: ast::Expr = {
         ast::Expr::Super(ast::ExprSuper {
             super_: ast::Identifier {
                 name: "super".to_string(),
+                package: None,
                 depth: None,
             },
             name,
@@ -242,6 +246,7 @@ ExprCall: ast::Expr = {
         ast::Expr::Super(ast::ExprSuper {
             super_: ast::Identifier {
                 name: "super".to_string(),
+                package: None,
                 depth: None,
             },
             name,
@@ -264,7 +269,8 @@ ExprPrimary: ast::Expr = {
 
     // Variables
     ExprIdentifier,
-    ExprThis,    
+    ExprThis,   
+    ExprPackage, 
 
     // Grouping
     "(" <Expr> ")",
@@ -274,6 +280,7 @@ ExprIdentifier: ast::Expr = <name:QualifiedIdentifier> =>
     ast::Expr::Identifier(ast::ExprIdentifier {
         identifier: ast::Identifier {
             name,
+            package: None,
             depth: None
         }
     });
@@ -281,6 +288,15 @@ ExprIdentifier: ast::Expr = <name:QualifiedIdentifier> =>
 ExprThis: ast::Expr = "this" => ast::Expr::Identifier(ast::ExprIdentifier {
     identifier: ast::Identifier {
         name: "this".to_string(),
+        package: None,
+        depth: None,
+    }
+});
+
+ExprPackage: ast::Expr = "package" => ast::Expr::Identifier(ast::ExprIdentifier {
+    identifier: ast::Identifier {
+        name: "package".to_string(),
+        package: None,
         depth: None,
     }
 });
@@ -293,7 +309,7 @@ Spanned<T>: ast::Spanned<T> = <l:@L> <t:T> <r:@R> => (t, l..r);
 
 // Comma separated list of string parameters a function/method takes
 Params: Vec<String> = {
-    <first:QualifiedIdentifier> <mut params:("," <QualifiedIdentifier>)*> => {
+    <first:identifier> <mut params:("," <identifier>)*> => {
         params.insert(0, first);
         params
     },
