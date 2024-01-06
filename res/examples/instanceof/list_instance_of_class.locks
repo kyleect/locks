@@ -1,0 +1,7 @@
+class Test {
+  
+}
+
+let test = Test();
+
+println(instanceof([], Test)); // out: TypeError: expected type "instance" but got "list"

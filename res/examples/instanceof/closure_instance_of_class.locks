@@ -1,0 +1,15 @@
+class Test {}
+
+let f;
+
+let value = 100;
+
+{
+  fn add (n) {
+    return a + value;
+  }
+
+  f = add;
+}
+
+println(instanceof(f, Test)); // out: TypeError: expected type "instance" but got "function"

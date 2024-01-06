@@ -1052,7 +1052,7 @@ impl VM {
 
                 let obj_type = match value.type_() {
                     value::ValueType::Nil => "nil",
-                    value::ValueType::Bool => "boolean",
+                    value::ValueType::Bool => "bool",
                     value::ValueType::Number => "number",
                     value::ValueType::Object(type_) => match type_ {
                         ObjectType::BoundMethod => "function",
@@ -1071,6 +1071,77 @@ impl VM {
                 let type_str = self.alloc(ObjectString::new(&obj_type)).into();
 
                 type_str
+            }
+            Native::InstanceOf => {
+                if arg_count != 2 {
+                    return self.err(TypeError::ArityMismatch {
+                        name: "instanceof".to_string(),
+                        exp_args: 2,
+                        got_args: arg_count,
+                    });
+                }
+
+                let test = self.pop();
+                let value = self.pop();
+                self.pop();
+
+                let test_type = match test.type_() {
+                    value::ValueType::Nil => "nil",
+                    value::ValueType::Bool => "bool",
+                    value::ValueType::Number => "number",
+                    value::ValueType::Object(type_) => match type_ {
+                        ObjectType::BoundMethod => "function",
+                        ObjectType::Class => "class",
+                        ObjectType::Closure => "function",
+                        ObjectType::Function => "function",
+                        ObjectType::Native => "function",
+                        ObjectType::Instance => "instance",
+                        ObjectType::String => "string",
+                        ObjectType::List => "list",
+                        ObjectType::Package => "package",
+                        ObjectType::Upvalue => "upvalue",
+                    },
+                };
+
+                if test_type != "class" {
+                    return self.err(TypeError::InvalidType {
+                        expected_type: "class".to_owned(),
+                        actual_type: test_type.to_owned(),
+                    });
+                }
+
+                let test_class = unsafe { test.as_object().class };
+
+                let value_type = match value.type_() {
+                    value::ValueType::Nil => "nil",
+                    value::ValueType::Bool => "bool",
+                    value::ValueType::Number => "number",
+                    value::ValueType::Object(type_) => match type_ {
+                        ObjectType::BoundMethod => "function",
+                        ObjectType::Class => "class",
+                        ObjectType::Closure => "function",
+                        ObjectType::Function => "function",
+                        ObjectType::Native => "function",
+                        ObjectType::Instance => "instance",
+                        ObjectType::String => "string",
+                        ObjectType::List => "list",
+                        ObjectType::Package => "package",
+                        ObjectType::Upvalue => "upvalue",
+                    },
+                };
+
+                if value_type != "instance" {
+                    return self.err(TypeError::InvalidType {
+                        expected_type: "instance".to_owned(),
+                        actual_type: value_type.to_owned(),
+                    });
+                }
+
+                let value_class = unsafe { (*value.as_object().instance).class };
+
+                let same_class = test_class == value_class;
+
+                Value::from(same_class)
             }
         };
 
@@ -1206,6 +1277,8 @@ impl Default for VM {
         globals.insert(gc.alloc("print"), gc.alloc(ObjectNative::new(Native::Print)).into());
         globals.insert(gc.alloc("println"), gc.alloc(ObjectNative::new(Native::PrintLn)).into());
         globals.insert(gc.alloc("typeof"), gc.alloc(ObjectNative::new(Native::TypeOf)).into());
+        globals
+            .insert(gc.alloc("instanceof"), gc.alloc(ObjectNative::new(Native::InstanceOf)).into());
 
         let vm = Self {
             globals,
