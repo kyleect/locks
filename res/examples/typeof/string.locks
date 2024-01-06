@@ -1,0 +1,3 @@
+let test = "expected";
+
+println(typeof(test)); // out: string

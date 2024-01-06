@@ -1,0 +1,5 @@
+class Class {
+  
+}
+
+println(typeof(Class)); // out: class

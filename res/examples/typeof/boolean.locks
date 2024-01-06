@@ -1,0 +1,2 @@
+println(typeof(true)); // out: boolean
+println(typeof(false)); // out: boolean

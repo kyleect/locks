@@ -161,6 +161,11 @@ const Docs: React.FC = () => (
               Lists
             </Link>
           </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#typeof ">
+              typeof
+            </Link>
+          </li>
         </ul>
         <DocCard
           title="Example"
@@ -540,6 +545,40 @@ const Docs: React.FC = () => (
           height="125px"
         >
           Lists can store a dynamic number of mixed types in a collection.
+        </DocCard>
+
+        <DocCard
+          title="typeof"
+          anchor="typeof"
+          code={[
+            'println(typeof(123)); // out: number',
+            'println(typeof("Hello")); // out: string',
+            '',
+            'println(typeof(println)); // out: function',
+            '',
+            'fn sum (a, b) => a + b;',
+            'println(typeof(sum)); // out: function',
+            '',
+            'println(typeof(true)); // out: boolean',
+            'println(typeof(false)); // out: boolean',
+            '',
+            'class Example {',
+            '  fn test() => 123;',
+            '}',
+            'println(typeof(Example)); // out: class',
+            '',
+            'let example = Example();',
+            'println(typeof(example)); // out: instance',
+            'println(typeof(example.test)); // out: function',
+            '',
+            'println(typeof([1, 2, 3])); // out: list',
+            'println(typeof(nil)); // out: nil',
+          ]}
+          height="450px"
+        >
+          Return a value&apos;s type as a string: <code>number</code> |{' '}
+          <code>string</code> | <code>function</code> | <code>boolean</code> |{' '}
+          <code>list</code> | <code>nil</code>
         </DocCard>
 
         <div className="shadow rounded p-3 vstack gap-3">

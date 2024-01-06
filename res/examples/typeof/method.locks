@@ -1,0 +1,9 @@
+class Class {
+  fn test () {
+    
+  }
+}
+
+let instance = Class();
+
+println(typeof(instance.test)); // out: function
