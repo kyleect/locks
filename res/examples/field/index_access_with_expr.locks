@@ -2,11 +2,11 @@ class Record {
   let key = "value";
 }
 
-let key = "key";
+let the_key = "key";
 let record = Record();
 
-println(record[key]); // out: value
+println(record[the_key]); // out: value
 
-record[key] = "new value";
+record[the_key] = "new value";
 
-println(record[key]); // out: new value
+println(record[the_key]); // out: new value
