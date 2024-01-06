@@ -1052,7 +1052,7 @@ impl VM {
                     value::ValueType::Bool => "boolean",
                     value::ValueType::Number => "number",
                     value::ValueType::Object(type_) => match type_ {
-                        ObjectType::BoundMethod => "boundmethod",
+                        ObjectType::BoundMethod => "function",
                         ObjectType::Class => "class",
                         ObjectType::Closure => "function",
                         ObjectType::Function => "function",
