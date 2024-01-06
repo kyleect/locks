@@ -1,0 +1,1 @@
+package let; // out: SyntaxError: unexpected "let"

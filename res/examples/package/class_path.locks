@@ -1,0 +1,1 @@
+package class; // out: SyntaxError: unexpected "class"

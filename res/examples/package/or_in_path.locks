@@ -1,0 +1,1 @@
+package test::or::test::or; // out: SyntaxError: unexpected "or"

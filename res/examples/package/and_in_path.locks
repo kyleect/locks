@@ -1,0 +1,1 @@
+package test::and::test::and; // out: SyntaxError: unexpected "and"
