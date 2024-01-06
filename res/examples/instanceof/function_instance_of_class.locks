@@ -1,0 +1,7 @@
+class Test {}
+
+fn test () {
+  
+}
+
+println(instanceof(test, Test)); // out: TypeError: expected type "instance" but got "function"

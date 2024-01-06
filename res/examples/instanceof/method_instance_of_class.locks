@@ -1,0 +1,9 @@
+class Test {
+  fn test (a, b) {
+    return a + b;
+  }
+}
+
+let test = Test();
+
+println(instanceof(test.test, Test)); // out: TypeError: expected type "instance" but got "function"
