@@ -1,0 +1,3 @@
+package test;
+
+package = "invalid package name"; // out: SyntaxError: unexpected "="

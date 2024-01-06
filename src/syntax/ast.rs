@@ -262,7 +262,20 @@ pub struct ExprIdentifier {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Identifier {
     pub name: String,
+    pub package: Option<String>,
     /// This field is initialized as [`None`] by the parser, and is later
     /// filled by the resolver.
     pub depth: Option<usize>,
+}
+
+#[derive(Debug, Clone, Eq, PartialEq)]
+pub enum IdName {
+    Name(String),
+    Qualified(String, String),
+}
+
+impl Identifier {
+    pub fn from(name: String, package: Option<String>) -> Self {
+        Identifier { name, package, depth: None }
+    }
 }

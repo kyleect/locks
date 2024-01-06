@@ -1,1 +1,1 @@
-package; // out: SyntaxError: unexpected ";"
+package; // out: NameError: name "package" is not defined
