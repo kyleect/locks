@@ -1,0 +1,6 @@
+let list = [];
+
+list[5] = 1;
+
+println(list); // out: [nil, nil, nil, nil, nil, 1]
+println(len(list)); // out: 6

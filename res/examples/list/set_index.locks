@@ -10,4 +10,6 @@ println(list[0]); // out: 100
 println(list[1]); // out: 400
 println(list[2]); // out: 300
 
-list[3] = 1000; // out: IndexError: the length is 3 but the index is 3 (out of bounds)
+list[3] = 1000;
+
+println(list); // out: [100, 400, 300, 1000]
