@@ -39,6 +39,12 @@ impl Gc {
                 ObjectType::Class => {
                     let class = unsafe { object.class };
                     self.mark(unsafe { (*class).name });
+
+                    // TODO: Is this needed?
+                    if let Some(super_) = unsafe { (*class).super_ } {
+                        self.mark(super_);
+                    }
+
                     for (&name, &method) in unsafe { &(*class).methods } {
                         self.mark(name);
                         self.mark(method);
