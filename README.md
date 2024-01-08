@@ -301,6 +301,9 @@ Download the VS Code extension from the [latest build](https://github.com/kyleec
 - `$ just run-playground` Build and run playground
 - `$ just build-docker` Build docker image
 - `$ just run-repl-docker` Run `locks repl` inside built docker image
+- `$ just install` Create a release build of locks and move it to `~/.cargo/bin`
+- `$ just install-debug` Create a debug build of locks and move it to `~/.cargo/bin`
+- `$ just install-trace` Create a debug build of locks with `gc-trace` & `vm-trace` features enabled then move it to `~/.cargo/bin`
 
 ## Forked
 
