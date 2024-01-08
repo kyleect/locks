@@ -1,4 +1,6 @@
 class Toggle {
+  let state;
+
   fn init(startState) {
     this.state = startState;
   }
@@ -12,6 +14,9 @@ class Toggle {
 }
 
 class NthToggle extends Toggle {
+  let countMax;
+  let count;
+  
   fn init(startState, maxCounter) {
     super.init(startState);
     this.countMax = maxCounter;
