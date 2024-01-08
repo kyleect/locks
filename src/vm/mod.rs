@@ -438,7 +438,7 @@ impl VM {
                 self.pop();
                 self.push(field);
             }
-            None => match unsafe { (*(*instance).class).methods.get(&name) } {
+            None => match unsafe { (*(*instance).class).get_method(name) } {
                 Some(&method) => {
                     let bound_method = self.alloc(ObjectBoundMethod::new(instance, method));
                     self.pop();
@@ -497,7 +497,7 @@ impl VM {
     fn op_get_super(&mut self) -> Result<()> {
         let name = unsafe { self.read_value().as_object().string };
         let super_ = unsafe { self.pop().as_object().class };
-        match unsafe { (*super_).methods.get(&name) } {
+        match unsafe { (*super_).get_method(name) } {
             Some(&method) => {
                 let instance = unsafe { (*self.peek(0)).as_object().instance };
                 let bound_method = self.alloc(ObjectBoundMethod::new(instance, method));
@@ -669,7 +669,7 @@ impl VM {
         let arg_count = self.read_u8() as usize;
         let super_ = unsafe { self.pop().as_object().class };
 
-        match unsafe { (*super_).methods.get(&name) } {
+        match unsafe { (*super_).get_method(name) } {
             Some(&method) => self.call_closure(method, arg_count),
             None => self.err(AttributeError::NoSuchAttribute {
                 type_: unsafe { (*(*super_).name).value.to_string() },
@@ -746,7 +746,11 @@ impl VM {
         };
 
         unsafe { (*class).fields = (*super_).fields.clone() };
-        unsafe { (*class).methods = (*super_).methods.clone() };
+
+        unsafe {
+            (*class).super_ = Some(super_);
+        }
+
         Ok(())
     }
 
@@ -892,7 +896,7 @@ impl VM {
         unsafe { *self.peek(arg_count) = Value::from(instance) };
 
         // Call the constructor/init method if it exists on the class
-        match unsafe { (*class).methods.get(&self.init_string) } {
+        match unsafe { (*class).get_method(self.init_string) } {
             Some(&init) => self.call_closure(init, arg_count),
             None if arg_count != 0 => self.err(TypeError::ArityMismatch {
                 name: unsafe { (*self.init_string).value.to_string() },

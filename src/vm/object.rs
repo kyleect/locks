@@ -247,6 +247,7 @@ impl ObjectBoundMethod {
 pub struct ObjectClass {
     pub common: ObjectCommon,
     pub name: *mut ObjectString,
+    pub super_: Option<*mut ObjectClass>,
     pub methods: HashMap<*mut ObjectString, *mut ObjectClosure, BuildHasherDefault<FxHasher>>,
     pub fields: HashMap<*mut ObjectString, Value, BuildHasherDefault<FxHasher>>,
 }
@@ -254,7 +255,19 @@ pub struct ObjectClass {
 impl ObjectClass {
     pub fn new(name: *mut ObjectString) -> Self {
         let common = ObjectCommon { type_: ObjectType::Class, is_marked: false };
-        Self { common, name, methods: HashMap::default(), fields: HashMap::default() }
+        Self { common, name, super_: None, methods: HashMap::default(), fields: HashMap::default() }
+    }
+
+    pub fn get_method(&self, name: *mut ObjectString) -> Option<&*mut ObjectClosure> {
+        let method = self.methods.get(&name).or_else(|| {
+            self.super_.and_then(|super_| {
+                let method = unsafe { (*super_).get_method(name) };
+
+                method
+            })
+        });
+
+        method
     }
 }
 
