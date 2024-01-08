@@ -1,10 +1,6 @@
 default:
     @just --list
 
-[linux]
-move-release:
-    mv target/debug/locks ~/.cargo/bin
-
 [unix]
 move-release:
     mv target/debug/locks ~/.cargo/bin
@@ -15,10 +11,6 @@ move-release:
 
 install: build && move-release
     echo 'Installed Locks (Release)'
-
-[linux]
-move-debug:
-    mv target/debug/locks ~/.cargo/bin
 
 [unix]
 move-debug:
