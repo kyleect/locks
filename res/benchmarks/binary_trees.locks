@@ -1,4 +1,9 @@
 class Tree {
+  let item;
+  let depth;
+  let left;
+  let right;
+
   fn init(item, depth) {
     this.item = item;
     this.depth = depth;
