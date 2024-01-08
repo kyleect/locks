@@ -1,17 +1,39 @@
 default:
     @just --list
 
-install: build
-    mv target/release/locks.exe ~/.cargo/bin
+[unix]
+move-release:
+    mv target/debug/locks ~/.cargo/bin
 
-install-debug: build-debug
+[windows]
+move-release:
     mv target/debug/locks.exe ~/.cargo/bin
+
+install: build && move-release
+    echo 'Installed Locks (Release)'
+
+[unix]
+move-debug:
+    mv target/debug/locks ~/.cargo/bin
+
+[windows]
+move-debug:
+    mv target/debug/locks.exe ~/.cargo/bin
+
+install-debug: build-debug && move-debug
+    echo 'Installed Locks (Debug)'
+
+install-trace: build-trace && move-debug
+    echo 'Installed Locks (Trace)'
 
 build:
     cargo build --release
 
 build-debug:
     cargo build
+
+build-trace:
+    cargo build --features=gc-trace,vm-trace
 
 build-docker:
     docker build -t kyleect/locks:1.0.0 .
