@@ -295,13 +295,12 @@ impl VM {
                 let list_idx = index.as_number() as usize;
 
                 if list_idx >= list.values.len() {
-                    return self.err(IndexError::OutOfBounds {
-                        wanted_index: list_idx,
-                        length: list.values.len(),
-                    });
+                    list.values.resize(list_idx, Value::NIL);
+                    list.values.push(value);
+                } else {
+                    list.values[list_idx] = value;
                 }
 
-                list.values[list_idx] = value;
                 self.push(value);
             } else {
                 return self.err(TypeError::NotIndexable { type_: target.type_().to_string() });

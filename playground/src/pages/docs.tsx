@@ -535,14 +535,14 @@ const Docs: React.FC = () => (
           title="Lists"
           anchor="lists"
           code={[
-            'let list = [10, 20, 30];',
-            'println(len(list)); // out: 3',
-            'let last = list[2];',
-            'println(last); // out: 30',
-            'list[1] = list[1] * 2;',
-            'println(list[1]); // out: 40',
+            'let list = [1, 2, 3];',
+            '',
+            'list[5] = 100;',
+            '',
+            'println(list); // out: [1, 2, 3, nil, nil, 100]',
+            'println(len(list)); // out: 6',
           ]}
-          height="125px"
+          height="150px"
         >
           Lists can store a dynamic number of mixed types in a collection.
         </DocCard>
