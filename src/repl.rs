@@ -2,6 +2,7 @@
 
 use std::borrow::Cow;
 use std::io;
+use std::process::exit;
 
 use anyhow::{Context, Result};
 use nu_ansi_term::{Color, Style};
@@ -30,7 +31,7 @@ pub fn run() -> Result<()> {
                     crate::error::report_errors(stderr, &vm.source, &errors)
                 }
             }
-            Ok(reedline::Signal::CtrlC) => eprintln!("^C"),
+            Ok(reedline::Signal::CtrlC) => exit(130),
             Ok(reedline::Signal::CtrlD) => break,
             Err(e) => {
                 eprintln!("error: {e:?}");
