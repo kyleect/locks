@@ -1,7 +1,7 @@
-class Tests {
+class Test {
   static let value = 123;
 }
 
-Tests.value = 1000;
+Test.value = 1000;
 
-println(Tests.value); // out: 1000
+println(Test.value); // out: 1000

@@ -1,0 +1,7 @@
+class Class {
+  static fn test () {
+    
+  }
+}
+
+println(typeof(Class.test)); // out: function

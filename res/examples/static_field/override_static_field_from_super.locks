@@ -1,0 +1,13 @@
+class A {
+  static let value = 100;
+}
+
+class B extends A {
+  
+}
+
+class C extends B {
+  static let value = 123;
+}
+
+println(C.value); // out: 123

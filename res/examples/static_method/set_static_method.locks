@@ -1,0 +1,9 @@
+class Test {
+  static fn value () => 123;
+}
+
+fn newFunction () => 1000;
+
+Test.value = newFunction;  // out: TypeError: static methods on classes can not be reassigned (e.g. class<Test>.value = "...")
+
+println(Test.value());

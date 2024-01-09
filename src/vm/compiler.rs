@@ -262,6 +262,23 @@ impl Compiler {
                     self.emit_u8(op::POP, span);
                 }
 
+                // Initialize class methods, if they exist
+                if !class.static_methods.is_empty() {
+                    self.get_variable(
+                        &Identifier { name: class.name.clone(), package: None, depth: None },
+                        span,
+                        gc,
+                    )?;
+                    for (method, span) in &class.static_methods {
+                        self.compile_function(method, span, FunctionType::Method, gc)?;
+
+                        let name = gc.alloc(&method.name).into();
+                        self.emit_u8(op::STATIC_METHOD, span);
+                        self.emit_constant(name, span)?;
+                    }
+                    self.emit_u8(op::POP, span);
+                }
+
                 if let Some(x) = self.class_ctx.last() {
                     if x.has_super {
                         self.end_scope(&NO_SPAN);

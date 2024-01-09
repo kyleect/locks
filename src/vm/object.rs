@@ -251,6 +251,8 @@ pub struct ObjectClass {
     pub methods: HashMap<*mut ObjectString, *mut ObjectClosure, BuildHasherDefault<FxHasher>>,
     pub fields: HashMap<*mut ObjectString, Value, BuildHasherDefault<FxHasher>>,
     pub static_fields: HashMap<*mut ObjectString, Value, BuildHasherDefault<FxHasher>>,
+    pub static_methods:
+        HashMap<*mut ObjectString, *mut ObjectClosure, BuildHasherDefault<FxHasher>>,
 }
 
 impl ObjectClass {
@@ -263,6 +265,7 @@ impl ObjectClass {
             methods: HashMap::default(),
             fields: HashMap::default(),
             static_fields: HashMap::default(),
+            static_methods: HashMap::default(),
         }
     }
 
@@ -286,6 +289,36 @@ impl ObjectClass {
         let method = self.methods.get(&name).or_else(|| {
             self.super_.and_then(|super_| {
                 let method = unsafe { (*super_).get_method(name) };
+
+                method
+            })
+        });
+
+        method
+    }
+
+    /// Try to get static method from the class then tries it's parent/super class if it exists
+    ///
+    /// This happens recursively until there isn't a parent/super class to try
+    pub fn get_static_method(&self, name: *mut ObjectString) -> Option<&*mut ObjectClosure> {
+        let method = self.static_methods.get(&name).or_else(|| {
+            self.super_.and_then(|super_| {
+                let method = unsafe { (*super_).get_static_method(name) };
+
+                method
+            })
+        });
+
+        method
+    }
+
+    /// Try to get static field from the class then tries it's parent/super class if it exists
+    ///
+    /// This happens recursively until there isn't a parent/super class to try
+    pub fn get_static_field(&self, name: *mut ObjectString) -> Option<&Value> {
+        let method = self.static_fields.get(&name).or_else(|| {
+            self.super_.and_then(|super_| {
+                let method = unsafe { (*super_).get_static_field(name) };
 
                 method
             })

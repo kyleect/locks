@@ -54,6 +54,7 @@ pub struct StmtClass {
     pub methods: Vec<Spanned<StmtFn>>,
     pub fields: Vec<Spanned<StmtAssign>>,
     pub static_fields: Vec<Spanned<StmtAssign>>,
+    pub static_methods: Vec<Spanned<StmtFn>>,
 }
 
 /// An expression statement evaluates an expression and discards the result.

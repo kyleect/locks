@@ -54,6 +54,11 @@ impl Gc {
                         self.mark(name);
                         self.mark(static_field);
                     }
+
+                    for (&name, &method) in unsafe { &(*class).static_methods } {
+                        self.mark(name);
+                        self.mark(method);
+                    }
                 }
                 ObjectType::Closure => {
                     let closure = unsafe { object.closure };
