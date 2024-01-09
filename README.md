@@ -335,7 +335,7 @@ With the syntax and implementation changes so far the Locks language has divered
 - Bug Fixes
   - Add `#[repr(C)]` to `ObjectNative`. This fixes a segfault that occurred when there were multiple entries in the `Native` enum.
   - [Remove an OP transformation the compiler](https://github.com/kyleect/locks/pull/135/files#diff-23c5734d7de815d5e64ad2291873d96e9f686a8b11d76481f3d02c905c53341dL403) was doing that would cause a segfault when bound methods were passed to functions e.g. `function(instance.method)`
-  - Fix REPL not exiting when pressing <kdb>Ctrl</kbd> + <kbd>C</kbd>. It now exits with code [`130`](https://tldp.org/LDP/abs/html/exitcodes.html#EXITCODESREF)
+  - Fix REPL not exiting when pressing <kbd>Ctrl</kbd> + <kbd>C</kbd>. It now exits with code [`130`](https://tldp.org/LDP/abs/html/exitcodes.html#EXITCODESREF)
 - [Dockerize](Dockerfile) the Locks binary executable
 - Implemented a [VS Code Extension](vsc)
   - Integrates the existing [language server](src/lsp.rs) to display parsing/compiler errors
