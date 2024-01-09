@@ -486,7 +486,24 @@ const Docs: React.FC = () => (
             'println(greeter.greet("World")); // out: Hello World!!!',
           ]}
           height="425px"
-        />
+        >
+          Classes can extend other classes. All classes extend or decend from
+          the base class `Object`.
+        </DocCard>
+
+        <DocCard
+          title="Object Base Class"
+          anchor="classes-object"
+          code={[
+            'class Example {}',
+            'let example = Example();',
+            'println(instanceof(example, Example)); // out: true',
+            'println(instanceof(example, Object)); // out: true',
+          ]}
+          height="100px"
+        >
+          All classes extend or descend from the base class `Object`.
+        </DocCard>
 
         <DocCard
           title="Class Field/Method Index Access"
