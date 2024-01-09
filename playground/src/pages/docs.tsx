@@ -605,6 +605,7 @@ const Docs: React.FC = () => (
             'println(instanceof(instance, Grandchild)); // out: true',
             'println(instanceof(instance, Child)); // out: true',
             'println(instanceof(instance, Parent)); // out: true',
+            'println(instanceof(instance, GrandParent)); // out: true',
             'println(instanceof(instance, OtherChild)); // out: false',
           ]}
           height="400px"
