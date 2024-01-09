@@ -144,6 +144,33 @@ impl Compiler {
                     )?;
                     // This will consume both values just pushed on VM's stack
                     self.emit_u8(op::INHERIT, span);
+                } else {
+                    let base_class = String::from("Object");
+
+                    if class.name != base_class {
+                        if let Some(last) = self.class_ctx.last_mut() {
+                            last.has_super = true;
+                        }
+
+                        self.begin_scope();
+                        self.declare_local("super", &NO_SPAN)?;
+                        self.define_local();
+
+                        self.get_variable(
+                            &Identifier { name: base_class, package: None, depth: None },
+                            span,
+                            gc,
+                        )?;
+
+                        self.get_variable(
+                            &Identifier { name: class.name.clone(), package: None, depth: None },
+                            span,
+                            gc,
+                        )?;
+
+                        // This will consume both values just pushed on VM's stack
+                        self.emit_u8(op::INHERIT, span);
+                    }
                 }
 
                 // Initialize class fields, if they exist
@@ -205,9 +232,12 @@ impl Compiler {
                     self.emit_u8(op::POP, span);
                 }
 
-                if has_super {
-                    self.end_scope(&NO_SPAN);
+                if let Some(x) = self.class_ctx.last() {
+                    if x.has_super {
+                        self.end_scope(&NO_SPAN);
+                    }
                 }
+
                 self.class_ctx.pop().expect("attempted to pop the global context");
             }
             Stmt::Error => panic!("tried to compile despite parser errors"),

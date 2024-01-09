@@ -1,7 +1,3 @@
-class LocksObject {
+class Object {
   
-}
-
-class Internal {
-
 }
