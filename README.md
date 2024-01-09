@@ -334,6 +334,8 @@ With the syntax and implementation changes so far the Locks language has divered
   - Change `print` from a statement to a function: `print`, `println`
   - Add [`typeof`](https://kyleect.github.io/locks/#/docs#typeof) native function to return a value's type as string
   - Add [`instanceof`](https://kyleect.github.io/locks/#/docs#instanceof) native function to return `boolean` if the value is an instance of the class or super class.
+  - Add the base class [`Object`](https://kyleect.github.io/locks/#/docs#classes-object) class that all classes extend from.
+  - The file `res/lib/locks.locks` is loaded by the VM before running user code. This is where the base class `Object` is defined.
 - Bug Fixes
   - Add `#[repr(C)]` to `ObjectNative`. This fixes a segfault that occurred when there were multiple entries in the `Native` enum.
   - [Remove an OP transformation the compiler](https://github.com/kyleect/locks/pull/135/files#diff-23c5734d7de815d5e64ad2291873d96e9f686a8b11d76481f3d02c905c53341dL403) was doing that would cause a segfault when bound methods were passed to functions e.g. `function(instance.method)`

@@ -1,4 +1,4 @@
-class Object {
+class Container {
   let box;
 
   fn init(value) {
@@ -18,6 +18,6 @@ class Box {
   }
 }
 
-let obj = Object(123);
+let container = Container(123);
 
-println(obj["box"]["get"]()); // out: 123
+println(container["box"]["get"]()); // out: 123

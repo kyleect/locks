@@ -1,6 +1,8 @@
 let foo = "variable";
 
-class Foo {
+class A {}
+
+class Foo extends A {
   fn method() {
     println(foo);
   }
