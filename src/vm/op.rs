@@ -87,5 +87,6 @@ iota! {
     GET_INDEX,
     SET_INDEX,
     // Reads a 1 byte offset for the package name
-    PACKAGE
+    PACKAGE,
+    STATIC_FIELD
 }

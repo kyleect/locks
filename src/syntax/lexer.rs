@@ -158,6 +158,8 @@ pub enum Token {
     Extends,
     #[token("package")]
     Package,
+    #[token("static")]
+    Static,
 
     #[regex(r"//.*", logos::skip)]
     #[regex(r"[ \r\n\t\f]+", logos::skip)]

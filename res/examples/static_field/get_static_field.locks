@@ -1,0 +1,5 @@
+class Tests {
+  static let value = 123;
+}
+
+println(Tests.value); // out: 123
