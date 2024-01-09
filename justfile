@@ -89,3 +89,6 @@ test-miri *args:
     MIRIFLAGS='-Zmiri-disable-isolation' cargo +nightly miri nextest run \
         --features='gc-stress,gc-trace' --no-default-features \
         --workspace {{args}}
+
+clean-git-branches:
+    git branch -d $(git branch --merged=main | grep -v main) && git fetch --prune
