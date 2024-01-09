@@ -1,0 +1,5 @@
+class Test {
+  static fn value () => 123;
+}
+
+println(Test.value()); // out: 123

@@ -132,6 +132,7 @@ impl<'a> Disassembler<'a> {
             op::PACKAGE => self.disassemble_op_constant("OP_PACKAGE", op_idx),
             op::FIELD => self.disassemble_op_constant("OP_FIELD", op_idx),
             op::STATIC_FIELD => self.disassemble_op_constant("OP_STATIC_FIELD", op_idx),
+            op::STATIC_METHOD => self.disassemble_op_constant("OP_STATIC_METHOD", op_idx),
             byte => self.disassemble_op_simple(&format!("OP_UNKNOWN({byte:#X})")),
         };
 

@@ -223,6 +223,7 @@ impl VM {
                 op::SET_INDEX => self.op_set_index(),
                 op::PACKAGE => self.op_package(),
                 op::STATIC_FIELD => self.op_static_field(),
+                op::STATIC_METHOD => self.op_static_method(),
                 _ => util::unreachable(),
             }?;
 
@@ -463,17 +464,23 @@ impl VM {
             ObjectType::Class => {
                 let class = unsafe { object.class };
 
-                match unsafe { (*class).static_fields.get(&name) } {
+                match unsafe { (*class).get_static_field(name) } {
                     Some(&field) => {
                         self.pop();
                         self.push(field);
                     }
-                    None => {
-                        return self.err(AttributeError::NoSuchAttribute {
-                            type_: unsafe { (*(*class).name).value.to_string() },
-                            name: unsafe { (*name).value.to_string() },
-                        });
-                    }
+                    None => match unsafe { (*class).get_static_method(name) } {
+                        Some(&method) => {
+                            self.pop();
+                            self.push(method.into());
+                        }
+                        None => {
+                            return self.err(AttributeError::NoSuchAttribute {
+                                type_: unsafe { (*(*class).name).value.to_string() },
+                                name: unsafe { (*name).value.to_string() },
+                            });
+                        }
+                    },
                 }
             }
             ObjectType::Instance => {
@@ -527,11 +534,20 @@ impl VM {
             ObjectType::Class => {
                 let class = unsafe { object.class };
                 let value = unsafe { *self.peek(0) };
-                let has_field = unsafe { (*class).static_fields.get(&name) };
+                let has_field = unsafe { (*class).get_static_field(name) };
 
                 if let Some(_) = has_field {
                     unsafe { (*class).static_fields.insert(name, value) };
                     return Ok(());
+                }
+
+                let class_has_method = unsafe { (*class).get_static_method(name) };
+
+                if let Some(_) = class_has_method {
+                    return self.err(TypeError::InvalidStaticMethodAssignment {
+                        name: unsafe { (*name).value.to_owned() },
+                        type_: unsafe { (*(*class).name).value.to_owned() },
+                    });
                 }
 
                 self.err(AttributeError::NoSuchAttribute {
@@ -864,6 +880,21 @@ impl VM {
         let value = self.pop();
         let class = unsafe { (*self.peek(0)).as_object().class };
         unsafe { (*class).static_fields.insert(name, value) };
+        Ok(())
+    }
+
+    /// Define a static method on the [`ObjectClass`] on the top of the VM's stack
+    ///
+    /// This consumes 1 byte op for method name.
+    ///
+    /// This pop's the [`ObjectClosure`] from the VM's stack for the field value.
+    ///
+    /// The next [`Value`] on the VM's stack is used as the [`ObjectClass`] for the method.
+    fn op_static_method(&mut self) -> Result<()> {
+        let name = unsafe { self.read_value().as_object().string };
+        let method = unsafe { self.pop().as_object().closure };
+        let class = unsafe { (*self.peek(0)).as_object().class };
+        unsafe { (*class).static_methods.insert(name, method) };
         Ok(())
     }
 

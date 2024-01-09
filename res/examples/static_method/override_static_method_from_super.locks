@@ -1,0 +1,16 @@
+class A {
+  static fn value () => 100;
+}
+
+class B extends A {
+  
+}
+
+class C extends B {
+  static fn value () => 123;
+}
+
+println(C.value()); // out: 123
+println(A.value == B.value); // out: true
+println(B.value == C.value); // out: false
+println(A.value == C.value); // out: false

@@ -1,0 +1,13 @@
+class A {
+  static fn value () => 100;
+}
+
+class B extends A {
+  
+}
+
+fn test () {
+  
+}
+
+B.value = test; // out: TypeError: static methods on classes can not be reassigned (e.g. class<B>.value = "...")

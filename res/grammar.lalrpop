@@ -25,6 +25,7 @@ DeclClass: ast::Stmt = <class:StmtClass> => ast::Stmt::Class(<>);
 StmtClass: ast::StmtClass =
     "class" <name:identifier> <super_:("extends" <Spanned<ExprIdentifier>>)?> "{"
         <static_fields:("static" <Spanned<StmtAssign>>)*>
+        <static_methods:("static" <Spanned<StmtFn>>)*>
         <fields:(<Spanned<StmtAssign>>)*>
         <methods:(<Spanned<StmtFn>>)*>
     "}" =>

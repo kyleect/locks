@@ -1,0 +1,11 @@
+class A {
+  static let value = 100;
+}
+
+class B extends A {
+  
+}
+
+B.value = 123;
+
+println(B.value); // out: 123

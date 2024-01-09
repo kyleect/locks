@@ -159,6 +159,11 @@ const Docs: React.FC = () => (
             </Link>
           </li>
           <li className="nav-item">
+            <Link className="nav-link" to="#classes-static-methods">
+              Static Class Methods
+            </Link>
+          </li>
+          <li className="nav-item">
             <Link
               className="nav-link"
               to="#classes-single-expression-method-bodies"
@@ -553,6 +558,19 @@ const Docs: React.FC = () => (
             'println(Test.value);',
           ]}
           height="200px"
+        />
+
+        <DocCard
+          title="Static Class Methods"
+          anchor="classes-static-methods"
+          code={[
+            'class Test {',
+            '  static fn value () => 123;',
+            '}',
+            '',
+            'println(Test.value()); // out: 123',
+          ]}
+          height="175px"
         />
 
         <DocCard
