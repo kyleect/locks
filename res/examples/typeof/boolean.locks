@@ -1,2 +1,2 @@
-println(typeof(true)); // out: boolean
-println(typeof(false)); // out: boolean
+println(typeof(true)); // out: bool
+println(typeof(false)); // out: bool

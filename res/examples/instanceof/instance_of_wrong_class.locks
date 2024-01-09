@@ -1,0 +1,11 @@
+class Test {
+  
+}
+
+class Wrong {
+  
+}
+
+let test = Test();
+
+println(instanceof(test, Wrong)); // out: false

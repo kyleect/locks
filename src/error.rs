@@ -210,6 +210,8 @@ pub enum TypeError {
     InvalidMethodAssignment { name: String, type_: String },
     #[error("{type_:?} object has no length")]
     NoLength { type_: String },
+    #[error(r#"expected type "{expected_type}" but got "{actual_type}""#)]
+    InvalidType { expected_type: String, actual_type: String },
 }
 
 impl AsDiagnostic for TypeError {
