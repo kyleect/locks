@@ -131,6 +131,7 @@ impl<'a> Disassembler<'a> {
             op::METHOD => self.disassemble_op_constant("OP_METHOD", op_idx),
             op::PACKAGE => self.disassemble_op_constant("OP_PACKAGE", op_idx),
             op::FIELD => self.disassemble_op_constant("OP_FIELD", op_idx),
+            op::STATIC_FIELD => self.disassemble_op_constant("OP_STATIC_FIELD", op_idx),
             byte => self.disassemble_op_simple(&format!("OP_UNKNOWN({byte:#X})")),
         };
 
@@ -447,6 +448,17 @@ mod tests {
             println(greeter.greet(\"World\")); // out: Hello World",
             concat!(
                 "0000 OP_CLASS            0 == 'Greeter'\n0002 OP_DEFINE_GLOBAL    0 == 'Greeter'\n0004 OP_GET_GLOBAL       1 == 'Object'\n0006 OP_GET_GLOBAL       0 == 'Greeter'\n0008 OP_INHERIT\n0009 OP_GET_GLOBAL       0 == 'Greeter'\n0011 OP_NIL\n0012 OP_FIELD            2 == 'greeting'\n0014 OP_POP\n0015 OP_GET_GLOBAL       0 == 'Greeter'\n0017 OP_CLOSURE          3 == '<fn init arity=1>'\n| 0000 OP_GET_LOCAL        1\n| 0002 OP_GET_LOCAL        0\n| 0004 OP_SET_PROPERTY     0 == 'greeting'\n| 0006 OP_POP\n| 0007 OP_GET_LOCAL        0\n| 0009 OP_RETURN\n0019 OP_METHOD           4 == 'init'\n0021 OP_CLOSURE          5 == '<fn greet arity=1>'\n| 0000 OP_GET_LOCAL        0\n| 0002 OP_GET_PROPERTY     0 == 'greeting'\n| 0004 OP_CONSTANT         1 == ' '\n| 0006 OP_ADD\n| 0007 OP_GET_LOCAL        1\n| 0009 OP_ADD\n| 0010 OP_RETURN\n0023 OP_METHOD           6 == 'greet'\n0025 OP_POP\n0026 OP_POP\n0027 OP_GET_GLOBAL       0 == 'Greeter'\n0029 OP_CONSTANT         7 == 'Hello'\n0031 OP_CALL             1\n0033 OP_DEFINE_GLOBAL    8 == 'greeter'\n0035 OP_GET_GLOBAL       9 == 'println'\n0037 OP_GET_GLOBAL       8 == 'greeter'\n0039 OP_GET_PROPERTY     6 == 'greet'\n0041 OP_CONSTANT        10 == 'World'\n0043 OP_CALL             1\n0045 OP_CALL             1\n0047 OP_POP\n0048 OP_NIL\n0049 OP_RETURN\n"
+            )
+        ),
+        class_static_field: (
+            "\
+            class Test {
+              static let value = 100;
+            }
+              
+            println(Test.value); // out: 100",
+            concat!(
+                "0000 OP_CLASS            0 == 'Test'\n0002 OP_DEFINE_GLOBAL    0 == 'Test'\n0004 OP_GET_GLOBAL       1 == 'Object'\n0006 OP_GET_GLOBAL       0 == 'Test'\n0008 OP_INHERIT\n0009 OP_GET_GLOBAL       0 == 'Test'\n0011 OP_CONSTANT         2 == '100'\n0013 OP_STATIC_FIELD     3 == 'value'\n0015 OP_POP\n0016 OP_POP\n0017 OP_GET_GLOBAL       4 == 'println'\n0019 OP_GET_GLOBAL       0 == 'Test'\n0021 OP_GET_PROPERTY     3 == 'value'\n0023 OP_CALL             1\n0025 OP_POP\n0026 OP_NIL\n0027 OP_RETURN\n"
             )
         ),
     }
