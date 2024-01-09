@@ -258,7 +258,20 @@ impl ObjectClass {
         Self { common, name, super_: None, methods: HashMap::default(), fields: HashMap::default() }
     }
 
-    /// Try to get method from class then tries it's parent/super class if it exists
+    /// Get a list of parent/super classes the class extends
+    pub fn get_super_classes(&self) -> Vec<*mut ObjectClass> {
+        let mut super_classes: Vec<*mut ObjectClass> = vec![];
+
+        if let Some(super_) = self.super_ {
+            let sc = unsafe { (*super_).get_super_classes() };
+            super_classes.extend(sc);
+            super_classes.push(super_);
+        }
+
+        super_classes
+    }
+
+    /// Try to get method from the class then tries it's parent/super class if it exists
     ///
     /// This happens recursively until there isn't a parent/super class to try
     pub fn get_method(&self, name: *mut ObjectString) -> Option<&*mut ObjectClosure> {
