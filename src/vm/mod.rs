@@ -1139,7 +1139,8 @@ impl VM {
 
                 let value_class = unsafe { (*value.as_object().instance).class };
 
-                let same_class = test_class == value_class;
+                let same_class = test_class == value_class
+                    || unsafe { (*value_class).get_super_classes().contains(&test_class) };
 
                 Value::from(same_class)
             }
