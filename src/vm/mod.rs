@@ -503,7 +503,7 @@ impl VM {
                 return self.err(AttributeError::NoSuchAttribute {
                     type_: value.type_().to_string(),
                     name: unsafe { (*name).value.to_string() },
-                })
+                });
             }
         };
 
@@ -576,7 +576,7 @@ impl VM {
                 return self.err(AttributeError::NoSuchAttribute {
                     type_: value.type_().to_string(),
                     name: unsafe { (*name).value.to_string() },
-                })
+                });
             }
         }
     }
