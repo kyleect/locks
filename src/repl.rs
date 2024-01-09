@@ -1,7 +1,8 @@
 #![cfg(feature = "repl")]
 
-use std::{borrow::Cow, process::exit};
+use std::borrow::Cow;
 use std::io;
+use std::process::exit;
 
 use anyhow::{Context, Result};
 use nu_ansi_term::{Color, Style};
