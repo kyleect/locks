@@ -304,6 +304,7 @@ Download the VS Code extension from the [latest build](https://github.com/kyleec
 - `$ just install` Create a release build of locks and move it to `~/.cargo/bin`
 - `$ just install-debug` Create a debug build of locks and move it to `~/.cargo/bin`
 - `$ just install-trace` Create a debug build of locks with `gc-trace` & `vm-trace` features enabled then move it to `~/.cargo/bin`
+- `$ just clean-git-branches` Clean up and prune branches merged in to `main`
 
 ## Forked
 
