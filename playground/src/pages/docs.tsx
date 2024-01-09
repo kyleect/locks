@@ -166,6 +166,11 @@ const Docs: React.FC = () => (
               typeof
             </Link>
           </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#instanceof ">
+              instanceof
+            </Link>
+          </li>
         </ul>
         <DocCard
           title="Example"
@@ -579,6 +584,33 @@ const Docs: React.FC = () => (
           Return a value&apos;s type as a string: <code>number</code> |{' '}
           <code>string</code> | <code>function</code> | <code>boolean</code> |{' '}
           <code>list</code> | <code>nil</code>
+        </DocCard>
+
+        <DocCard
+          title="instanceof"
+          anchor="instanceof"
+          code={[
+            'class GrandParent {}',
+            '',
+            'class Parent extends GrandParent {}',
+            '',
+            'class Child extends Parent {}',
+            '',
+            'class OtherChild extends Parent {}',
+            '',
+            'class Grandchild extends Child {}',
+            '',
+            'let instance = Grandchild();',
+            '',
+            'println(instanceof(instance, Grandchild)); // out: true',
+            'println(instanceof(instance, Child)); // out: true',
+            'println(instanceof(instance, Parent)); // out: true',
+            'println(instanceof(instance, OtherChild)); // out: false',
+          ]}
+          height="400px"
+        >
+          Return <code>bool</code> if the value is an instance of the
+          class/super class.
         </DocCard>
 
         <div className="shadow rounded p-3 vstack gap-3">
