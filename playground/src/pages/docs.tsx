@@ -144,6 +144,11 @@ const Docs: React.FC = () => (
             </Link>
           </li>
           <li className="nav-item">
+            <Link className="nav-link" to="#classes-object">
+              Object Base Class
+            </Link>
+          </li>
+          <li className="nav-item">
             <Link className="nav-link" to="#classes-index-access">
               Class Field/Method Index Access
             </Link>
