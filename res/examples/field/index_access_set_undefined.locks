@@ -1,6 +1,6 @@
-class Object {
+class Test {
 }
 
-let obj = Object();
+let test = Test();
 
-obj["key"] = "new value"; // out: AttributeError: "Object" object has no attribute "key"
+test["key"] = "new value"; // out: AttributeError: "Test" object has no attribute "key"
