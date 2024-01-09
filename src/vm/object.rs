@@ -258,6 +258,9 @@ impl ObjectClass {
         Self { common, name, super_: None, methods: HashMap::default(), fields: HashMap::default() }
     }
 
+    /// Try to get method from class then tries it's parent/super class if it exists
+    ///
+    /// This happens recursively until there isn't a parent/super class to try
     pub fn get_method(&self, name: *mut ObjectString) -> Option<&*mut ObjectClosure> {
         let method = self.methods.get(&name).or_else(|| {
             self.super_.and_then(|super_| {
