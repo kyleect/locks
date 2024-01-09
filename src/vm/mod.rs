@@ -10,9 +10,8 @@ mod value;
 
 use std::hash::BuildHasherDefault;
 use std::io::Write;
-use std::{fs, mem, ptr};
+use std::{mem, ptr};
 
-use anyhow::Context;
 use arrayvec::ArrayVec;
 pub use compiler::Compiler;
 pub use disassembler::Disassembler;
@@ -37,7 +36,7 @@ const FRAMES_MAX: usize = 64;
 const STACK_MAX: usize = FRAMES_MAX * STACK_MAX_PER_FRAME;
 const STACK_MAX_PER_FRAME: usize = u8::MAX as usize + 1;
 
-const PRELOADED_LOCKS_LIBS: &'static [&'static str] = &["res/lib/locks.locks"];
+const LOCKS_LIB: &'static str = include_str!("../../res/lib/locks.locks");
 
 #[derive(Debug)]
 pub struct VM {
@@ -81,17 +80,12 @@ impl VM {
     pub fn run(&mut self, source: &str, stdout: &mut impl Write) -> Result<(), Vec<ErrorS>> {
         let mut errors: Vec<ErrorS> = vec![];
 
-        for &path in PRELOADED_LOCKS_LIBS.into_iter() {
-            let source =
-                fs::read_to_string(&path).with_context(|| format!("could not read file: {path}"));
-
-            if let Ok(source) = source {
-                if let Err(mut errs) = self.load(&source, stdout) {
-                    errors.append(&mut errs);
-                }
-            }
+        // Load the core Locks library code first
+        if let Err(mut errs) = self.load(&LOCKS_LIB, stdout) {
+            errors.append(&mut errs);
         }
 
+        // Then load the user code
         if let Err(mut errs) = self.load(&source, stdout) {
             errors.append(&mut errs);
         }
