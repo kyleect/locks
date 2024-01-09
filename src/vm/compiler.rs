@@ -210,6 +210,36 @@ impl Compiler {
                     self.emit_u8(op::POP, span);
                 }
 
+                // Initialize class fields, if they exist
+                if !class.static_fields.is_empty() {
+                    // Get class `Value` by name and push it on to the VM's stack
+                    self.get_variable(
+                        &Identifier { name: class.name.clone(), package: None, depth: None },
+                        span,
+                        gc,
+                    )?;
+
+                    for (field_assign, span) in &class.static_fields {
+                        let name = &field_assign.identifier.name;
+
+                        // Compile value expression if it exists and push it on the VM's stack.
+                        //
+                        // This value is the field's default value.
+                        // Otherwise its initalized to `nil`.
+                        match &field_assign.value {
+                            Some(value) => self.compile_expr(value, gc)?,
+                            None => self.emit_u8(op::NIL, span),
+                        }
+
+                        self.emit_u8(op::STATIC_FIELD, span);
+                        // Emit field name's constant index
+                        let name = gc.alloc(name).into();
+                        self.emit_constant(name, span)?;
+                    }
+
+                    self.emit_u8(op::POP, span);
+                }
+
                 // Initialize class methods, if they exist
                 if !class.methods.is_empty() {
                     self.get_variable(

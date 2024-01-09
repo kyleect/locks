@@ -53,6 +53,7 @@ pub struct StmtClass {
     pub super_: Option<ExprS>,
     pub methods: Vec<Spanned<StmtFn>>,
     pub fields: Vec<Spanned<StmtAssign>>,
+    pub static_fields: Vec<Spanned<StmtAssign>>,
 }
 
 /// An expression statement evaluates an expression and discards the result.

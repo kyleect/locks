@@ -250,12 +250,20 @@ pub struct ObjectClass {
     pub super_: Option<*mut ObjectClass>,
     pub methods: HashMap<*mut ObjectString, *mut ObjectClosure, BuildHasherDefault<FxHasher>>,
     pub fields: HashMap<*mut ObjectString, Value, BuildHasherDefault<FxHasher>>,
+    pub static_fields: HashMap<*mut ObjectString, Value, BuildHasherDefault<FxHasher>>,
 }
 
 impl ObjectClass {
     pub fn new(name: *mut ObjectString) -> Self {
         let common = ObjectCommon { type_: ObjectType::Class, is_marked: false };
-        Self { common, name, super_: None, methods: HashMap::default(), fields: HashMap::default() }
+        Self {
+            common,
+            name,
+            super_: None,
+            methods: HashMap::default(),
+            fields: HashMap::default(),
+            static_fields: HashMap::default(),
+        }
     }
 
     /// Get a list of parent/super classes the class extends

@@ -154,6 +154,11 @@ const Docs: React.FC = () => (
             </Link>
           </li>
           <li className="nav-item">
+            <Link className="nav-link" to="#classes-static-fields">
+              Static Class Fields
+            </Link>
+          </li>
+          <li className="nav-item">
             <Link
               className="nav-link"
               to="#classes-single-expression-method-bodies"
@@ -531,6 +536,23 @@ const Docs: React.FC = () => (
             'println(box.get()); // out: 123',
           ]}
           height="300px"
+        />
+
+        <DocCard
+          title="Static Class Fields"
+          anchor="classes-static-fields"
+          code={[
+            'class Test {',
+            '  static let value = 123;',
+            '}',
+            '',
+            'println(Test.value); // out: 123',
+            '',
+            'Test.value = 1000;',
+            '',
+            'println(Test.value);',
+          ]}
+          height="200px"
         />
 
         <DocCard

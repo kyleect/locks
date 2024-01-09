@@ -222,6 +222,7 @@ impl VM {
                 op::GET_INDEX => self.op_get_index(),
                 op::SET_INDEX => self.op_set_index(),
                 op::PACKAGE => self.op_package(),
+                op::STATIC_FIELD => self.op_static_field(),
                 _ => util::unreachable(),
             }?;
 
@@ -447,79 +448,137 @@ impl VM {
 
     fn op_get_property(&mut self) -> Result<()> {
         let name = unsafe { self.read_value().as_object().string };
-        let instance = {
-            let value = unsafe { *self.peek(0) };
-            let object = value.as_object();
+        let value = unsafe { *self.peek(0) };
 
-            if value.is_object() && object.type_() == ObjectType::Instance {
-                unsafe { object.instance }
-            } else {
+        if !value.is_object() {
+            return self.err(AttributeError::NoSuchAttribute {
+                type_: value.type_().to_string(),
+                name: unsafe { (*name).value.to_string() },
+            });
+        }
+
+        let object = value.as_object();
+
+        match object.type_() {
+            ObjectType::Class => {
+                let class = unsafe { object.class };
+
+                match unsafe { (*class).static_fields.get(&name) } {
+                    Some(&field) => {
+                        self.pop();
+                        self.push(field);
+                    }
+                    None => {
+                        return self.err(AttributeError::NoSuchAttribute {
+                            type_: unsafe { (*(*class).name).value.to_string() },
+                            name: unsafe { (*name).value.to_string() },
+                        });
+                    }
+                }
+            }
+            ObjectType::Instance => {
+                let instance = unsafe { object.instance };
+
+                match unsafe { (*instance).fields.get(&name) } {
+                    Some(&field) => {
+                        self.pop();
+                        self.push(field);
+                    }
+                    None => match unsafe { (*(*instance).class).get_method(name) } {
+                        Some(&method) => {
+                            let bound_method = self.alloc(ObjectBoundMethod::new(instance, method));
+                            self.pop();
+                            self.push(bound_method.into());
+                        }
+                        None => {
+                            return self.err(AttributeError::NoSuchAttribute {
+                                type_: unsafe { (*(*(*instance).class).name).value.to_string() },
+                                name: unsafe { (*name).value.to_string() },
+                            });
+                        }
+                    },
+                }
+            }
+            _ => {
                 return self.err(AttributeError::NoSuchAttribute {
                     type_: value.type_().to_string(),
                     name: unsafe { (*name).value.to_string() },
                 });
             }
         };
-
-        match unsafe { (*instance).fields.get(&name) } {
-            Some(&field) => {
-                self.pop();
-                self.push(field);
-            }
-            None => match unsafe { (*(*instance).class).get_method(name) } {
-                Some(&method) => {
-                    let bound_method = self.alloc(ObjectBoundMethod::new(instance, method));
-                    self.pop();
-                    self.push(bound_method.into());
-                }
-                None => {
-                    return self.err(AttributeError::NoSuchAttribute {
-                        type_: unsafe { (*(*(*instance).class).name).value.to_string() },
-                        name: unsafe { (*name).value.to_string() },
-                    });
-                }
-            },
-        }
 
         Ok(())
     }
 
     fn op_set_property(&mut self) -> Result<()> {
         let name = unsafe { self.read_value().as_object().string };
-        let instance = {
-            let value = self.pop();
-            let object = value.as_object();
+        let value = self.pop();
 
-            if value.is_object() && object.type_() == ObjectType::Instance {
-                unsafe { object.instance }
-            } else {
+        if !value.is_object() {
+            return self.err(AttributeError::NoSuchAttribute {
+                type_: value.type_().to_string(),
+                name: unsafe { (*name).value.to_string() },
+            });
+        }
+
+        let object = value.as_object();
+
+        match object.type_() {
+            ObjectType::Class => {
+                let class = unsafe { object.class };
+                let value = unsafe { *self.peek(0) };
+                let has_field = unsafe { (*class).static_fields.get(&name) };
+
+                if let Some(_) = has_field {
+                    unsafe { (*class).static_fields.insert(name, value) };
+                    return Ok(());
+                }
+
+                self.err(AttributeError::NoSuchAttribute {
+                    type_: unsafe { (*(*class).name).value.to_string() },
+                    name: unsafe { (*name).value.to_string() },
+                })
+            }
+            ObjectType::Instance => {
+                let instance = {
+                    if value.is_object() && object.type_() == ObjectType::Instance {
+                        unsafe { object.instance }
+                    } else {
+                        return self.err(AttributeError::NoSuchAttribute {
+                            type_: value.type_().to_string(),
+                            name: unsafe { (*name).value.to_string() },
+                        });
+                    }
+                };
+                let value = unsafe { *self.peek(0) };
+                let has_field = unsafe { (*instance).fields.get(&name) };
+
+                if let Some(_) = has_field {
+                    unsafe { (*instance).fields.insert(name, value) };
+                    return Ok(());
+                }
+
+                let class_has_method = unsafe { (*(*instance).class).methods.get(&name) };
+
+                if let Some(_) = class_has_method {
+                    return self.err(TypeError::InvalidMethodAssignment {
+                        name: unsafe { (*name).value.to_owned() },
+                        type_: unsafe { (*(*(*instance).class).name).value.to_owned() },
+                    });
+                }
+
+                self.err(AttributeError::NoSuchAttribute {
+                    type_: unsafe { (*(*(*instance).class).name).value.to_string() },
+                    name: unsafe { (*name).value.to_string() },
+                })
+            }
+            _ => {
                 return self.err(AttributeError::NoSuchAttribute {
                     type_: value.type_().to_string(),
                     name: unsafe { (*name).value.to_string() },
                 });
             }
-        };
-        let value = unsafe { *self.peek(0) };
-        let has_field = unsafe { (*instance).fields.get(&name) };
-
-        if let Some(_) = has_field {
-            unsafe { (*instance).fields.insert(name, value) };
-            return Ok(());
         }
-
-        let class_has_method = unsafe { (*(*instance).class).methods.get(&name) };
-
-        if let Some(_) = class_has_method {
-            return self.err(TypeError::InvalidMethodAssignment {
-                name: unsafe { (*name).value.to_owned() },
-                type_: unsafe { (*(*(*instance).class).name).value.to_owned() },
-            });
-        }
-
-        self.err(AttributeError::NoSuchAttribute {
-            type_: unsafe { (*(*(*instance).class).name).value.to_string() },
-            name: unsafe { (*name).value.to_string() },
-        })
     }
 
     fn op_get_super(&mut self) -> Result<()> {
@@ -792,6 +851,19 @@ impl VM {
         let value = self.pop();
         let class = unsafe { (*self.peek(0)).as_object().class };
         unsafe { (*class).fields.insert(name, value) };
+        Ok(())
+    }
+
+    /// Define a static field on the [`ObjectClass`] on the top of the VM's stack
+    ///
+    /// This consumes 2 byte ops for field name, & access modifier
+    ///
+    /// This pop's the [`Value`] from the VM's stack for the field value.
+    fn op_static_field(&mut self) -> Result<()> {
+        let name = unsafe { self.read_value().as_object().string };
+        let value = self.pop();
+        let class = unsafe { (*self.peek(0)).as_object().class };
+        unsafe { (*class).static_fields.insert(name, value) };
         Ok(())
     }
 

@@ -24,6 +24,7 @@ DeclClass: ast::Stmt = <class:StmtClass> => ast::Stmt::Class(<>);
 
 StmtClass: ast::StmtClass =
     "class" <name:identifier> <super_:("extends" <Spanned<ExprIdentifier>>)?> "{"
+        <static_fields:("static" <Spanned<StmtAssign>>)*>
         <fields:(<Spanned<StmtAssign>>)*>
         <methods:(<Spanned<StmtFn>>)*>
     "}" =>
@@ -395,5 +396,6 @@ extern {
         "while" => lexer::Token::While,
         "extends" => lexer::Token::Extends,
         "package" => lexer::Token::Package,
+        "static" => lexer::Token::Static
     }
 }
