@@ -216,6 +216,8 @@ pub enum TypeError {
     NoLength { type_: String },
     #[error(r#"expected type "{expected_type}" but got "{actual_type}""#)]
     InvalidType { expected_type: String, actual_type: String },
+    #[error(r#"expected an index type "{expected_type}" but got "{actual_type}""#)]
+    InvalidIndexType { expected_type: String, actual_type: String },
 }
 
 impl AsDiagnostic for TypeError {

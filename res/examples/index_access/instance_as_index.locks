@@ -1,0 +1,12 @@
+class A {
+  
+}
+
+class B {
+  
+}
+
+let a = A();
+let b = B();
+
+println(a[b]); // out: TypeError: expected an index type "string" but got "instance"

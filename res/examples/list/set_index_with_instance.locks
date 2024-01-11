@@ -1,0 +1,7 @@
+let list = [1, 2];
+
+class Test {}
+
+let test = Test();
+
+list[test] = 100; // out: TypeError: expected an index type "number" but got "instance"

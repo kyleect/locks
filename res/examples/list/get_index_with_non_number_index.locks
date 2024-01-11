@@ -1,3 +1,0 @@
-let list = [1, 2];
-
-println(list["b"]); // out: AttributeError: "list" object has no attribute "b"

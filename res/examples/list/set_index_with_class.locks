@@ -1,0 +1,5 @@
+let list = [1, 2];
+
+class Test {}
+
+list[Test] = 100;  // out: TypeError: expected an index type "number" but got "class"

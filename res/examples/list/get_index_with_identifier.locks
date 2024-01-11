@@ -1,0 +1,4 @@
+let list = [1, 2, 3];
+let index = 1;
+
+println(list[index]); // out: 2

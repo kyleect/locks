@@ -157,12 +157,39 @@ ExprAssign = {
         })),
     <target:Spanned<ExprCall>> "[" <index:number> "]" "=" <value:ExprS> =>
         ast::Expr::SetIndex(Box::new(ast::ExprSetIndex {<>})),
-    <object:Spanned<ExprCall>> "." <name:identifier> "=" <value:ExprS> =>
-        ast::Expr::Set(Box::new(ast::ExprSet { <> })),
-    <object:Spanned<ExprCall>> "[" <name:QualifiedIdentifier> "]" "=" <value:ExprS> =>
-        ast::Expr::Set(Box::new(ast::ExprSet { <> })),
-    <object:Spanned<ExprCall>> "[" <name:string> "]" "=" <value:ExprS> =>
-        ast::Expr::Set(Box::new(ast::ExprSet { <> })),
+    <object:Spanned<ExprCall>> "." <name:Spanned<identifier>> "=" <value:ExprS> =>
+        ast::Expr::Set(Box::new(ast::ExprSet { 
+            object,
+            name: (
+                ast::Expr::Literal(ast::ExprLiteral::String(name.0)),
+                name.1
+            ),
+            value
+         })),
+    <object:Spanned<ExprCall>> "[" <name:Spanned<QualifiedIdentifier>> "]" "=" <value:ExprS> =>
+        ast::Expr::Set(Box::new(ast::ExprSet { 
+            object,
+            name: (
+                ast::Expr::Identifier(ast::ExprIdentifier {
+                    identifier: ast::Identifier {
+                        name: name.0,
+                        package: None,
+                        depth: None,
+                    }
+                }),
+                name.1
+            ),
+            value
+         })),
+    <object:Spanned<ExprCall>> "[" <name:Spanned<string>> "]" "=" <value:ExprS> =>
+        ast::Expr::Set(Box::new(ast::ExprSet { 
+            object,
+            name: (
+                ast::Expr::Literal(ast::ExprLiteral::String(name.0)),
+                name.1
+            ),
+            value
+         })),
     ExprLogicOr,
 }
 
@@ -218,12 +245,36 @@ OpPrefix: ast::OpPrefix = {
 ExprCall: ast::Expr = {
     <callee:Spanned<ExprCall>> "(" <args:Args> ")" =>
         ast::Expr::Call(Box::new(ast::ExprCall { callee, args })),
-    <object:Spanned<ExprCall>> "." <name:identifier> =>
-        ast::Expr::Get(Box::new(ast::ExprGet { <> })),
-    <object:Spanned<ExprCall>> "[" <name:string> "]" =>
-        ast::Expr::Get(Box::new(ast::ExprGet { <> })),
-    <object:Spanned<ExprCall>> "[" <name:QualifiedIdentifier> "]" =>
-        ast::Expr::Get(Box::new(ast::ExprGet { <> })),
+    <object:Spanned<ExprCall>> "." <name:Spanned<identifier>> =>
+        ast::Expr::Get(Box::new(ast::ExprGet { 
+            object,
+            name: (
+                ast::Expr::Literal(ast::ExprLiteral::String(name.0)),
+                name.1
+            )
+         })),
+    <object:Spanned<ExprCall>> "[" <name:Spanned<string>> "]" =>
+        ast::Expr::Get(Box::new(ast::ExprGet { 
+            object,
+            name: (
+                ast::Expr::Literal(ast::ExprLiteral::String(name.0)),
+                name.1
+            )
+         })),
+    <object:Spanned<ExprCall>> "[" <name:Spanned<QualifiedIdentifier>> "]" =>
+        ast::Expr::Get(Box::new(ast::ExprGet { 
+            object,
+            name: (
+                ast::Expr::Identifier(ast::ExprIdentifier {
+                    identifier: ast::Identifier {
+                        name: name.0,
+                        package: None,
+                        depth: None,
+                    }
+                }),
+                name.1
+            )
+         })),
     <target:Spanned<ExprCall>> "[" <index:number> "]" =>
         ast::Expr::GetIndex(Box::new(ast::ExprGetIndex {<>})),
     "super" "." <name:identifier> =>

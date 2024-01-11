@@ -1,0 +1,3 @@
+let list = [1, 2];
+
+list["b"] = 100; // out: TypeError: expected an index type "number" but got "string"
