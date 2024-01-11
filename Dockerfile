@@ -7,7 +7,7 @@
 ################################################################################
 # Create a stage for building the application.
 
-ARG RUST_VERSION=1.73.0
+ARG RUST_VERSION=1.75.0
 FROM rust:${RUST_VERSION}-slim-bullseye AS build
 WORKDIR /app
 
