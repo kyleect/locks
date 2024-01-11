@@ -10,7 +10,7 @@ description = "Webassembly build of Locks for the playground"
 edition = "2021"
 license = "MIT"
 repository = "https://github.com/kyleect/locks"
-rust-version = "1.73"
+rust-version = "1.75"
 version = "1.0.0"
 publish = false
 
