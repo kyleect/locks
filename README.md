@@ -93,6 +93,7 @@ let value;
 println(value); // out: nil
 value = 42;
 println(value); // out: 42
+
 ```
 
 ```shell
