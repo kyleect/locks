@@ -448,30 +448,45 @@ impl VM {
     }
 
     fn op_get_property(&mut self) -> Result<()> {
-        let name = unsafe { self.read_value().as_object().string };
-        let value = unsafe { *self.peek(0) };
+        let object = self.pop();
+        let name = self.pop();
 
-        if !value.is_object() {
+        if !object.is_object() {
+            if !name.is_object() {
+                return self.err(AttributeError::NoSuchAttribute {
+                    type_: object.type_().to_string(),
+                    name: name.type_().to_string(),
+                });
+            }
+
+            let name = unsafe { name.as_object().string };
+
             return self.err(AttributeError::NoSuchAttribute {
-                type_: value.type_().to_string(),
+                type_: object.type_().to_string(),
                 name: unsafe { (*name).value.to_string() },
             });
         }
 
-        let object = value.as_object();
+        let object = object.as_object();
 
         match object.type_() {
             ObjectType::Class => {
+                if !name.is_object() {
+                    return self.err(AttributeError::NoSuchAttribute {
+                        type_: object.type_().to_string(),
+                        name: name.type_().to_string(),
+                    });
+                }
+
                 let class = unsafe { object.class };
+                let name = unsafe { name.as_object().string };
 
                 match unsafe { (*class).get_static_field(name) } {
                     Some(&field) => {
-                        self.pop();
                         self.push(field);
                     }
                     None => match unsafe { (*class).get_static_method(name) } {
                         Some(&method) => {
-                            self.pop();
                             self.push(method.into());
                         }
                         None => {
@@ -485,16 +500,24 @@ impl VM {
             }
             ObjectType::Instance => {
                 let instance = unsafe { object.instance };
+                let name = name.as_object();
+
+                if name.type_() != ObjectType::String {
+                    return self.err(TypeError::InvalidIndexType {
+                        expected_type: "string".to_string(),
+                        actual_type: name.type_().to_string(),
+                    });
+                }
+
+                let name = unsafe { name.string };
 
                 match unsafe { (*instance).fields.get(&name) } {
                     Some(&field) => {
-                        self.pop();
                         self.push(field);
                     }
                     None => match unsafe { (*(*instance).class).get_method(name) } {
                         Some(&method) => {
                             let bound_method = self.alloc(ObjectBoundMethod::new(instance, method));
-                            self.pop();
                             self.push(bound_method.into());
                         }
                         None => {
@@ -506,9 +529,39 @@ impl VM {
                     },
                 }
             }
+            ObjectType::List => {
+                if !name.is_number() {
+                    return self.err(TypeError::InvalidIndexType {
+                        expected_type: "number".to_string(),
+                        actual_type: name.type_().to_string(),
+                    });
+                }
+
+                let list = unsafe { &mut (*object.list) };
+                let index = name.as_number() as usize;
+
+                if index >= list.values.len() {
+                    return self.err(IndexError::OutOfBounds {
+                        wanted_index: index,
+                        length: list.values.len(),
+                    });
+                }
+
+                let value = list.values[index];
+                self.push(value);
+            }
             _ => {
+                if !name.is_object() {
+                    return self.err(AttributeError::NoSuchAttribute {
+                        type_: object.type_().to_string(),
+                        name: name.type_().to_string(),
+                    });
+                }
+
+                let name = unsafe { name.as_object().string };
+
                 return self.err(AttributeError::NoSuchAttribute {
-                    type_: value.type_().to_string(),
+                    type_: object.type_().to_string(),
                     name: unsafe { (*name).value.to_string() },
                 });
             }
@@ -518,22 +571,40 @@ impl VM {
     }
 
     fn op_set_property(&mut self) -> Result<()> {
-        let name = unsafe { self.read_value().as_object().string };
+        let object = self.pop();
+        let name = self.pop();
         let value = self.pop();
 
-        if !value.is_object() {
+        if !object.is_object() {
+            if !name.is_object() {
+                return self.err(AttributeError::NoSuchAttribute {
+                    type_: object.type_().to_string(),
+                    name: name.type_().to_string(),
+                });
+            }
+
+            let name = unsafe { name.as_object().string };
+
             return self.err(AttributeError::NoSuchAttribute {
-                type_: value.type_().to_string(),
+                type_: object.type_().to_string(),
                 name: unsafe { (*name).value.to_string() },
             });
         }
 
-        let object = value.as_object();
+        let object = object.as_object();
 
         match object.type_() {
             ObjectType::Class => {
+                if !name.is_object() {
+                    return self.err(AttributeError::NoSuchAttribute {
+                        type_: object.type_().to_string(),
+                        name: name.type_().to_string(),
+                    });
+                }
+
                 let class = unsafe { object.class };
-                let value = unsafe { *self.peek(0) };
+                let name = unsafe { name.as_object().string };
+
                 let has_field = unsafe { (*class).get_static_field(name) };
 
                 if let Some(_) = has_field {
@@ -550,27 +621,29 @@ impl VM {
                     });
                 }
 
+                self.push(value);
+
                 self.err(AttributeError::NoSuchAttribute {
                     type_: unsafe { (*(*class).name).value.to_string() },
                     name: unsafe { (*name).value.to_string() },
                 })
             }
             ObjectType::Instance => {
-                let instance = {
-                    if value.is_object() && object.type_() == ObjectType::Instance {
-                        unsafe { object.instance }
-                    } else {
-                        return self.err(AttributeError::NoSuchAttribute {
-                            type_: value.type_().to_string(),
-                            name: unsafe { (*name).value.to_string() },
-                        });
-                    }
-                };
-                let value = unsafe { *self.peek(0) };
+                if !name.is_object() {
+                    return self.err(AttributeError::NoSuchAttribute {
+                        type_: object.type_().to_string(),
+                        name: name.type_().to_string(),
+                    });
+                }
+
+                let instance = unsafe { object.instance };
+                let name = unsafe { name.as_object().string };
+
                 let has_field = unsafe { (*instance).fields.get(&name) };
 
                 if let Some(_) = has_field {
                     unsafe { (*instance).fields.insert(name, value) };
+                    self.push(value);
                     return Ok(());
                 }
 
@@ -588,9 +661,40 @@ impl VM {
                     name: unsafe { (*name).value.to_string() },
                 })
             }
+            ObjectType::List => {
+                if !name.is_number() {
+                    return self.err(TypeError::InvalidIndexType {
+                        expected_type: "number".to_string(),
+                        actual_type: name.type_().to_string(),
+                    });
+                }
+
+                let list = unsafe { &mut (*object.list) };
+                let index = name.as_number() as usize;
+
+                if index >= list.values.len() {
+                    list.values.resize(index, Value::NIL);
+                    list.values.push(value);
+                } else {
+                    list.values[index] = value;
+                }
+
+                self.push(value);
+
+                Ok(())
+            }
             _ => {
+                if !name.is_object() {
+                    return self.err(AttributeError::NoSuchAttribute {
+                        type_: object.type_().to_string(),
+                        name: name.type_().to_string(),
+                    });
+                }
+
+                let name = unsafe { name.as_object().string };
+
                 return self.err(AttributeError::NoSuchAttribute {
-                    type_: value.type_().to_string(),
+                    type_: object.type_().to_string(),
                     name: unsafe { (*name).value.to_string() },
                 });
             }

@@ -1,0 +1,3 @@
+let list = [1, 2];
+
+println(list["b"]); // out: TypeError: expected an index type "number" but got "string"

@@ -519,11 +519,10 @@ impl Compiler {
                 self.emit_u8(arg_count, span);
             }
             Expr::Get(get) => {
+                self.compile_expr(&get.name, gc)?;
                 self.compile_expr(&get.object, gc)?;
 
-                let name = gc.alloc(&get.name).into();
                 self.emit_u8(op::GET_PROPERTY, span);
-                self.emit_constant(name, span)?;
             }
             Expr::GetIndex(get_index) => {
                 let target = &get_index.target;
@@ -669,11 +668,10 @@ impl Compiler {
             }
             Expr::Set(set) => {
                 self.compile_expr(&set.value, gc)?;
+                self.compile_expr(&set.name, gc)?;
                 self.compile_expr(&set.object, gc)?;
 
-                let name = gc.alloc(&set.name).into();
                 self.emit_u8(op::SET_PROPERTY, span);
-                self.emit_constant(name, span)?;
             }
             Expr::Super(super_) => {
                 match self.class_ctx.last() {

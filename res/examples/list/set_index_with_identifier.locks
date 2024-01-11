@@ -1,0 +1,6 @@
+let list = [1, 2, 3];
+let index = 1;
+
+list[index] = 100;
+
+println(list[1]); // out: 100
